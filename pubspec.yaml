@@ -1,0 +1,58 @@
+name: loga_parameshwari
+description: This application help to see pooja and events held on the powerfull
+  Loga Parameshwari Temple Ramassery.
+publish_to: "none"
+version: 2.13.7+21
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  cached_network_image: ^3.0.0
+  cloud_firestore: ^4.0.3
+  connectivity: ^3.0.6
+  datetime_picker_formfield: ^2.0.0
+  device_info_plus: ^9.1.2
+  firebase_analytics: ^10.0.3
+  firebase_auth: ^4.1.0
+  firebase_core: ^2.1.1
+  firebase_dynamic_links: ^5.0.3
+  firebase_messaging: ^14.0.3
+  firebase_storage: ^11.0.3
+  flutter:
+    sdk: flutter
+  flutter_local_notifications: ^13.0.0
+  flutter_staggered_grid_view: ^0.4.0
+  google_fonts: ^2.1.0
+  http: ^0.13.5
+  in_app_update:
+    git:
+      url: https://github.com/sanjay-rb/flutter_packages.git
+      path: in_app_update
+  intl: ^0.17.0
+  logger: ^2.3.0
+  multi_image_picker: ^4.8.1
+  permission_handler: ^10.2.0
+  provider: ^5.0.0
+  share: ^2.0.4
+  shared_preferences: ^2.0.6
+  tutorial_coach_mark: ^1.2.2
+  url_launcher: ^6.0.9
+
+dev_dependencies:
+  flutter_launcher_icons:
+    git:
+      url: https://github.com/Davenchy/flutter_launcher_icons.git
+      ref: fixMinSdkParseFlutter2.8
+  lint: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - images/god.webp
+    - images/icon.png
+
+flutter_icons:
+  image_path: "images/icon.png"
+  android: true
+  ios: true

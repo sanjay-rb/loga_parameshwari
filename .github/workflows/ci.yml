@@ -1,0 +1,98 @@
+name: Perform CI
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  continuous_integration:
+    name: Continuous Integration
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "11.x"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION }}
+          channel: "stable"
+
+      - name: Get Flutter Dependancy
+        run: flutter pub get
+
+      - name: Check Code Format
+        run: dart format . --set-exit-if-changed
+
+      - name: Analyze Code
+        run: dart analyze .
+
+      - name: Decode keystore files
+        run: |
+          echo $KEY_JKS_BASE64 | base64 --decode > key.jks
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > google-services.json
+          echo $API_DART | base64 --decode > api.dart
+          
+          touch key.properties
+          echo "storePassword=$KEY_STORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> key.properties
+          echo "keyAlias=$KEY_ALIAS" >> key.properties
+          echo "storeFile=${{github.workspace}}/key.jks" >> key.properties
+
+          mv key.properties android/key.properties
+          mv google-services.json android/app/google-services.json
+          mv api.dart lib/constant/api.dart
+        env:
+          KEY_JKS_BASE64: ${{ secrets.KEY_JKS_BASE64 }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS : ${{ secrets.KEY_ALIAS }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          API_DART: ${{ secrets.API_DART }}
+
+      
+      - name: Testing Build Android App
+        run: flutter build apk --release
+
+  notification_success:
+    if: success()
+    needs: [continuous_integration]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Success Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Continuous Integration Completed Successfully!!!
+
+            User: ${{ github.actor }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+
+  notification_failure:
+    if: failure()
+    needs: [continuous_integration]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Failure Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Continuous Integration Failed!!!
+
+            User: ${{ github.actor }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+  
