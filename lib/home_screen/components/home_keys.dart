@@ -70,9 +70,13 @@ class MapView extends StatelessWidget {
             color: Colors.green,
             borderRadius: cc.borderRadius,
           ),
-          child: Image.network(
-            'https://raw.githubusercontent.com/sanjaysanju618/100-Days-of-Flutter-Live/main/images/logo.png?token=AGFR3IHKBYQ26GQVO3UFFBLAIBSTU',
-            fit: BoxFit.fill,
+          child: ClipRRect(
+            borderRadius: cc.borderRadius,
+            child: Image.network(
+              'https://raw.githubusercontent.com/sanjaysanju618/Loga-Parameshwari-Temple-Live/master/images/location.png?token=AGFR3IGZVWXUV3S5HD7JCH3AIBTPC',
+              fit: BoxFit.fill,
+              isAntiAlias: true,
+            ),
           ),
         ),
       ),
