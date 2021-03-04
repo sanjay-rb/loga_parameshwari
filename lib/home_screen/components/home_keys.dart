@@ -1,21 +1,10 @@
+import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class RecentPooja extends StatelessWidget {
-  const RecentPooja({Key key}) : super(key: key);
-  final CardContainer cc = const CardContainer();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.amber,
-        borderRadius: cc.borderRadius,
-      ),
-    );
-  }
-}
+import 'recent_pooja.dart';
 
 class AddPooja extends StatelessWidget {
   const AddPooja({Key key}) : super(key: key);
@@ -28,8 +17,21 @@ class AddPooja extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.black,
+            border: Border.all(),
             borderRadius: cc.borderRadius,
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Icon(Icons.add, size: 50),
+                  ),
+                  Text("Schedule Pooja")
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -74,24 +76,21 @@ class MapView extends StatelessWidget {
             }
           },
           child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: cc.borderRadius,
+              border: Border.all(),
+            ),
             child: ClipRRect(
               borderRadius: cc.borderRadius,
-              child: Image.network(
-                iu.mapImg,
+              child: CachedNetworkImage(
+                imageUrl: iu.mapImg,
                 fit: BoxFit.fill,
-                isAntiAlias: true,
-                loadingBuilder:
-                    (BuildContext context, Widget child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes
-                          : null,
-                    ),
-                  );
-                },
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress),
+                ),
               ),
             ),
           ),
@@ -105,6 +104,7 @@ class HomeKeysComponent extends StatelessWidget {
   final double width;
   final double height;
   const HomeKeysComponent({Key key, this.width, this.height}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,7 +115,21 @@ class HomeKeysComponent extends StatelessWidget {
         children: [
           Expanded(
             flex: 55,
-            child: RecentPooja(),
+            child: OpenContainer(
+              closedColor: Colors.amber,
+              closedElevation: 5.0,
+              closedShape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              transitionType: ContainerTransitionType.fade,
+              transitionDuration: const Duration(milliseconds: 500),
+              openBuilder: (context, action) {
+                return const Scaffold();
+              },
+              closedBuilder: (context, action) {
+                return RecentPooja();
+              },
+            ),
           ),
           Expanded(
             flex: 45,

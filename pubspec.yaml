@@ -25,6 +25,7 @@ dependencies:
   flutter:
     sdk: flutter
   animations: ^2.0.0
+  cached_network_image: any
   cupertino_icons: ^1.0.0
   google_fonts: ^2.0.0
   url_launcher: ^6.0.2
