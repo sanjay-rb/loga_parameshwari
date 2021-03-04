@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
@@ -59,23 +60,31 @@ class HistoryPooja extends StatelessWidget {
 class MapView extends StatelessWidget {
   const MapView({Key key}) : super(key: key);
   final CardContainer cc = const CardContainer();
+  final ImagesAndUrls iu = const ImagesAndUrls();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: cc.borderRadius,
-          ),
-          child: ClipRRect(
-            borderRadius: cc.borderRadius,
-            child: Image.network(
-              'https://raw.githubusercontent.com/sanjaysanju618/Loga-Parameshwari-Temple-Live/master/images/location.png?token=AGFR3IGZVWXUV3S5HD7JCH3AIBTPC',
-              fit: BoxFit.fill,
-              isAntiAlias: true,
+        child: GestureDetector(
+          onTap: () async {
+            if (await canLaunch(iu.mapUrl)) {
+              await launch(iu.mapUrl);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: cc.borderRadius,
+            ),
+            child: ClipRRect(
+              borderRadius: cc.borderRadius,
+              child: Image.network(
+                iu.mapImg,
+                fit: BoxFit.fill,
+                isAntiAlias: true,
+              ),
             ),
           ),
         ),
