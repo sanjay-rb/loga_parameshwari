@@ -74,16 +74,24 @@ class MapView extends StatelessWidget {
             }
           },
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: cc.borderRadius,
-            ),
             child: ClipRRect(
               borderRadius: cc.borderRadius,
               child: Image.network(
                 iu.mapImg,
                 fit: BoxFit.fill,
                 isAntiAlias: true,
+                loadingBuilder:
+                    (BuildContext context, Widget child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
               ),
             ),
           ),

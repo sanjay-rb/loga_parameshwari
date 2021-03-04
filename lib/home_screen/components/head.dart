@@ -10,9 +10,9 @@ class HeadComponent extends StatelessWidget {
   String getGreeting() {
     if (DateTime.now().hour >= 3 && DateTime.now().hour < 12) {
       return "Good Morning";
-    } else if (DateTime.now().hour >= 12 && DateTime.now().hour < 5) {
+    } else if (DateTime.now().hour >= 12 && DateTime.now().hour < 17) {
       return "Good Afternoon";
-    } else if (DateTime.now().hour >= 5 && DateTime.now().hour < 8) {
+    } else if (DateTime.now().hour >= 17 && DateTime.now().hour < 20) {
       return "Good Evening";
     } else {
       return "Good Night";
