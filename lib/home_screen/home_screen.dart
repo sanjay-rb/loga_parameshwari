@@ -24,6 +24,9 @@ class HomeScreen extends StatelessWidget {
                     width: constraints.maxWidth,
                     height: constraints.maxHeight * 0.1,
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   HomeKeysComponent(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight * 0.5,

@@ -7,15 +7,15 @@ class HeadComponent extends StatelessWidget {
   const HeadComponent({Key key, this.width, this.height}) : super(key: key);
   final TextDesign td = const TextDesign();
 
-  String getGreeting() {
+  Stream<String> getGreeting() async* {
     if (DateTime.now().hour >= 3 && DateTime.now().hour < 12) {
-      return "Good Morning";
+      yield "Good Morning";
     } else if (DateTime.now().hour >= 12 && DateTime.now().hour < 17) {
-      return "Good Afternoon";
+      yield "Good Afternoon";
     } else if (DateTime.now().hour >= 17 && DateTime.now().hour < 20) {
-      return "Good Evening";
+      yield "Good Evening";
     } else {
-      return "Good Night";
+      yield "Good Night";
     }
   }
 
@@ -32,10 +32,15 @@ class HeadComponent extends StatelessWidget {
             style: td.headText,
             textAlign: TextAlign.right,
           ),
-          Text(
-            getGreeting(),
-            style: td.titleText,
-            textAlign: TextAlign.right,
+          StreamBuilder<String>(
+            stream: getGreeting(),
+            builder: (context, snapshot) {
+              return Text(
+                snapshot.data.toString(),
+                style: td.titleText,
+                textAlign: TextAlign.right,
+              );
+            },
           ),
         ],
       ),

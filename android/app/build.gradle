@@ -39,7 +39,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.sanjoke.loga_parameshwari"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
@@ -70,3 +70,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
     //For Firebase Firestore Database Service
 }
+
+apply plugin: 'com.google.gms.google-services'
