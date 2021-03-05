@@ -41,6 +41,7 @@ android {
         applicationId "com.sanjoke.loga_parameshwari"
         minSdkVersion 16
         targetSdkVersion 29
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -60,4 +61,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    //For Firebase Analytics Service
+    
+    implementation 'com.google.firebase:firebase-firestore:21.3.1'
+    //For Firebase Firestore Database Service
 }
