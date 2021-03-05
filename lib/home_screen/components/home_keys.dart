@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/add_pooja_screen/add_pooja_screen.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,23 +16,29 @@ class AddPooja extends StatelessWidget {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: cc.borderRadius,
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Icon(Icons.add, size: 50),
-                  ),
-                  Text("Schedule Pooja")
-                ],
+        child: OpenContainer(
+          closedBuilder: (context, action) => Container(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: cc.borderRadius,
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Icon(Icons.add, size: 50),
+                    ),
+                    Text("Schedule Pooja")
+                  ],
+                ),
               ),
             ),
+          ),
+          openBuilder: (context, action) => AddPoojaScreen(),
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
         ),
       ),

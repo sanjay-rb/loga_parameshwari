@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
 
 class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
@@ -16,15 +18,21 @@ class RecentPooja extends StatelessWidget {
         borderRadius: cc.borderRadius,
       ),
       child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Event')
-              .where('on', isGreaterThanOrEqualTo: Timestamp.now())
-              .orderBy('on')
-              .snapshots(),
-          builder: (context, snapshot) {
-            String name = snapshot.data.docs.first.get('name');
-            Timestamp date = snapshot.data.docs.first.get('on');
-            String by = snapshot.data.docs.first.get('by');
+        stream: FirebaseFirestore.instance
+            .collection('Event')
+            .where('on', isGreaterThanOrEqualTo: Timestamp.now())
+            .orderBy('on')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            Pooja next = Pooja.fromJson(snapshot.data.docs.first.data());
             return Column(
               children: [
                 Expanded(
@@ -42,7 +50,7 @@ class RecentPooja extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
-                          "$name",
+                          "${next.name}",
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -60,7 +68,7 @@ class RecentPooja extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
-                          "on ${date.toDate().day}-${date.toDate().month}-${date.toDate().year}",
+                          "on ${DateFormat("dd-MM-yyyy hh:mm aaa").format(next.on.toDate())}",
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -136,7 +144,7 @@ class RecentPooja extends StatelessWidget {
                     height: 50,
                     child: Center(
                       child: Text(
-                        "by $by",
+                        "by ${next.by}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -147,7 +155,9 @@ class RecentPooja extends StatelessWidget {
                 ),
               ],
             );
-          }),
+          }
+        },
+      ),
     );
   }
 }

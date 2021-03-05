@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Loga Parameshwari',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.amber,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
