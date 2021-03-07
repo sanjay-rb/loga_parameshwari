@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 
 class HeadComponent extends StatelessWidget {
-  final double width;
-  final double height;
-  const HeadComponent({Key key, this.width, this.height}) : super(key: key);
+  const HeadComponent({Key key}) : super(key: key);
   final TextDesign td = const TextDesign();
 
   Stream<String> getGreeting() async* {
@@ -22,8 +20,6 @@ class HeadComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: this.width,
-      height: this.height,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
