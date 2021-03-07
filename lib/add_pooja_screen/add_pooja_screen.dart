@@ -53,6 +53,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                               return null;
                             }
                           },
+                          textCapitalization: TextCapitalization.sentences,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(hintText: "Name"),
                           onEditingComplete: () => node.nextFocus(),
@@ -77,6 +78,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                               return null;
                             }
                           },
+                          textCapitalization: TextCapitalization.words,
                           keyboardType: TextInputType.text,
                           decoration:
                               InputDecoration(hintText: "Origanizer Name"),

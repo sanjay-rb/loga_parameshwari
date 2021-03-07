@@ -46,7 +46,7 @@ class HistoryScreen extends StatelessWidget {
                   );
                 } else {
                   return Center(
-                    child: Text("No Such Pooja"),
+                    child: Text("No Pooja has been fetched"),
                   );
                 }
               }
