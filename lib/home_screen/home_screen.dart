@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/home_screen/components/speacil_pooja.dart';
+import 'components/special_pooja.dart';
 import 'components/head.dart';
 import 'components/home_ad.dart';
 import 'components/home_keys.dart';

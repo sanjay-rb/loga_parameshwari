@@ -8,14 +8,13 @@ import 'package:loga_parameshwari/model/pooja.dart';
 class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
   final CardContainer cc = const CardContainer();
-  final ImagesAndUrls iu = const ImagesAndUrls();
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black,
+        border: Border.all(),
         borderRadius: cc.borderRadius,
+        color: Colors.white,
       ),
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -23,141 +22,120 @@ class RecentPooja extends StatelessWidget {
             .where('on', isGreaterThanOrEqualTo: Timestamp.now())
             .orderBy('on')
             .snapshots(),
+        initialData: null,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return Center(
+              child: CircularProgressIndicator(),
             );
           } else {
-            Pooja next = Pooja.fromJson(snapshot.data.docs.first.data());
-            return Column(
-              children: [
-                Expanded(
-                  flex: 20,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    height: 50,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Text(
-                          "${next.name}",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                    ),
-                    height: 50,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Text(
-                          "on ${DateFormat("dd-MM-yyyy hh:mm aaa").format(next.on.toDate())}",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 60,
-                  child: Container(
-                    width: double.maxFinite,
-                    child: CachedNetworkImage(
-                      imageUrl: iu.godImg,
-                      fit: BoxFit.fill,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) => Center(
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress),
-                      ),
-                    ),
-                  ),
-                  /**
-                   * 
-                   Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Opacity(
-                        opacity: 0.5,
-                        child: Container(
-                          color: Colors.black,
-                          child: CachedNetworkImage(
-                            imageUrl: iu.godImg,
-                            fit: BoxFit.fill,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: SingleChildScrollView(
-                              child: Text(
-                                "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                   * 
-                   */
-                ),
-                Expanded(
-                  flex: 15,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                    ),
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        "by ${next.by}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
+            if (snapshot.data.docs.isNotEmpty) {
+              Pooja next = Pooja.fromJson(snapshot.data.docs.first.data());
+              return RecentPoojaView(next: next);
+            } else {
+              return RecentPoojaView(next: null);
+            }
           }
         },
       ),
+    );
+  }
+}
+
+class RecentPoojaView extends StatelessWidget {
+  const RecentPoojaView({
+    Key key,
+    @required this.next,
+  }) : super(key: key);
+  final Pooja next;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 20,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            height: 50,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(
+                  this.next != null ? "${next.name}" : "No Event Scheduled",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+            ),
+            height: 50,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(
+                  this.next != null
+                      ? "on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(next.on.toDate())}"
+                      : "",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 60,
+          child: Container(
+            width: double.maxFinite,
+            child: CachedNetworkImage(
+              imageUrl: ImagesAndUrls.godImg,
+              fit: BoxFit.fill,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                child:
+                    CircularProgressIndicator(value: downloadProgress.progress),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 15,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            height: 50,
+            child: Center(
+              child: Text(
+                this.next != null ? "by ${next.by}" : "Schedule Now",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

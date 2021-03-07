@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/add_pooja_screen/add_pooja_screen.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/history_screen/history_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'recent_pooja.dart';
@@ -55,10 +56,41 @@ class HistoryPooja extends StatelessWidget {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: cc.borderRadius,
+        child: OpenContainer(
+          closedBuilder: (context, action) => Container(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: cc.borderRadius,
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CachedNetworkImage(
+                          imageUrl: ImagesAndUrls.historyImg,
+                          fit: BoxFit.contain,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text("History")
+                  ],
+                ),
+              ),
+            ),
+          ),
+          openBuilder: (context, action) => HistoryScreen(),
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
         ),
       ),
@@ -69,7 +101,6 @@ class HistoryPooja extends StatelessWidget {
 class MapView extends StatelessWidget {
   const MapView({Key key}) : super(key: key);
   final CardContainer cc = const CardContainer();
-  final ImagesAndUrls iu = const ImagesAndUrls();
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +109,8 @@ class MapView extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: GestureDetector(
           onTap: () async {
-            if (await canLaunch(iu.mapUrl)) {
-              await launch(iu.mapUrl);
+            if (await canLaunch(ImagesAndUrls.mapUrl)) {
+              await launch(ImagesAndUrls.mapUrl);
             }
           },
           child: Container(
@@ -91,7 +122,7 @@ class MapView extends StatelessWidget {
             child: ClipRRect(
               borderRadius: cc.borderRadius,
               child: CachedNetworkImage(
-                imageUrl: iu.mapImg,
+                imageUrl: ImagesAndUrls.mapImg,
                 fit: BoxFit.fill,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     Center(
@@ -122,21 +153,7 @@ class HomeKeysComponent extends StatelessWidget {
         children: [
           Expanded(
             flex: 55,
-            child: OpenContainer(
-              closedColor: Colors.amber,
-              closedElevation: 5.0,
-              closedShape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              transitionType: ContainerTransitionType.fade,
-              transitionDuration: const Duration(milliseconds: 500),
-              openBuilder: (context, action) {
-                return const Scaffold();
-              },
-              closedBuilder: (context, action) {
-                return RecentPooja();
-              },
-            ),
+            child: RecentPooja(),
           ),
           Expanded(
             flex: 45,
