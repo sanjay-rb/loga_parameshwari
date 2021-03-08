@@ -11,6 +11,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Loga Parameshwari"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4162656890979507~9776433380"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

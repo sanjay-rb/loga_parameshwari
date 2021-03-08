@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 
 class HomeAdComponent extends StatelessWidget {
@@ -8,8 +9,10 @@ class HomeAdComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: this.width,
-      height: this.height,
+      child: AdmobBanner(
+        adUnitId: "ca-app-pub-4162656890979507/5787434520",
+        adSize: AdmobBannerSize.BANNER,
+      ),
     );
   }
 }
