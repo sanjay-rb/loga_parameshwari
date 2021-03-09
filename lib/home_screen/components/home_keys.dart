@@ -10,7 +10,6 @@ import 'recent_pooja.dart';
 
 class AddPooja extends StatelessWidget {
   const AddPooja({Key key}) : super(key: key);
-  final CardContainer cc = const CardContainer();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class AddPooja extends StatelessWidget {
           closedBuilder: (context, action) => Container(
             decoration: BoxDecoration(
               border: Border.all(),
-              borderRadius: cc.borderRadius,
+              borderRadius: CardContainer.borderRadius,
             ),
             child: Center(
               child: Padding(
@@ -49,7 +48,6 @@ class AddPooja extends StatelessWidget {
 
 class HistoryPooja extends StatelessWidget {
   const HistoryPooja({Key key}) : super(key: key);
-  final CardContainer cc = const CardContainer();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,7 @@ class HistoryPooja extends StatelessWidget {
           closedBuilder: (context, action) => Container(
             decoration: BoxDecoration(
               border: Border.all(),
-              borderRadius: cc.borderRadius,
+              borderRadius: CardContainer.borderRadius,
             ),
             child: Center(
               child: Padding(
@@ -100,7 +98,6 @@ class HistoryPooja extends StatelessWidget {
 
 class MapView extends StatelessWidget {
   const MapView({Key key}) : super(key: key);
-  final CardContainer cc = const CardContainer();
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +113,11 @@ class MapView extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.blue,
-              borderRadius: cc.borderRadius,
+              borderRadius: CardContainer.borderRadius,
               border: Border.all(),
             ),
             child: ClipRRect(
-              borderRadius: cc.borderRadius,
+              borderRadius: CardContainer.borderRadius,
               child: CachedNetworkImage(
                 imageUrl: ImagesAndUrls.mapImg,
                 fit: BoxFit.fill,

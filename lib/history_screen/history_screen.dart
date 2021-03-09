@@ -1,6 +1,8 @@
+import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:loga_parameshwari/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -34,7 +36,7 @@ class HistoryScreen extends StatelessWidget {
                 );
               } else {
                 if (snapshot.data.docs.isNotEmpty) {
-                  List allPooja = snapshot.data.docs;
+                  List<QueryDocumentSnapshot> allPooja = snapshot.data.docs;
                   return ListView.builder(
                     itemCount: allPooja.length,
                     itemBuilder: (context, index) {
@@ -126,31 +128,37 @@ class LeafCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 40,
-      child: Container(
-        child: Card(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "${pooja.name}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: OpenContainer(
+          closedBuilder: (context, action) => Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "by ${pooja.by}",
-                    overflow: TextOverflow.ellipsis,
+                    "${pooja.name}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      "by ${pooja.by}",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          openBuilder: (context, action) => DetailPooja(
+            pooja: pooja,
           ),
         ),
       ),

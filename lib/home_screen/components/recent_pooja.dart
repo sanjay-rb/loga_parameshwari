@@ -7,13 +7,12 @@ import 'package:loga_parameshwari/model/pooja.dart';
 
 class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
-  final CardContainer cc = const CardContainer();
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(),
-        borderRadius: cc.borderRadius,
+        borderRadius: CardContainer.borderRadius,
         color: Colors.white,
       ),
       child: StreamBuilder<QuerySnapshot>(

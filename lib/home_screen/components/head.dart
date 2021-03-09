@@ -3,7 +3,6 @@ import 'package:loga_parameshwari/constant/constant.dart';
 
 class HeadComponent extends StatelessWidget {
   const HeadComponent({Key key}) : super(key: key);
-  final TextDesign td = const TextDesign();
 
   Stream<String> getGreeting() async* {
     if (DateTime.now().hour >= 3 && DateTime.now().hour < 12) {
@@ -25,7 +24,7 @@ class HeadComponent extends StatelessWidget {
         children: [
           Text(
             "Loga Parameshwari Thunai",
-            style: td.headText,
+            style: TextDesign.headText,
             textAlign: TextAlign.right,
           ),
           StreamBuilder<String>(
@@ -33,7 +32,7 @@ class HeadComponent extends StatelessWidget {
             builder: (context, snapshot) {
               return Text(
                 snapshot.data.toString(),
-                style: td.titleText,
+                style: TextDesign.titleText,
                 textAlign: TextAlign.right,
               );
             },

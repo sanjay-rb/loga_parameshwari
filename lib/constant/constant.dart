@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 
 class TextDesign {
   const TextDesign();
-  final headText = const TextStyle(
+  static final headText = const TextStyle(
     fontSize: 25,
   );
 
-  final titleText = const TextStyle(
+  static final titleText = const TextStyle(
     fontSize: 20,
+  );
+  static final subTitleText = const TextStyle(
+    fontSize: 15,
   );
 }
 
 class CardContainer {
-  const CardContainer();
-  final borderRadius = const BorderRadius.all(
+  static final borderRadius = const BorderRadius.all(
     Radius.circular(20),
   );
 }
