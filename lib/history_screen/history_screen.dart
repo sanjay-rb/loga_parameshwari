@@ -43,6 +43,7 @@ class HistoryScreen extends StatelessWidget {
                       return TreeLeaf(
                         pooja: Pooja.fromJson(allPooja[index]),
                         index: index,
+                        id: allPooja[index].id,
                       );
                     },
                   );
@@ -65,11 +66,12 @@ class TreeLeaf extends StatelessWidget {
     Key key,
     @required this.pooja,
     @required this.index,
+    @required this.id,
   }) : super(key: key);
 
   final Pooja pooja;
   final int index;
-
+  final id;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,7 +82,7 @@ class TreeLeaf extends StatelessWidget {
           Row(
             children: index % 2 == 0
                 ? [
-                    LeafCard(pooja: pooja),
+                    LeafCard(pooja: pooja, id: this.id),
                     Expanded(
                       flex: 2,
                       child: Container(
@@ -97,7 +99,7 @@ class TreeLeaf extends StatelessWidget {
                         color: Colors.purple,
                       ),
                     ),
-                    LeafCard(pooja: pooja),
+                    LeafCard(pooja: pooja, id: this.id),
                   ],
           ),
           Center(
@@ -120,9 +122,11 @@ class LeafCard extends StatelessWidget {
   const LeafCard({
     Key key,
     @required this.pooja,
+    @required this.id,
   }) : super(key: key);
 
   final Pooja pooja;
+  final id;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +163,7 @@ class LeafCard extends StatelessWidget {
           ),
           openBuilder: (context, action) => DetailPooja(
             pooja: pooja,
+            id: this.id,
           ),
         ),
       ),

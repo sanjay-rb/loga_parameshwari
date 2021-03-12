@@ -140,11 +140,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                             FirebaseFirestore.instance
                                 .collection("Event")
                                 .add(
-                                  Pooja(
-                                    name,
-                                    by,
-                                    Timestamp.fromDate(on),
-                                  ).toJson(),
+                                  Pooja(name, by, Timestamp.fromDate(on))
+                                      .toJson(),
                                 )
                                 .then((value) {
                               showDialog(

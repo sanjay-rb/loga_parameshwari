@@ -8,8 +8,7 @@
             "name": "Flutter Run",
             "type": "dart",
             "args": [
-                "-v",
-                "--status"
+                "-v"
             ],
             "flutterMode": "debug",
             "showMemoryUsage": true,

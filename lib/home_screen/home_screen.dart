@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'components/share_app.dart';
 import 'components/special_pooja.dart';
 import 'components/head.dart';
-import 'components/home_ad.dart';
+// import 'components/home_ad.dart';
 import 'components/home_keys.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -18,10 +18,7 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: ListView(
                 children: [
-                  HomeAdComponent(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight * 0.05,
-                  ),
+                  // HomeAdComponent(),
                   HeadComponent(),
                   SizedBox(
                     height: 15,
