@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
 
 class TextDesign {
   const TextDesign();
@@ -12,6 +14,8 @@ class TextDesign {
   static final subTitleText = const TextStyle(
     fontSize: 15,
   );
+  static getMessageText(Pooja pooja) =>
+      "Hi, your invited to *${pooja.name}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by}*.\n\nWe request your gracious presence on this auspicious occasion.";
 }
 
 class CardContainer {
