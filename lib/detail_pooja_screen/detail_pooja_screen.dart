@@ -112,19 +112,47 @@ class _DetailPoojaState extends State<DetailPooja> {
                         itemCount: images.length,
                         itemBuilder: (BuildContext context, int index) {
                           return OpenContainer(
-                            closedBuilder: (context, action) =>
+                            closedBuilder: (context, action) => Stack(
+                              fit: StackFit.loose,
+                              children: [
                                 CachedNetworkImage(
-                              imageUrl: images[index]['url'],
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Container(
-                                width: 150,
-                                height: 150,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    value: progress.progress,
+                                  imageUrl: images[index]['url'],
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Container(
+                                    width: 150,
+                                    height: 150,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Positioned(
+                                  bottom: 1,
+                                  right: 1,
+                                  child: FutureBuilder(
+                                    future: SharedPreferences.getInstance()
+                                        .then((value) =>
+                                            value.get(images[index]['url'])),
+                                    builder: (context, snapshot) {
+                                      print(snapshot.data);
+                                      if (snapshot.data == true) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                            size: 20,
+                                          ),
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             openBuilder: (context, action) => ImageFullView(
                               url: images[index]['url'],
@@ -189,24 +217,12 @@ class _ImageFullViewState extends State<ImageFullView> {
         child: pref != null &&
                 pref.get(widget.url) != null &&
                 pref.get(widget.url) == true
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                  Text("152")
-                ],
+            ? Icon(
+                Icons.favorite,
+                color: Colors.red,
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.favorite,
-                  ),
-                  Text("152")
-                ],
+            : Icon(
+                Icons.favorite,
               ),
       ),
       body: SafeArea(
