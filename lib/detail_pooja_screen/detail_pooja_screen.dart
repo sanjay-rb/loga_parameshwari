@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPooja extends StatefulWidget {
   //const
@@ -147,18 +148,92 @@ class _DetailPoojaState extends State<DetailPooja> {
   }
 }
 
-class ImageFullView extends StatelessWidget {
+class ImageFullView extends StatefulWidget {
   const ImageFullView({Key key, this.url}) : super(key: key);
   final url;
+
+  @override
+  _ImageFullViewState createState() => _ImageFullViewState();
+}
+
+class _ImageFullViewState extends State<ImageFullView> {
+  SharedPreferences pref;
+  getVal() async {
+    pref = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getVal();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          SharedPreferences.getInstance().then((pref) {
+            if (pref.get(widget.url) != null && pref.get(widget.url) == true) {
+              setState(() {
+                pref.setBool(widget.url, false);
+              });
+            } else {
+              setState(() {
+                pref.setBool(widget.url, true);
+              });
+            }
+          });
+        },
+        child: pref != null &&
+                pref.get(widget.url) != null &&
+                pref.get(widget.url) == true
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                  ),
+                  Text("152")
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite,
+                  ),
+                  Text("152")
+                ],
+              ),
+      ),
       body: SafeArea(
-        child: InteractiveViewer(
-          child: Center(
-            child: CachedNetworkImage(
-              imageUrl: url,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Image Viewer",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InteractiveViewer(
+                  child: Center(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.url,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
