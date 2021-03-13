@@ -5,13 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter Run",
-            "type": "dart",
-            "args": [
-                "-v"
-            ],
-            "flutterMode": "debug",
-            "showMemoryUsage": true,
+            "name": "Run",
+            "type": "node-terminal",
+            "command": "echo Run Time %date%:%time% & flutter run",
             "request": "launch",
         }
     ]
