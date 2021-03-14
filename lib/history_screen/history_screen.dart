@@ -47,8 +47,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 if (snapshot.data.docs.isNotEmpty) {
                   List<QueryDocumentSnapshot> allPooja = snapshot.data.docs;
                   var controller = ScrollController(
-                    initialScrollOffset: allPooja.length + 1 * 50.0,
+                    initialScrollOffset: (allPooja.length + 1) * 50.0,
                   );
+                  var data = allPooja.where((element) {
+                    Pooja pooja = Pooja.fromJson(element);
+                    return pooja.on.toDate().compareTo(DateTime.now()) == 1;
+                  });
+                  var moveTo = 0.0;
+                  if (data.isNotEmpty) {
+                    moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
+                  }
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    controller.animateTo(
+                      moveTo,
+                      duration: Duration(seconds: 1),
+                      curve: Curves.ease,
+                    );
+                  });
 
                   return ListView.builder(
                     controller: controller,
