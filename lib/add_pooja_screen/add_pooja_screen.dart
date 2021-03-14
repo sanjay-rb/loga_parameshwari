@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
 class AddPoojaScreen extends StatefulWidget {
@@ -144,42 +145,14 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                       .toJson(),
                                 )
                                 .then((value) {
-                              /**
-                                   Future<void> sendPushMessage() async {
-    if (_token == null) {
-      print('Unable to send FCM message, no token exists.');
-      return;
-    }
-
-    String constructFCMPayload(String token) {
-  _messageCount++;
-  return jsonEncode({
-    'token': token,
-    'data': {
-      'via': 'FlutterFire Cloud Messaging!!!',
-      'count': _messageCount.toString(),
-    },
-    'notification': {
-      'title': 'Hello FlutterFire!',
-      'body': 'This notification (#$_messageCount) was created via FCM!',
-    },
-  });
-}
-
-    try {
-      await http.post(
-        Uri.parse('https://api.rnfirebase.io/messaging/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: constructFCMPayload(_token),
-      );
-      print('FCM request for device sent!');
-    } catch (e) {
-      print(e);
-    }
-  }
-                                   */
+                              Messaging.send(
+                                title: name,
+                                body:
+                                    'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
+                              ).then((value) {
+                                print(
+                                    "MESSAGE STATUS ::::::: ${value.statusCode}");
+                              });
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
