@@ -7,7 +7,13 @@
         {
             "name": "Run",
             "type": "node-terminal",
-            "command": "echo Run Time %date%:%time% & flutter run",
+            "command": " echo Run Time %time%:%date% & flutter run -v",
+            "request": "launch",
+        },
+        {
+            "name": "Release",
+            "type": "node-terminal",
+            "command": " echo Run Time %time%:%date% & flutter run -v --release",
             "request": "launch",
         }
     ]

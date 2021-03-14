@@ -4,8 +4,18 @@ import 'package:loga_parameshwari/model/pooja.dart';
 
 import 'components/tree_leaf.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key key}) : super(key: key);
+
+  @override
+  _HistoryScreenState createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,12 @@ class HistoryScreen extends StatelessWidget {
               } else {
                 if (snapshot.data.docs.isNotEmpty) {
                   List<QueryDocumentSnapshot> allPooja = snapshot.data.docs;
+                  var controller = ScrollController(
+                    initialScrollOffset: allPooja.length + 1 * 50.0,
+                  );
+
                   return ListView.builder(
+                    controller: controller,
                     itemCount: allPooja.length + 1,
                     itemBuilder: (context, index) {
                       if (index == allPooja.length) {
