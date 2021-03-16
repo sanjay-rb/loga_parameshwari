@@ -5,13 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter Run",
-            "type": "dart",
-            "args": [
-                "-v"
-            ],
-            "flutterMode": "debug",
-            "showMemoryUsage": true,
+            "name": "Run",
+            "type": "node-terminal",
+            "command": " echo Run Time %time%:%date% & flutter run -v",
+            "request": "launch",
+        },
+        {
+            "name": "Release",
+            "type": "node-terminal",
+            "command": " echo Run Time %time%:%date% & flutter run -v --release",
+            "request": "launch",
+        },
+        {
+            "name": "Build",
+            "type": "node-terminal",
+            "command": " echo Run Time %time%:%date% & flutter build apk --split-per-abi",
             "request": "launch",
         }
     ]

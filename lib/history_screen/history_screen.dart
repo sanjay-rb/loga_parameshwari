@@ -1,14 +1,21 @@
-import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
-import 'package:share/share.dart';
 
-class HistoryScreen extends StatelessWidget {
+import 'components/tree_leaf.dart';
+
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key key}) : super(key: key);
+
+  @override
+  _HistoryScreenState createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +46,87 @@ class HistoryScreen extends StatelessWidget {
               } else {
                 if (snapshot.data.docs.isNotEmpty) {
                   List<QueryDocumentSnapshot> allPooja = snapshot.data.docs;
+                  var controller = ScrollController(
+                    initialScrollOffset: (allPooja.length + 1) * 50.0,
+                  );
+                  var data = allPooja.where((element) {
+                    Pooja pooja = Pooja.fromJson(element);
+                    return pooja.on.toDate().compareTo(DateTime.now()) == 1;
+                  });
+                  var moveTo = 0.0;
+                  if (data.isNotEmpty) {
+                    moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
+                  }
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    controller.animateTo(
+                      moveTo,
+                      duration: Duration(seconds: 1),
+                      curve: Curves.ease,
+                    );
+                  });
+
                   return ListView.builder(
-                    itemCount: allPooja.length,
+                    controller: controller,
+                    itemCount: allPooja.length + 1,
                     itemBuilder: (context, index) {
-                      return TreeLeaf(
-                        pooja: Pooja.fromJson(allPooja[index]),
-                        index: index,
-                        id: allPooja[index].id,
-                      );
+                      if (index == allPooja.length) {
+                        return Container(
+                          width: double.maxFinite,
+                          height: 50,
+                          child: Stack(
+                            children: [
+                              Row(
+                                children: index % 2 == 0
+                                    ? [
+                                        Spacer(
+                                          flex: 40,
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            color: Colors.purple,
+                                          ),
+                                        ),
+                                        Spacer(
+                                          flex: 40,
+                                        ),
+                                      ]
+                                    : [
+                                        Spacer(
+                                          flex: 40,
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            color: Colors.purple,
+                                          ),
+                                        ),
+                                        Spacer(
+                                          flex: 40,
+                                        ),
+                                      ],
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return TreeLeaf(
+                          pooja: Pooja.fromJson(allPooja[index]),
+                          index: index,
+                          id: allPooja[index].id,
+                        );
+                      }
                     },
                   );
                 } else {
@@ -57,143 +137,6 @@ class HistoryScreen extends StatelessWidget {
               }
             },
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class TreeLeaf extends StatelessWidget {
-  const TreeLeaf({
-    Key key,
-    @required this.pooja,
-    @required this.index,
-    @required this.id,
-  }) : super(key: key);
-
-  final Pooja pooja;
-  final int index;
-  final id;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      height: 100,
-      child: Stack(
-        children: [
-          Row(
-            children: index % 2 == 0
-                ? [
-                    LeafCard(pooja: pooja, id: this.id),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    LeafDate(pooja: pooja),
-                  ]
-                : [
-                    LeafDate(pooja: pooja),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    LeafCard(pooja: pooja, id: this.id),
-                  ],
-          ),
-          Center(
-            child: Container(
-              width: 15,
-              height: 15,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class LeafCard extends StatelessWidget {
-  const LeafCard({
-    Key key,
-    @required this.pooja,
-    @required this.id,
-  }) : super(key: key);
-
-  final Pooja pooja;
-  final id;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 40,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GestureDetector(
-          onLongPress: () {
-            Share.share(TextDesign.getMessageText(pooja));
-          },
-          child: OpenContainer(
-            closedBuilder: (context, action) => Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "${pooja.name}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        "by ${pooja.by}",
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            openBuilder: (context, action) => DetailPooja(
-              pooja: pooja,
-              id: this.id,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LeafDate extends StatelessWidget {
-  const LeafDate({
-    Key key,
-    @required this.pooja,
-  }) : super(key: key);
-
-  final Pooja pooja;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 40,
-      child: Container(
-        child: Center(
-          child: Text(
-              "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}"),
         ),
       ),
     );

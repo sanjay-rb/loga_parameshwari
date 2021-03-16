@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
 class AddPoojaScreen extends StatefulWidget {
@@ -144,9 +145,58 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                       .toJson(),
                                 )
                                 .then((value) {
+                              Messaging.send(
+                                title: name,
+                                body:
+                                    'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
+                              ).then((value) {
+                                print(
+                                    "MESSAGE STATUS ::::::: ${value.statusCode}");
+                              });
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                  ],
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.done_rounded,
+                                          size: 80,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text("Done"),
+                                    ],
+                                  ),
+                                ),
+                              ).then((value) => Navigator.pop(context));
+                            }).onError((error, stackTrace) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                  ],
                                   content: Container(
                                     height: 190,
                                     child: Column(
@@ -159,23 +209,18 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: Icon(
-                                            Icons.done_rounded,
+                                            Icons.error,
                                             size: 80,
                                             color: Colors.white,
                                           ),
                                         ),
-                                        Text("Done"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("OK"),
-                                        ),
+                                        Text(
+                                            "Somthing went Wrong! Please try again."),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ).then((value) => Navigator.pop(context));
+                              );
                             });
                           }
                         },

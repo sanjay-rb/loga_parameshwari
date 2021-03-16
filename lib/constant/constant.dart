@@ -14,6 +14,9 @@ class TextDesign {
   static final subTitleText = const TextStyle(
     fontSize: 15,
   );
+
+  static const msgKey =
+      "AAAAZCPfm4I:APA91bHfQkiVDflbWTHDlf6tZPASoa41uKXQkxiOjRSpCezcNdiiiMLT1tIvNOGBbUvqckjSq8mE2pMHURP8Qeo8Nm5QkYwtrfe0pW7hbhJ9dwcWzLuTTcLVw9b5K1SIqHUEusREdoN4";
   static getMessageText(Pooja pooja) =>
       "Hi, your invited to *${pooja.name}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by}*.\n\nWe request your gracious presence on this auspicious occasion.";
 }
