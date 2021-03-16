@@ -21,6 +21,12 @@
             "type": "node-terminal",
             "command": " echo Run Time %time%:%date% & flutter build apk --split-per-abi",
             "request": "launch",
+        },
+        {
+            "name": "Clean",
+            "type": "node-terminal",
+            "command": "flutter clean",
+            "request": "launch",
         }
     ]
 }
