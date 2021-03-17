@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:in_app_review_play_store/in_app_review_play_store.dart';
 import 'components/btn_ad.dart';
 import 'components/home_ad.dart';
 import 'components/share_app.dart';
 import 'components/special_pooja.dart';
 import 'components/head.dart';
-// import 'components/home_ad.dart';
 import 'components/home_keys.dart';
 
 class HomeScreen extends StatefulWidget {
