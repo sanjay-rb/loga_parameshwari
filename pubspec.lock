@@ -303,13 +303,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  in_app_review_play_store:
-    dependency: "direct main"
-    description:
-      name: in_app_review_play_store
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
   intl:
     dependency: "direct main"
     description:
