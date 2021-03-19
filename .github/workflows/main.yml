@@ -1,0 +1,73 @@
+name: Continuous Integration and Deploy.
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      # GitHub CheckOut....
+      - name: GitHub CheckOut.
+        uses: actions/checkout@v2
+
+      # Setup Java....
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "1.8.X"
+
+      # Setup Flutter....
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      # Get Flutter Dependencies....
+      - name: Get Dependencies.
+        run: flutter pub get
+
+      # Check for any formatting issues in the code....
+      - name: Check Format Issues
+        run: flutter format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors....
+      - name: Analyze Code
+        run: flutter analyze .
+
+      # Build apk....
+      - name: Build APK
+        run: flutter build apk -t lib/main.dart --split-per-abi
+
+      # Telegram sender....
+      - name: Telegram sender
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: build/app/outputs/flutter-apk/app.apk
+          message: |
+            WorkFlow: 
+              ${{ github.workflow }}
+            ------------------------------------------  
+            The Pull Request triggered with ID
+              ${{ github.event.pull_request.id }}
+
+            ${{ github.event.pull_request.html_url }}
+            ------------------------------------------
+            ${{ github.base_ref }} <- ${{ github.head_ref }}
+            ------------------------------------------
+            Pull Request Title: 
+              ${{ github.event.pull_request.title }}
+            Total Commits: 
+              ${{ github.event.pull_request.commits }}
+            ------------------------------------------
+            By : ${{ github.actor }}
+            Please find the new APK here.
+            ------------------------------------------
+            🔥🔥🔥🔥
+            👇🏾👇🏾👇🏾
+            👇🏾👇🏾
+            👇🏾
