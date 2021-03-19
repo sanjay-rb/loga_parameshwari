@@ -30,7 +30,6 @@ dependencies:
   cloud_firestore: any
   cupertino_icons: ^1.0.0
   datetime_picker_formfield: ^2.0.0
-  file_picker: ^3.0.0
   firebase_analytics: any
   firebase_core: any
   firebase_messaging: ^9.0.0

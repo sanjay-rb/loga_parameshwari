@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
+import 'components/btn_ad.dart';
+
 class AddPoojaScreen extends StatefulWidget {
   const AddPoojaScreen({Key key}) : super(key: key);
 
@@ -37,98 +39,9 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        Align(
-                          child: Text("Pooja Name"),
-                          alignment: Alignment.topLeft,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if (value == null || value.length == 0) {
-                              return "Please give pooja name";
-                            } else {
-                              name = value;
-                              return null;
-                            }
-                          },
-                          textCapitalization: TextCapitalization.sentences,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(hintText: "Name"),
-                          onEditingComplete: () => node.nextFocus(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        Align(
-                          child: Text("Origanized by"),
-                          alignment: Alignment.topLeft,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if (value == null || value.length == 0) {
-                              return "Please give your name";
-                            } else {
-                              by = value;
-                              return null;
-                            }
-                          },
-                          textCapitalization: TextCapitalization.words,
-                          keyboardType: TextInputType.text,
-                          decoration:
-                              InputDecoration(hintText: "Origanizer Name"),
-                          onEditingComplete: () => node.unfocus(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        Align(
-                          child: Text("Scheduled on"),
-                          alignment: Alignment.topLeft,
-                        ),
-                        DateTimeField(
-                          decoration:
-                              InputDecoration(hintText: "Date of the Pooja"),
-                          validator: (value) {
-                            if (value == null) {
-                              return "Please give date and time";
-                            } else {
-                              on = value;
-                              return null;
-                            }
-                          },
-                          format: DateFormat("dd-MM-yyyy hh:mm aaa"),
-                          onShowPicker: (context, currentValue) async {
-                            final date = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100));
-                            if (date != null) {
-                              final time = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.fromDateTime(
-                                    currentValue ?? DateTime.now()),
-                              );
-                              return DateTimeField.combine(date, time);
-                            } else {
-                              return currentValue;
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                  nameForm(node),
+                  byForm(node),
+                  onForm(),
                   Spacer(),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -138,11 +51,25 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (addPoojaFormKey.currentState.validate()) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                content: LinearProgressIndicator(),
+                              ),
+                            );
                             FirebaseFirestore.instance
                                 .collection("Event")
                                 .add(
-                                  Pooja(name, by, Timestamp.fromDate(on))
-                                      .toJson(),
+                                  Pooja(
+                                    name.trim(),
+                                    by.trim(),
+                                    Timestamp.fromDate(on),
+                                  ).toJson(),
                                 )
                                 .then((value) {
                               Messaging.send(
@@ -150,77 +77,17 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                 body:
                                     'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
                               ).then((value) {
-                                print(
-                                    "MESSAGE STATUS ::::::: ${value.statusCode}");
+                                Navigator.pop(context);
+                                if (value.statusCode == 200)
+                                  successDialog(context);
+                                else
+                                  errorDialog(context,
+                                      "Something went wrong! Message not sent to the members.");
                               });
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.done_rounded,
-                                          size: 80,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Text("Done"),
-                                    ],
-                                  ),
-                                ),
-                              ).then((value) => Navigator.pop(context));
                             }).onError((error, stackTrace) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                  content: Container(
-                                    height: 190,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: 100,
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.error,
-                                            size: 80,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        Text(
-                                            "Somthing went Wrong! Please try again."),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
+                              Navigator.pop(context);
+                              errorDialog(context,
+                                  "Something went wrong! Pooja not posted to the members.");
                             });
                           }
                         },
@@ -230,7 +97,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -239,4 +106,168 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       ),
     );
   }
+
+  void errorDialog(context, msg) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            ),
+          ],
+          content: Container(
+            height: 190,
+            child: Column(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.error,
+                    size: 80,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(msg),
+                BtnAdComponent(),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  void successDialog(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            ),
+          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.done_rounded,
+                  size: 80,
+                  color: Colors.white,
+                ),
+              ),
+              Text("Done"),
+              BtnAdComponent(),
+            ],
+          ),
+        ),
+      ).then((value) => Navigator.pop(context));
+
+  nameForm(node) => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Align(
+              child: Text("Pooja Name"),
+              alignment: Alignment.topLeft,
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.length == 0) {
+                  return "Please give pooja name";
+                } else {
+                  name = value;
+                  return null;
+                }
+              },
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(hintText: "Name"),
+              onEditingComplete: () => node.nextFocus(),
+            ),
+          ],
+        ),
+      );
+
+  byForm(FocusScopeNode node) => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Align(
+              child: Text("Origanized by"),
+              alignment: Alignment.topLeft,
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.length == 0) {
+                  return "Please give your name";
+                } else {
+                  by = value;
+                  return null;
+                }
+              },
+              textCapitalization: TextCapitalization.words,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(hintText: "Origanizer Name"),
+              onEditingComplete: () => node.nextFocus(),
+            ),
+          ],
+        ),
+      );
+
+  onForm() => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Align(
+              child: Text("Scheduled on"),
+              alignment: Alignment.topLeft,
+            ),
+            DateTimeField(
+              decoration: InputDecoration(hintText: "Date of the Pooja"),
+              validator: (value) {
+                if (value == null) {
+                  return "Please give date and time";
+                } else {
+                  on = value;
+                  return null;
+                }
+              },
+              format: DateFormat("dd-MM-yyyy hh:mm aaa"),
+              onShowPicker: (context, currentValue) async {
+                final date = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100));
+                if (date != null) {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime:
+                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                  );
+                  return DateTimeField.combine(date, time);
+                } else {
+                  return currentValue;
+                }
+              },
+            ),
+          ],
+        ),
+      );
 }
