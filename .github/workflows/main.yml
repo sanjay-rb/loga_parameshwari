@@ -1,4 +1,4 @@
-name: Continuous Integration and Deploy.
+name: CICD on Loga Parameshwari Temple App
 on:
   workflow_dispatch:
     branches:
