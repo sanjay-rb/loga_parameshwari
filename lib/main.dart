@@ -1,4 +1,3 @@
-// import 'package:admob_flutter/admob_flutter.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -19,6 +18,30 @@ Future<void> main() async {
   );
   await FirebaseMessaging.instance.subscribeToTopic("all");
   runApp(MyApp());
+}
+
+class ErrorPage extends StatelessWidget {
+  // This widget is the root of your application.
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Loga Parameshwari',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+      home: Scaffold(body: Center(child: Text("Error"))),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

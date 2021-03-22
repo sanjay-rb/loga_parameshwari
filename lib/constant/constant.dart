@@ -36,4 +36,5 @@ class ImagesAndUrls {
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fgod.jpg?alt=media&token=fe7eb4f0-882b-42e7-b94a-461a22cb38ab";
   static final historyImg =
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fhistory.png?alt=media&token=231b1981-7c7e-4fa2-a21f-108660b74fc3";
+      static final logoImg = "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Flogo.png?alt=media&token=830a8425-ccea-4d0e-9b2d-bd3fbfd4e385";
 }
