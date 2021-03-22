@@ -110,6 +110,9 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   void errorDialog(context, msg) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
           actions: [
             TextButton(
               onPressed: () {
@@ -118,8 +121,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               child: Text("OK"),
             ),
           ],
-          content: Container(
-            height: 190,
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Container(
@@ -146,7 +149,9 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   void successDialog(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          insetPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
           actions: [
             TextButton(
               onPressed: () {
@@ -155,25 +160,28 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               child: Text("OK"),
             ),
           ],
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.done_rounded,
+                    size: 80,
+                    color: Colors.white,
+                  ),
                 ),
-                child: Icon(
-                  Icons.done_rounded,
-                  size: 80,
-                  color: Colors.white,
-                ),
-              ),
-              Text("Done"),
-              BtnAdComponent(),
-            ],
+                Text("Done"),
+                BtnAdComponent(),
+              ],
+            ),
           ),
         ),
       ).then((value) => Navigator.pop(context));
