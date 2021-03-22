@@ -1,0 +1,71 @@
+name: CICD on Loga Parameshwari Temple App
+on:
+  workflow_dispatch:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build_apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      # GitHub CheckOut....
+      - name: GitHub CheckOut.
+        uses: actions/checkout@v2.3.4
+
+      # Setup Java....
+      - name: Setup Java
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: "1.8.X"
+
+      # Setup Flutter....
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1.4.0
+        with:
+          channel: "stable"
+
+      # Get Flutter Dependencies....
+      - name: Get Dependencies.
+        run: flutter pub get
+
+      # Check for any formatting issues in the code....
+      - name: Check Format Issues
+        run: flutter format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors....
+      - name: Analyze Code
+        run: flutter analyze .
+
+      # Build apk....
+      - name: Build APK
+        run: flutter build apk -t lib/main.dart --split-per-abi
+
+      # Telegram sender....
+      - name: Telegram sender
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: build/app/outputs/flutter-apk/app.apk
+          message: |
+            Project:
+              ${{ github.event.repository.name }}
+            WorkFlow: 
+              ${{ github.workflow }}
+            ------------------------------------------
+            Pull Request Title: 
+              ${{ github.event.pull_request.title }}
+            Total Commits: 
+              ${{ github.event.pull_request.commits }}
+            ------------------------------------------
+            By : ${{ github.actor }}
+            Please find the new APK here.
+            ------------------------------------------
+            🔥🔥🔥🔥
+            👇🏾👇🏾👇🏾
+            👇🏾👇🏾
+            👇🏾
