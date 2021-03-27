@@ -2,10 +2,9 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/add_pooja_screen/add_pooja_screen.dart';
-import 'package:loga_parameshwari/ar_full_view/ar_full_view.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/history_screen/history_screen.dart';
-import 'package:model_viewer/model_viewer.dart';
+import 'package:loga_parameshwari/home_screen/components/map_view.dart';
 import 'recent_pooja.dart';
 
 class AddPooja extends StatelessWidget {
@@ -96,49 +95,6 @@ class HistoryPooja extends StatelessWidget {
   }
 }
 
-class ARView extends StatelessWidget {
-  const ARView({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: OpenContainer(
-          closedBuilder: (context, action) => Container(
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: CardContainer.borderRadius,
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ModelViewer(
-                        backgroundColor: Colors.white,
-                        src: 'images/3d_sullam.glb',
-                        alt: "A 3D model of an astronaut",
-                        autoRotate: true,
-                      ),
-                    ),
-                    Text("AR Logo")
-                  ],
-                ),
-              ),
-            ),
-          ),
-          openBuilder: (context, action) => ARFullView(),
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class HomeKeysComponent extends StatelessWidget {
   final double width;
   final double height;
@@ -163,7 +119,7 @@ class HomeKeysComponent extends StatelessWidget {
                 children: [
                   Expanded(child: AddPooja()),
                   Expanded(child: HistoryPooja()),
-                  Expanded(child: ARView()),
+                  Expanded(child: MapView()),
                 ],
               ),
             ),

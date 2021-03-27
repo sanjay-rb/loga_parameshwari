@@ -14,7 +14,7 @@ class ARFullView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Temple AR View",
+                "Temple 3D View",
                 style: TextDesign.headText,
                 textAlign: TextAlign.right,
               ),
@@ -22,8 +22,8 @@ class ARFullView extends StatelessWidget {
             Expanded(
               child: ModelViewer(
                 backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-                src: 'images/3d_sullam.glb',
-                alt: "A 3D model of an astronaut",
+                src: 'images/temple.glb',
+                alt: "A 3D model of an loga parameshari temple",
                 autoRotate: true,
                 cameraControls: true,
                 ar: true,
