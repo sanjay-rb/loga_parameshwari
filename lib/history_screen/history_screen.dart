@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
-import 'components/history_ad.dart';
+// import 'components/history_ad.dart';
 import 'components/tree_leaf.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            HistoryAdComponent(),
+            // HistoryAdComponent(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'components/btn_ad.dart';
-import 'components/home_ad.dart';
+import 'package:loga_parameshwari/home_screen/components/map_view.dart';
+// import 'components/btn_ad.dart';
+// import 'components/home_ad.dart';
 import 'components/review_app.dart';
 import 'components/share_app.dart';
 import 'components/special_pooja.dart';
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   controller: _homeListController,
                   children: [
-                    HomeAdComponent(),
+                    // HomeAdComponent(),
                     HeadComponent(),
                     SizedBox(
                       height: 15,
@@ -82,6 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: constraints.maxWidth,
                       height: constraints.maxHeight * 0.5,
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    MapView(),
                     SizedBox(
                       height: 20,
                     ),
@@ -124,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text("If you like to exit?"),
               ),
             ),
-            BackBtnAdComponent(),
+            // BackBtnAdComponent(),
           ],
         ),
         actions: [
