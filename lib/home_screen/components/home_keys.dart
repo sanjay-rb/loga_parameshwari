@@ -6,8 +6,6 @@ import 'package:loga_parameshwari/ar_full_view/ar_full_view.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/history_screen/history_screen.dart';
 import 'package:model_viewer/model_viewer.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'recent_pooja.dart';
 
 class AddPooja extends StatelessWidget {

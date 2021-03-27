@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
-import 'components/btn_ad.dart';
+// import 'components/btn_ad.dart';
 
 class AddPoojaScreen extends StatefulWidget {
   const AddPoojaScreen({Key key}) : super(key: key);
@@ -139,7 +139,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                   ),
                 ),
                 Text(msg),
-                BtnAdComponent(),
+                // BtnAdComponent(),
               ],
             ),
           ),
@@ -179,7 +179,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                   ),
                 ),
                 Text("Done"),
-                BtnAdComponent(),
+                // BtnAdComponent(),
               ],
             ),
           ),
