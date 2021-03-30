@@ -47,7 +47,7 @@ class AddImageButton extends StatelessWidget {
           String url = await rootPath
               .child('${pooja.name}+$id')
               .child(imageFile.name)
-              .putData((await imageFile.getByteData(quality: 70))
+              .putData((await imageFile.getByteData(quality: 50))
                   .buffer
                   .asUint8List())
               .then((v) => v.ref.getDownloadURL());

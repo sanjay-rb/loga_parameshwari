@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 
-
 class Messaging {
   static Future<http.Response> send({
     @required String title,
@@ -17,7 +16,7 @@ class Messaging {
           "notification": {
             "title": "$title",
             "body": "$body",
-            "imageUrl":"${ImagesAndUrls.logoImg}"
+            "imageUrl": "${ImagesAndUrls.logoImg}"
           }
         }),
         headers: <String, String>{

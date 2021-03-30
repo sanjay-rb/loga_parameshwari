@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReviewApp extends StatelessWidget {
   @override
@@ -11,10 +12,8 @@ class ReviewApp extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
         ),
         onPressed: () async {
-          final InAppReview inAppReview = InAppReview.instance;
-
-          if (await inAppReview.isAvailable()) {
-            inAppReview.requestReview();
+          if (await canLaunch(ImagesAndUrls.googlePlayLink)) {
+            launch(ImagesAndUrls.googlePlayLink);
           }
         },
         icon: Icon(Icons.star, color: Colors.white),
