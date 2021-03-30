@@ -14,7 +14,7 @@ class ShareApp extends StatelessWidget {
         ),
         onPressed: () {
           Share.share(
-              "This is Sanjay, Ping for for Test https://play.google.com/store/apps/developer?id=Sanjay+R+B");
+              "Install this app for get live information about the Loga Parameshwari Temple Ramassery https://play.google.com/store/apps/details?id=com.sanjoke.loga_parameshwari");
         },
         icon: Icon(Icons.share, color: Colors.white),
         label: Text(
