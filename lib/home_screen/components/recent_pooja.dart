@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -100,7 +99,12 @@ class RecentPoojaView extends StatelessWidget {
           flex: 60,
           child: Container(
             width: double.maxFinite,
-            child: CachedNetworkImage(
+            child: Image.asset(
+              "images/god.jpg",
+              fit: BoxFit.fill,
+            ),
+            /**
+             * CachedNetworkImage(
               imageUrl: ImagesAndUrls.godImg,
               fit: BoxFit.fill,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -109,6 +113,7 @@ class RecentPoojaView extends StatelessWidget {
                     CircularProgressIndicator(value: downloadProgress.progress),
               ),
             ),
+             */
           ),
         ),
         Expanded(

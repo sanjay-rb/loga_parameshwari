@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/home_screen/components/map_view.dart';
 // import 'components/btn_ad.dart';
 // import 'components/home_ad.dart';
+import 'components/ar_view.dart';
 import 'components/review_app.dart';
 import 'components/share_app.dart';
 import 'components/special_pooja.dart';
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    MapView(),
+                    ARView(),
                     SizedBox(
                       height: 20,
                     ),

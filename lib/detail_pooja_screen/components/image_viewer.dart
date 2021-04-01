@@ -71,6 +71,7 @@ class _ImageFullViewState extends State<ImageFullView> {
                   child: Center(
                     child: CachedNetworkImage(
                       imageUrl: widget.url,
+                      filterQuality: FilterQuality.high,
                     ),
                   ),
                 ),

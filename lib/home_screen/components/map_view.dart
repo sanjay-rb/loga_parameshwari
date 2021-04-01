@@ -18,7 +18,6 @@ class MapView extends StatelessWidget {
             }
           },
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: CardContainer.borderRadius,

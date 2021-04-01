@@ -18,7 +18,7 @@ class TextDesign {
   static const msgKey =
       "AAAAZCPfm4I:APA91bHfQkiVDflbWTHDlf6tZPASoa41uKXQkxiOjRSpCezcNdiiiMLT1tIvNOGBbUvqckjSq8mE2pMHURP8Qeo8Nm5QkYwtrfe0pW7hbhJ9dwcWzLuTTcLVw9b5K1SIqHUEusREdoN4";
   static getMessageText(Pooja pooja) =>
-      "Hi, your invited to *${pooja.name}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by}*.\n\nWe request your gracious presence on this auspicious occasion.";
+      "Hi, your invited to *${pooja.name.trim()}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by.trim()}*.\n\nWe request your gracious presence on this auspicious occasion.";
 }
 
 class CardContainer {
@@ -32,9 +32,10 @@ class ImagesAndUrls {
   static final mapImg =
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Flocation.png?alt=media&token=a1527275-6659-47a7-b7a5-a67fc9c71ec3";
   static final mapUrl = "https://goo.gl/maps/dTXWo6dTdQ8Bgsi28";
-  static final godImg =
-      "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fgod.jpg?alt=media&token=fe7eb4f0-882b-42e7-b94a-461a22cb38ab";
   static final historyImg =
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fhistory.png?alt=media&token=231b1981-7c7e-4fa2-a21f-108660b74fc3";
-      static final logoImg = "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Flogo.png?alt=media&token=830a8425-ccea-4d0e-9b2d-bd3fbfd4e385";
+  static final logoImg =
+      "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Flogo.png?alt=media&token=830a8425-ccea-4d0e-9b2d-bd3fbfd4e385";
+  static final googlePlayLink =
+      "https://play.google.com/store/apps/details?id=com.sanjoke.loga_parameshwari";
 }
