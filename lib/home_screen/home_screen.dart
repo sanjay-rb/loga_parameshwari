@@ -109,29 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
     bool yesorno = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        insetPadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.zero,
-        titlePadding: EdgeInsets.zero,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Bye👋! See you Soon 😃",
-            style: TextStyle(fontSize: 17),
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("If you like to exit?"),
-              ),
-            ),
-            // BackBtnAdComponent(),
-          ],
-        ),
+        title: Text("Bye👋! See you Soon 😃", style: TextStyle(fontSize: 17)),
+        content: Text("If you like to exit?"),
         actions: [
           TextButton(
             onPressed: () {

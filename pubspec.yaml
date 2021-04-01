@@ -24,7 +24,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  admob_flutter: ^1.0.1
   animations: ^2.0.0
   cached_network_image: any
   cloud_firestore: any
