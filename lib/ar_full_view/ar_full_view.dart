@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:model_viewer/model_viewer.dart';
 
 class ARFullView extends StatefulWidget {
@@ -31,7 +32,7 @@ class _ARFullViewState extends State<ARFullView> {
         body: SafeArea(
           child: ModelViewer(
             backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-            src: 'images/temple.glb',
+            src: ImagesAndUrls.glb3D,
             alt: "A 3D model of an loga parameshari temple",
             autoRotate: true,
             cameraControls: true,
