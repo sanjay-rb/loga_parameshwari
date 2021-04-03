@@ -7,19 +7,19 @@
         {
             "name": "Run",
             "type": "node-terminal",
-            "command": "code build_time.txt & echo Run Time %time%:%date% & flutter run -v",
+            "command": "flutter run -v",
             "request": "launch",
         },
         {
             "name": "Release",
             "type": "node-terminal",
-            "command": "code build_time.txt & echo Run Time %time%:%date% & flutter run -v --release",
+            "command": "flutter run -v --release",
             "request": "launch",
         },
         {
             "name": "Build",
             "type": "node-terminal",
-            "command": "code build_time.txt & echo Run Time %time%:%date% & flutter build apk --split-per-abi",
+            "command": "flutter build apk --split-per-abi",
             "request": "launch",
         },
         {
