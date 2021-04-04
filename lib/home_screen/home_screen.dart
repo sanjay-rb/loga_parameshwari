@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'components/btn_ad.dart';
-// import 'components/home_ad.dart';
 import 'components/ar_view.dart';
 import 'components/review_app.dart';
 import 'components/share_app.dart';
