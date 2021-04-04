@@ -1,4 +1,6 @@
+import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/error_page/error_page.dart';
 import 'components/ar_view.dart';
 import 'components/review_app.dart';
 import 'components/share_app.dart';
@@ -63,40 +65,44 @@ class _HomeScreenState extends State<HomeScreen> {
       body: WillPopScope(
         onWillPop: _onBackPress,
         child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) => Container(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ListView(
-                  controller: _homeListController,
-                  children: [
-                    // HomeAdComponent(),
-                    HeadComponent(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    HomeKeysComponent(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight * 0.5,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ARView(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SpecialPoojaComponent(),
-                    SizedBox(
-                      height: _bottomAppBarHeight,
-                    ),
-                  ],
+          child: ConnectivityBuilder(builder: (context, isConnect, status) {
+            if (status == ConnectivityStatus.none) {
+              return ErrorApp();
+            }
+            return LayoutBuilder(
+              builder: (context, constraints) => Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ListView(
+                    controller: _homeListController,
+                    children: [
+                      HeadComponent(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      HomeKeysComponent(
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight * 0.5,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ARView(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SpecialPoojaComponent(),
+                      SizedBox(
+                        height: _bottomAppBarHeight,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );

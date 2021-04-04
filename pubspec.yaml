@@ -13,6 +13,7 @@ dependencies:
   animations: ^2.0.0
   cached_network_image: ^3.0.0
   cloud_firestore: ^1.0.3
+  cross_connectivity: ^3.0.2
   datetime_picker_formfield: ^2.0.0
   firebase_analytics: ^7.1.1
   firebase_core: ^1.0.2
