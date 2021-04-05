@@ -38,6 +38,8 @@ class ImagesAndUrls {
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Flogo.png?alt=media&token=830a8425-ccea-4d0e-9b2d-bd3fbfd4e385";
   static final googlePlayLink =
       "https://play.google.com/store/apps/details?id=com.sanjoke.loga_parameshwari";
-  static final glb3D =
-      "https://sanjaysanju618.github.io/ScreenShots/temple.glb";
+  static final gif3D =
+      "https://sanjaysanju618.github.io/ScreenShots/temple_3d.gif";
+  static final godImg =
+      "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fgod.webp?alt=media&token=af566403-fd35-47c1-9a64-8a676453d77d";
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 
@@ -26,9 +27,14 @@ class ARView extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.asset(
-                    'images/temple_3d.gif',
+                  CachedNetworkImage(
+                    imageUrl: ImagesAndUrls.gif3D,
                     fit: BoxFit.fill,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
