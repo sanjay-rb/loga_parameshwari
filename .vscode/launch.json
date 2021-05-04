@@ -23,6 +23,12 @@
             "request": "launch",
         },
         {
+            "name": "Deploy",
+            "type": "node-terminal",
+            "command": "flutter build appbundle --release",
+            "request": "launch",
+        },
+        {
             "name": "Clean",
             "type": "node-terminal",
             "command": "flutter clean",
