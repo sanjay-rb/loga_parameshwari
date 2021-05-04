@@ -41,7 +41,7 @@ class _ErrorPageState extends State<ErrorPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Oops, it looks like your not connected to the internet 😕. Please check your internet connection 👍.",
+                "Oops, it looks like your not connected to the internet 😕. \nPlease check your internet connection 👍.",
                 style: TextDesign.titleText,
                 textAlign: TextAlign.center,
               ),

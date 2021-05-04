@@ -259,10 +259,13 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               format: DateFormat("dd-MM-yyyy hh:mm aaa"),
               onShowPicker: (context, currentValue) async {
                 final date = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
+                  context: context,
+                  firstDate: DateTime.now(),
+                  initialDate: currentValue ?? DateTime.now(),
+                  lastDate: DateTime.now().add(
+                    Duration(days: 365 * 3),
+                  ),
+                );
                 if (date != null) {
                   final time = await showTimePicker(
                     context: context,

@@ -60,40 +60,58 @@ class HeaderDetails extends StatelessWidget {
   }
 }
 
-deleteEvent(context, id, pooja) => () async {
-      bool boolVal = await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Oops! You're deleting the event?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: Text(
-                "Yes, I'm",
-                style: TextStyle(color: Colors.red),
+deleteEvent(context, id, Pooja pooja) => () async {
+      if (pooja.on.toDate().difference(DateTime.now()).isNegative) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Sorry'),
+            content: Text("This pooja is already done unable to delete it."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text("Ok"),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Text(
-                "Nope",
-                style: TextStyle(color: Colors.green),
-              ),
-            ),
-          ],
-        ),
-      );
-      if (boolVal != null && boolVal) {
-        FirebaseFirestore.instance.collection("Event").doc(id).delete();
-        Messaging.send(
-          title: pooja.name,
-          body:
-              '${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())} was deleted.',
+            ],
+          ),
         );
-        Navigator.pop(context);
+      } else {
+        bool boolVal = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Oops! You're deleting the event?"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(
+                  "Yes, I'm",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(
+                  "Nope",
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          ),
+        );
+        if (boolVal != null && boolVal) {
+          FirebaseFirestore.instance.collection("Event").doc(id).delete();
+          Messaging.send(
+            title: pooja.name,
+            body:
+                '${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())} was deleted.',
+          );
+          Navigator.pop(context);
+        }
       }
     };

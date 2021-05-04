@@ -67,9 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onWillPop: _onBackPress,
         child: SafeArea(
           child: ConnectivityBuilder(builder: (context, isConnect, status) {
-            print("isConnect $isConnect");
             if (isConnect) {
-              print("Print IN");
               return LayoutBuilder(
                 builder: (context, constraints) => Container(
                   width: double.maxFinite,
@@ -104,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else {
-              print("Print OUT");
               return Scaffold(
                 body: Center(
                   child: Padding(
@@ -113,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Oops, it looks like your not connected to the internet 😕. Please check your internet connection 👍.",
+                          "Oops, it looks like your not connected to the internet 😕. \nPlease check your internet connection 👍.",
                           style: TextDesign.titleText,
                           textAlign: TextAlign.center,
                         ),
