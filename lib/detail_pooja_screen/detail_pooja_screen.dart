@@ -18,7 +18,7 @@ class DetailPooja extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              HeaderDetails(pooja: pooja, id:id),
+              HeaderDetails(pooja: pooja, id: id),
               Divider(),
               ImageGridViewer(id),
             ],
