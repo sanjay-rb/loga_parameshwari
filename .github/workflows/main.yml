@@ -29,8 +29,12 @@ jobs:
           channel: "stable"
           flutter-version: '2.0.5'
 
+      # Get Flutter Clean....
+      - name: Clean Flutter
+        run: flutter clean
+
       # Get Flutter Dependencies....
-      - name: Get Dependencies.
+      - name: Get Dependencies
         run: flutter pub get
 
       # Check for any formatting issues in the code....
