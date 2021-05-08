@@ -1,5 +1,6 @@
 # My Ignore
 ignore/
+.vscode/
 
 # Miscellaneous
 *.class

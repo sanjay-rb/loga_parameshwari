@@ -19,7 +19,7 @@
         {
             "name": "Build",
             "type": "node-terminal",
-            "command": "flutter build apk --split-per-abi",
+            "command": "flutter build apk --split-per-abi --release",
             "request": "launch",
         },
         {
