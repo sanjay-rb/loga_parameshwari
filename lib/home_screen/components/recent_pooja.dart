@@ -69,6 +69,10 @@ class RecentPoojaView extends StatelessWidget {
                 child: Text(
                   this.next != null ? "${next.name}" : "No Event Scheduled",
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -88,9 +92,9 @@ class RecentPoojaView extends StatelessWidget {
                   this.next != null
                       ? "on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(next.on.toDate())}"
                       : "",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -137,6 +141,7 @@ class RecentPoojaView extends StatelessWidget {
                 child: Text(
                   this.next != null ? "by ${next.by}" : "Schedule Now",
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
