@@ -1,7 +1,7 @@
 # Loga Parameshwari Temple Ramassery.
 
 ## Short description
-> This app helps to see pooja at powerful Loga Parameshwari Temple Ramassery.
+ - This app helps to see pooja at powerful Loga Parameshwari Temple Ramassery.
 
 ## Specifications
  - Complete pooja management application.
