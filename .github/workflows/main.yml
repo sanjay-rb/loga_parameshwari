@@ -20,13 +20,14 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
         with:
-          java-version: "1.8.X"
+          java-version: "1.8.0_211"
 
       # Setup Flutter....
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
           channel: "stable"
+          flutter-version: '2.0.5'
 
       # Get Flutter Dependencies....
       - name: Get Dependencies.
@@ -34,7 +35,7 @@ jobs:
 
       # Check for any formatting issues in the code....
       - name: Check Format Issues
-        run: flutter format --set-exit-if-changed .
+        run: flutter format .
 
       # Statically analyze the Dart code for any errors....
       - name: Analyze Code
@@ -42,7 +43,7 @@ jobs:
 
       # Build apk....
       - name: Build APK
-        run: flutter build apk -t lib/main.dart --split-per-abi
+        run: flutter build apk -t lib/main.dart --split-per-abi -v
 
       # Telegram sender....
       - name: Telegram sender
