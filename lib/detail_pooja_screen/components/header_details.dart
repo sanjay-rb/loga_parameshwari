@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
@@ -105,12 +106,32 @@ deleteEvent(context, id, Pooja pooja) => () async {
           ),
         );
         if (boolVal != null && boolVal) {
-          FirebaseFirestore.instance.collection("Event").doc(id).delete();
-          Messaging.send(
-            title: pooja.name,
-            body:
-                '${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())} was deleted.',
-          );
+          var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
+          var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
+          Reference rootPath = FirebaseStorage.instance
+              .ref()
+              .child(year)
+              .child(month)
+              .child('${pooja.name}+$id');
+          rootPath.listAll().then((value) {
+            for (Reference item in value.items) {
+              item.delete();
+            }
+          });
+          DocumentReference rootRef =
+              FirebaseFirestore.instance.collection("Event").doc(id);
+          rootRef.collection("Images").get().then((value) {
+            for (var item in value.docs) {
+              rootRef.collection("Images").doc(item.id).delete();
+            }
+          });
+          rootRef.delete();
+
+          // Messaging.send(
+          //   title: pooja.name,
+          //   body:
+          //       '${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())} was deleted.',
+          // );
           Navigator.pop(context);
         }
       }

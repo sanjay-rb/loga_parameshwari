@@ -72,18 +72,19 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                   ).toJson(),
                                 )
                                 .then((value) {
-                              Messaging.send(
-                                title: name,
-                                body:
-                                    'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-                              ).then((value) {
-                                Navigator.pop(context);
-                                if (value.statusCode == 200)
-                                  successDialog(context);
-                                else
-                                  errorDialog(context,
-                                      "Something went wrong! Message not sent to the members.");
-                              });
+                              Navigator.pop(context);
+                              // Messaging.send(
+                              //   title: name,
+                              //   body:
+                              //       'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
+                              // ).then((value) {
+                              //   Navigator.pop(context);
+                              //   if (value.statusCode == 200)
+                              //     successDialog(context);
+                              //   else
+                              //     errorDialog(context,
+                              //         "Something went wrong! Message not sent to the members.");
+                              // });
                             }).onError((error, stackTrace) {
                               Navigator.pop(context);
                               errorDialog(context,
