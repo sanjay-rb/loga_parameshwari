@@ -97,14 +97,17 @@ class HeaderDetails extends StatelessWidget {
         Text(
           "${pooja.name}",
           style: TextDesign.headText,
+          textAlign: TextAlign.center,
         ),
         Text(
           "by ${pooja.by}",
           style: TextDesign.titleText,
+          textAlign: TextAlign.center,
         ),
         Text(
           "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}",
           style: TextDesign.subTitleText,
+          textAlign: TextAlign.center,
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
