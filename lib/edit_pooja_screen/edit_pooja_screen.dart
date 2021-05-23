@@ -3,16 +3,20 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/fire_message/fire_message.dart';
+import 'package:loga_parameshwari/history_screen/history_screen.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 
-class AddPoojaScreen extends StatefulWidget {
-  const AddPoojaScreen({Key key}) : super(key: key);
+class EditPoojaScreen extends StatefulWidget {
+  const EditPoojaScreen({Key key, this.toEditPooja, this.toEditId})
+      : super(key: key);
+  final Pooja toEditPooja;
+  final toEditId;
 
   @override
-  _AddPoojaScreenState createState() => _AddPoojaScreenState();
+  _EditPoojaScreenState createState() => _EditPoojaScreenState();
 }
 
-class _AddPoojaScreenState extends State<AddPoojaScreen> {
+class _EditPoojaScreenState extends State<EditPoojaScreen> {
   final addPoojaFormKey = GlobalKey<FormState>();
   String name;
   String by;
@@ -54,7 +58,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                               barrierDismissible: false,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                  "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading",
+                                  "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Updating",
                                   style: TextStyle(fontSize: 10),
                                 ),
                                 content: LinearProgressIndicator(),
@@ -62,7 +66,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                             );
                             FirebaseFirestore.instance
                                 .collection("Event")
-                                .add(
+                                .doc(widget.toEditId)
+                                .update(
                                   Pooja(
                                     name.trim(),
                                     by.trim(),
@@ -71,8 +76,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                 )
                                 .then((value) {
                               Messaging.send(
-                                title:
-                                    "New Pooja named $name is created by $by",
+                                title: "$name Pooja is updated by $by",
                                 body:
                                     'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
                               ).then((value) {
@@ -91,7 +95,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                           }
                         },
                         child: Text(
-                          "Shedule Now",
+                          "Update Data",
                           style: TextStyle(fontSize: 25),
                         ),
                       ),
@@ -123,6 +127,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
           content: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: 100,
@@ -181,7 +186,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
             ),
           ),
         ),
-      ).then((value) => Navigator.pop(context));
+      ).then((value) => Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => HistoryScreen())));
 
   nameForm(node) => Padding(
         padding: const EdgeInsets.all(5),
@@ -192,6 +198,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               alignment: Alignment.topLeft,
             ),
             TextFormField(
+              initialValue: widget.toEditPooja.name,
               validator: (value) {
                 if (value == null || value.length == 0) {
                   return "Please give pooja name";
@@ -218,6 +225,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               alignment: Alignment.topLeft,
             ),
             TextFormField(
+              initialValue: widget.toEditPooja.by,
               validator: (value) {
                 if (value == null || value.length == 0) {
                   return "Please give your name";
@@ -244,6 +252,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               alignment: Alignment.topLeft,
             ),
             DateTimeField(
+              initialValue: widget.toEditPooja.on.toDate(),
               decoration: InputDecoration(hintText: "Date of the Pooja"),
               validator: (value) {
                 if (value == null) {

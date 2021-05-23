@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/edit_pooja_screen/edit_pooja_screen.dart';
 import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:share/share.dart';
@@ -16,69 +17,23 @@ class HeaderDetails extends StatelessWidget {
 
   final Pooja pooja;
   final id;
+  isPoojaCompleted() =>
+      (pooja.on.toDate().difference(DateTime.now()).isNegative);
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "${pooja.name}",
-          style: TextDesign.headText,
-        ),
-        Text(
-          "by ${pooja.by}",
-          style: TextDesign.titleText,
-        ),
-        Text(
-          "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}",
-          style: TextDesign.subTitleText,
-        ),
-        Row(
-          children: [
-            Spacer(),
-            TextButton.icon(
-              onPressed: () {
-                Share.share(TextDesign.getMessageText(pooja));
-              },
-              icon: Icon(Icons.share),
-              label: Text("Share"),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              ),
-            ),
-            TextButton.icon(
-              onPressed: deleteEvent(context, id, pooja),
-              icon: Icon(Icons.delete),
-              label: Text("Delete"),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              ),
-            ),
-          ],
-        ),
-      ],
+  editEvent(BuildContext context, Pooja pooja, id) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (_) => EditPoojaScreen(toEditPooja: pooja, toEditId: id)));
+  }
+
+  notificationEvent(BuildContext context, Pooja pooja) {
+    Messaging.send(
+      title: "Reminder to ${pooja.name}",
+      body:
+          'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
     );
   }
-}
 
-deleteEvent(context, id, Pooja pooja) => () async {
-      if (pooja.on.toDate().difference(DateTime.now()).isNegative) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Sorry'),
-            content: Text("This pooja is already done unable to delete it."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: Text("Ok"),
-              ),
-            ],
-          ),
-        );
-      } else {
+  deleteEvent(context, id, Pooja pooja) => () async {
         bool boolVal = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -113,26 +68,109 @@ deleteEvent(context, id, Pooja pooja) => () async {
               .child(year)
               .child(month)
               .child('${pooja.name}+$id');
-          rootPath.listAll().then((value) {
-            for (Reference item in value.items) {
-              item.delete();
-            }
-          });
+          ListResult storeList = await rootPath.listAll();
+          for (Reference item in storeList.items) {
+            item.delete();
+          }
+
           DocumentReference rootRef =
               FirebaseFirestore.instance.collection("Event").doc(id);
-          rootRef.collection("Images").get().then((value) {
-            for (var item in value.docs) {
-              rootRef.collection("Images").doc(item.id).delete();
-            }
-          });
-          rootRef.delete();
+          QuerySnapshot imageList = await rootRef.collection("Images").get();
+          for (QueryDocumentSnapshot item in imageList.docs) {
+            rootRef.collection("Images").doc(item.id).delete();
+          }
 
-          // Messaging.send(
-          //   title: pooja.name,
-          //   body:
-          //       '${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())} was deleted.',
-          // );
+          rootRef.delete();
+          Messaging.send(
+            title: "Pooja ${pooja.name} is Deleted",
+            body:
+                'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
+          );
           Navigator.pop(context);
         }
-      }
-    };
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "${pooja.name}",
+          style: TextDesign.headText,
+        ),
+        Text(
+          "by ${pooja.by}",
+          style: TextDesign.titleText,
+        ),
+        Text(
+          "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}",
+          style: TextDesign.subTitleText,
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              !isPoojaCompleted()
+                  ? Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: TextButton.icon(
+                        onPressed: () => editEvent(context, pooja, id),
+                        icon: Icon(Icons.edit),
+                        label: Text("Edit"),
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              !isPoojaCompleted()
+                  ? Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: TextButton.icon(
+                        onPressed: () => notificationEvent(context, pooja),
+                        icon: Icon(Icons.notifications_active),
+                        label: Text("Reminder"),
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: TextButton.icon(
+                  onPressed: () {
+                    Share.share(TextDesign.getMessageText(pooja));
+                  },
+                  icon: Icon(Icons.share),
+                  label: Text("Share"),
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black),
+                  ),
+                ),
+              ),
+              !isPoojaCompleted()
+                  ? Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: TextButton.icon(
+                        onPressed: () => deleteEvent(context, id, pooja),
+                        icon: Icon(Icons.delete),
+                        label: Text("Delete"),
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
