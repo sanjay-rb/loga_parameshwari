@@ -6,9 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loga_parameshwari/login_screen/login_screen.dart';
 
-import 'error_page/error_page.dart';
+import './error_page/error_page.dart';
+import './services/auth_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: LoginScreen(),
+      home: AuthService().handleAuth(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],

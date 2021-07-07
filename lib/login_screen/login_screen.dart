@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -9,84 +10,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  void showOTPDialog(String verificationId, int forceResendingToken) {
-    TextEditingController _otpController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Enter the "One Time Password" which is sent to the phone number.',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'OTP',
-                ),
-                controller: _otpController,
-              ),
-              Builder(
-                builder: (context) => TextButton(
-                  onPressed: () async {
-                    final code = _otpController.text.trim();
-                    try {
-                      AuthCredential credential = PhoneAuthProvider.credential(
-                          verificationId: verificationId, smsCode: code);
-                      if (credential != null) {
-                        print("credential $credential");
-                      } else {
-                        Navigator.pop(context);
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text("Error in User Login"),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Try again!'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      Navigator.pop(context);
-                      print(e);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Error in User Login"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('Try again!'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: Text("Verify"),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  String verificationId = "";
+  TextEditingController _phoneNumberCtrl = TextEditingController();
+  TextEditingController _smsOTPCtrl = TextEditingController();
+  bool codeSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -132,31 +59,59 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("Please enter your number"),
-                    TextField(
-                      keyboardType: TextInputType.phone,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Enter Phone number",
+                          border: InputBorder.none,
+                          prefix: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text("+91"),
+                          ),
+                        ),
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        controller: _phoneNumberCtrl,
+                        keyboardType: TextInputType.phone,
+                      ),
                     ),
+                    this.codeSent
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: "Enter OTP",
+                                  border: InputBorder.none,
+                                ),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                                controller: _smsOTPCtrl,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          )
+                        : Container(),
                     ElevatedButton(
                       onPressed: () async {
-                        FirebaseAuth _auth = FirebaseAuth.instance;
-                        // TODO OTP auth....
-                        _auth.verifyPhoneNumber(
-                          phoneNumber: "+919442212906",
-                          timeout: Duration(seconds: 60),
-                          verificationCompleted: (phoneAuthCredential) async {
-                            UserCredential userCredential = await _auth
-                                .signInWithCredential(phoneAuthCredential);
-                            if (userCredential.user != null) {
-                              print(userCredential.user);
-                            }
-                          },
-                          verificationFailed: (error) {
-                            print(error);
-                          },
-                          codeSent: showOTPDialog,
-                          codeAutoRetrievalTimeout: null,
-                        );
+                        FocusScope.of(context).unfocus();
+                        codeSent
+                            ? AuthService().signInWithOTP(
+                                _smsOTPCtrl.text.trim(), verificationId)
+                            : verifyPhone(_phoneNumberCtrl.text.trim());
                       },
-                      child: Text("Login"),
+                      child: codeSent ? Text('Login') : Text('Verify'),
                     ),
                   ],
                 ),
@@ -165,6 +120,29 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> verifyPhone(phoneNo) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    print("phonenumber : '+91$phoneNo'");
+    await _auth.verifyPhoneNumber(
+      phoneNumber: '+91$phoneNo',
+      verificationCompleted: (PhoneAuthCredential credential) {
+        AuthService().signIn(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        print("verificationFailed: (FirebaseAuthException $e)");
+      },
+      codeSent: (String verificationId, int resendToken) async {
+        this.verificationId = verificationId;
+        setState(() {
+          this.codeSent = true;
+        });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        this.verificationId = verificationId;
+      },
     );
   }
 }

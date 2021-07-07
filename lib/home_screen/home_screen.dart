@@ -8,6 +8,7 @@ import 'components/share_app.dart';
 import 'components/special_pooja.dart';
 import 'components/head.dart';
 import 'components/home_keys.dart';
+import 'components/logout.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -93,6 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 20,
                         ),
                         SpecialPoojaComponent(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        LogoutBtn(),
                         SizedBox(
                           height: _bottomAppBarHeight,
                         ),
