@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/fire_message/fire_message.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AddPoojaScreen extends StatefulWidget {
   const AddPoojaScreen({Key key}) : super(key: key);
@@ -17,7 +19,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   String name;
   String by;
   DateTime on;
-
+  List<Asset> upImages = <Asset>[];
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -34,13 +36,27 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
             height: double.maxFinite,
             child: Form(
               key: addPoojaFormKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+              child: Stack(
                 children: [
-                  nameForm(node),
-                  byForm(node),
-                  onForm(),
-                  Spacer(),
+                  ListView(
+                    children: [
+                      nameForm(node),
+                      byForm(node),
+                      onForm(),
+                      addImages(),
+                      if (upImages.isNotEmpty)
+                        Text(
+                          "Tap on the image to delete",
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      Divider(),
+                      imageView(),
+                      SizedBox(
+                        height: 50 + 10.0,
+                      ),
+                    ],
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
@@ -60,34 +76,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                                 content: LinearProgressIndicator(),
                               ),
                             );
-                            FirebaseFirestore.instance
-                                .collection("Event")
-                                .add(
-                                  Pooja(
-                                    name.trim(),
-                                    by.trim(),
-                                    Timestamp.fromDate(on),
-                                  ).toJson(),
-                                )
-                                .then((value) {
-                              Messaging.send(
-                                title:
-                                    "New Pooja named $name is created by $by",
-                                body:
-                                    'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-                              ).then((value) {
-                                Navigator.pop(context);
-                                if (value.statusCode == 200)
-                                  successDialog(context);
-                                else
-                                  errorDialog(context,
-                                      "Something went wrong! Message not sent to the members.");
-                              });
-                            }).onError((error, stackTrace) {
-                              Navigator.pop(context);
-                              errorDialog(context,
-                                  "Something went wrong! Pooja not posted to the members.");
-                            });
+                            addPooja();
                           }
                         },
                         child: Text(
@@ -101,6 +90,57 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget imageView() {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.center,
+      spacing: 10,
+      runSpacing: 10,
+      children: List.generate(
+          upImages.length,
+          (index) => ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      upImages.remove(upImages[index]);
+                    });
+                  },
+                  child: AssetThumb(
+                    asset: upImages[index],
+                    width: (upImages[index].originalWidth * 0.2).toInt(),
+                    height: (upImages[index].originalHeight * 0.2).toInt(),
+                  ),
+                ),
+              )),
+    );
+  }
+
+  Widget addImages() {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: OutlinedButton(
+        onPressed: () async {
+          upImages = await MultiImagePicker.pickImages(
+            maxImages: 500,
+            enableCamera: true,
+            materialOptions: MaterialOptions(
+              actionBarTitle: "Select Images",
+              allViewTitle: "All Photos",
+              useDetailsView: false,
+            ),
+            selectedAssets: upImages,
+          );
+          setState(() {});
+          print(upImages);
+        },
+        child: Text(
+          "Add Images",
         ),
       ),
     );
@@ -278,4 +318,66 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
           ],
         ),
       );
+
+  Future<void> uploadImages(id) async {
+    Pooja pooja = Pooja(
+      name.trim(),
+      by.trim(),
+      Timestamp.fromDate(on),
+    );
+    var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
+    var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
+    Reference rootPath =
+        FirebaseStorage.instance.ref().child(year).child(month);
+    for (Asset imageFile in upImages) {
+      String url = await rootPath
+          .child('${pooja.name}+$id')
+          .child(imageFile.name)
+          .putData(
+              (await imageFile.getByteData(quality: 50)).buffer.asUint8List())
+          .then((v) => v.ref.getDownloadURL());
+      FirebaseFirestore.instance
+          .collection("Event")
+          .doc(id)
+          .collection('Images')
+          .doc('${imageFile.name}+$id')
+          .set({'url': url});
+    }
+  }
+
+  void sendMessage() {
+    Messaging.send(
+      title: "New Pooja named $name is created by $by",
+      body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
+    ).then((value) {
+      Navigator.pop(context);
+      if (value.statusCode == 200)
+        successDialog(context);
+      else
+        errorDialog(
+            context, "Something went wrong! Message not sent to the members.");
+    });
+  }
+
+  void addPooja() {
+    FirebaseFirestore.instance
+        .collection("Event")
+        .add(
+          Pooja(
+            name.trim(),
+            by.trim(),
+            Timestamp.fromDate(on),
+          ).toJson(),
+        )
+        .then((value) async {
+      if (upImages.isNotEmpty) {
+        await uploadImages(value.id);
+      }
+      sendMessage();
+    }).onError((error, stackTrace) {
+      Navigator.pop(context);
+      errorDialog(
+          context, "Something went wrong! Pooja not posted to the members.");
+    });
+  }
 }

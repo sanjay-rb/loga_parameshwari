@@ -6,7 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loga_parameshwari/home_screen/home_screen.dart';
+import 'package:loga_parameshwari/login_screen/login_screen.dart';
 
 import 'error_page/error_page.dart';
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: HomeScreen(),
+      home: LoginScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],

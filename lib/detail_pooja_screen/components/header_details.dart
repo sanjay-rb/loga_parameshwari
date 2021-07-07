@@ -34,6 +34,7 @@ class HeaderDetails extends StatelessWidget {
   }
 
   deleteEvent(context, id, Pooja pooja) => () async {
+        print("HI");
         bool boolVal = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -160,7 +161,9 @@ class HeaderDetails extends StatelessWidget {
                   ? Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: TextButton.icon(
-                        onPressed: () => deleteEvent(context, id, pooja),
+                        onPressed: () {
+                          deleteEvent(context, id, pooja);
+                        },
                         icon: Icon(Icons.delete),
                         label: Text("Delete"),
                         style: ButtonStyle(
