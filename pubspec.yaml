@@ -28,6 +28,7 @@ dependencies:
   share: ^2.0.1
   shared_preferences: ^2.0.5
   url_launcher: ^6.0.3
+  google_mobile_ads: ^0.13.2
 
 dev_dependencies: null
 

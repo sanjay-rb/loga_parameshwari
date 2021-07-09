@@ -1,7 +1,9 @@
 import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:flutter_restart/flutter_restart.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 import 'components/ar_view.dart';
 import 'components/review_app.dart';
 import 'components/share_app.dart';
@@ -78,6 +80,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView(
                       controller: _homeListController,
                       children: [
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: AdWidget(
+                            ad: AdmobServices.createBannerAd(
+                              adSize: AdSize.banner,
+                            )..load(),
+                            key: UniqueKey(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
                         HeadComponent(),
                         SizedBox(
                           height: 15,
