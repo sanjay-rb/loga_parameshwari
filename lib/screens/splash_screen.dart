@@ -37,13 +37,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ResponsiveService.screenSize = MediaQuery.of(context).size;
+    Responsiveness.init(MediaQuery.of(context).size);
     return Scaffold(
       body: Stack(
         children: [
           Container(
-            width: ResponsiveService.screenSize.width,
-            height: ResponsiveService.screenSize.height,
+            width: Responsiveness.screenSize.width,
+            height: Responsiveness.screenSize.height,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -58,11 +58,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Positioned(
-            bottom: ResponsiveService.height(150),
-            left: ResponsiveService.screenSize.width * 0.5 -
-                (ResponsiveService.widthRatio(0.5) * 0.5),
+            bottom: Responsiveness.height(150),
+            left: Responsiveness.screenSize.width * 0.5 -
+                (Responsiveness.widthRatio(0.5) * 0.5),
             child: SizedBox(
-              width: ResponsiveService.widthRatio(0.5),
+              width: Responsiveness.widthRatio(0.5),
               child: LinearProgressIndicator(),
             ),
           ),

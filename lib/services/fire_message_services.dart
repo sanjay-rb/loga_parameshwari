@@ -1,12 +1,30 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../constant/constant.dart';
 
+/// This service helps to connect and trigger the firebase messaging....
+///
+/// You can set canNotify as true before triggering send() func....
 class Messaging {
   static bool canNotify = false;
+
+  /// Please call init() function before main or splash screen....
+  static init() async {
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    await FirebaseMessaging.instance.subscribeToTopic("all");
+  }
+
+  /// This send() function create http request to the firebase messageing and trigger the message....
+  /// Pleas provide the title and body of the notifcation...
   static Future<http.Response> send({
     @required String title,
     @required String body,
@@ -19,7 +37,9 @@ class Messaging {
               "notification": {
                 "title": "$title",
                 "body": "$body",
-                "imageUrl": "${ImagesAndUrls.logoImg}"
+                "imageUrl": "${ImagesAndUrls.logoImg}",
+                "icon": "${ImagesAndUrls.logoImg}",
+                "sound": "default"
               }
             }),
             headers: <String, String>{
