@@ -8,8 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import './error_page/error_page.dart';
-import './splash_screen/splash_screen.dart';
+import './screens/error_screen.dart';
+import './screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,10 +47,10 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: SplashScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],
+      home: SplashScreen(),
     );
   }
 }

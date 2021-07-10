@@ -13,7 +13,7 @@ class Pooja {
     this.on = json['on'];
   }
 
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'name': this.name,
       'by': this.by,

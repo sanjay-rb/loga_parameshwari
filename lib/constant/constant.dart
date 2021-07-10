@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+
+import '../model/pooja.dart';
 
 class TextDesign {
   const TextDesign();

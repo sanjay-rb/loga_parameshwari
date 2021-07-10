@@ -36,4 +36,9 @@ class AuthService {
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
     signIn(authCreds);
   }
+
+  // Get current user phonenumber....
+  getUserNumber() {
+    return FirebaseAuth.instance.currentUser.phoneNumber;
+  }
 }
