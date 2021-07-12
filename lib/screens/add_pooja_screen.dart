@@ -1,8 +1,10 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
@@ -18,10 +20,11 @@ class AddPoojaScreen extends StatefulWidget {
 
 class _AddPoojaScreenState extends State<AddPoojaScreen> {
   final addPoojaFormKey = GlobalKey<FormState>();
-  String name;
-  String by;
-  DateTime on;
   List<Asset> upImages = <Asset>[];
+  DateTime on = DateTime.now();
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController byCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -72,7 +75,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                               barrierDismissible: false,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                  "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading",
+                                  "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
                                   style: TextStyle(fontSize: 10),
                                 ),
                                 content: LinearProgressIndicator(),
@@ -237,11 +240,10 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               validator: (value) {
                 if (value == null || value.length == 0) {
                   return "Please give pooja name";
-                } else {
-                  name = value;
-                  return null;
                 }
+                return null;
               },
+              controller: nameCtrl,
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(hintText: "Name"),
@@ -260,13 +262,12 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               alignment: Alignment.topLeft,
             ),
             TextFormField(
+              controller: byCtrl,
               validator: (value) {
                 if (value == null || value.length == 0) {
                   return "Please give your name";
-                } else {
-                  by = value;
-                  return null;
                 }
+                return null;
               },
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.text,
@@ -286,14 +287,16 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               alignment: Alignment.topLeft,
             ),
             DateTimeField(
+              initialValue: on,
               decoration: InputDecoration(hintText: "Date of the Pooja"),
               validator: (value) {
                 if (value == null) {
                   return "Please give date and time";
-                } else {
-                  on = value;
-                  return null;
                 }
+                return null;
+              },
+              onChanged: (val) {
+                on = val;
               },
               format: DateFormat("dd-MM-yyyy hh:mm aaa"),
               onShowPicker: (context, currentValue) async {
@@ -321,35 +324,45 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
         ),
       );
 
-  Future<void> uploadImages(id) async {
-    Pooja pooja = Pooja(
-      name.trim(),
-      by.trim(),
-      Timestamp.fromDate(on),
-    );
+  Future<void> uploadImages(Pooja pooja) async {
     var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
     var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
     Reference rootPath =
         FirebaseStorage.instance.ref().child(year).child(month);
     for (Asset imageFile in upImages) {
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "${imageFile.name} Uploading....",
+            style: TextStyle(fontSize: 10),
+          ),
+          content: LinearProgressIndicator(),
+        ),
+      );
       String url = await rootPath
-          .child('${pooja.name}+$id')
+          .child('${pooja.name}+${pooja.id}')
           .child(imageFile.name)
           .putData(
               (await imageFile.getByteData(quality: 50)).buffer.asUint8List())
           .then((v) => v.ref.getDownloadURL());
-      FirebaseFirestore.instance
-          .collection("Event")
-          .doc(id)
-          .collection('Images')
-          .doc('${imageFile.name}+$id')
-          .set({'url': url});
+      ImageModel imageModel = ImageModel(
+        id: DatabaseManager.getUniqueId(),
+        like: [],
+        pooja: pooja.id,
+        url: url,
+        user: pooja.user,
+      );
+      await DatabaseManager.addImage(imageModel);
     }
   }
 
   void sendMessage() {
     Messaging.send(
-      title: "New Pooja named $name is created by $by",
+      title:
+          "New Pooja named ${nameCtrl.text.trim()} by ${byCtrl.text.trim()}}",
       body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
     ).then((value) {
       Navigator.pop(context);
@@ -361,21 +374,17 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     });
   }
 
-  void addPooja() {
-    Map<String, dynamic> newPooja = Pooja(
-      name.trim(),
-      by.trim(),
+  Future<void> addPooja() async {
+    Pooja pooja = Pooja(
+      DatabaseManager.getUniqueId(),
+      nameCtrl.text.trim(),
+      byCtrl.text.trim(),
       Timestamp.fromDate(on),
-    ).toJson();
-    newPooja["user"] = AuthService().getUserNumber();
-    FirebaseFirestore.instance
-        .collection("Event")
-        .add(
-          newPooja,
-        )
-        .then((value) async {
+      AuthService.getUserNumber(),
+    );
+    DatabaseManager.addPooja(pooja).then((value) async {
       if (upImages.isNotEmpty) {
-        await uploadImages(value.id);
+        await uploadImages(pooja);
       }
       sendMessage();
     }).onError((error, stackTrace) {

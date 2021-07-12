@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 import './components/tree_leaf.dart';
 import '../../../model/pooja.dart';
@@ -28,18 +29,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // HistoryAdComponent(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('Event')
-                      .orderBy(
-                        'on',
-                        descending: true,
-                      )
-                      .snapshots(),
+                  stream: DatabaseManager.getAllPoojaStream(),
                   initialData: null,
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {

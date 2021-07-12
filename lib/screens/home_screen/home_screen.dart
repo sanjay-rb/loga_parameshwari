@@ -84,12 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         Container(
                           width: double.infinity,
                           height: 50,
-                          child: AdWidget(
-                            ad: AdmobServices.createBannerAd(
-                              adSize: AdSize.banner,
-                            )..load(),
-                            key: UniqueKey(),
-                          ),
+                          // child: AdWidget(
+                          //   ad: AdmobServices.createBannerAd(
+                          //     adSize: AdSize.banner,
+                          //   )..load(),
+                          //   key: UniqueKey(),
+                          // ),
                         ),
                         SizedBox(
                           height: 15,

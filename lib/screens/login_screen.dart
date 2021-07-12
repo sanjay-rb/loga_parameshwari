@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:loga_parameshwari/services/responsive_services.dart';
 
 import '../constant/constant.dart';
 import '../services/auth_services.dart';
@@ -37,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.black38,
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.1,
+            top: Responsiveness.heightRatio(0.1),
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
@@ -51,12 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.2,
-            left: (MediaQuery.of(context).size.width * 0.5) -
-                (MediaQuery.of(context).size.width * 0.9 * 0.5),
+            bottom: Responsiveness.heightRatio(0.2),
+            left: Responsiveness.widthRatio(0.5) -
+                Responsiveness.widthRatio(0.9) * 0.5,
             child: Card(
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: Responsiveness.widthRatio(0.9),
                 padding: EdgeInsets.all(10),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -109,10 +110,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     ElevatedButton(
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        codeSent
-                            ? AuthService().signInWithOTP(
-                                _smsOTPCtrl.text.trim(), verificationId)
-                            : verifyPhone(_phoneNumberCtrl.text.trim());
+                        if (codeSent) {
+                          AuthService.signInWithOTP(
+                              _smsOTPCtrl.text.trim(), verificationId);
+                        } else {
+                          // var data = await AuthService.verifyPhone(
+                          //     _phoneNumberCtrl.text.trim());
+                          // print("DATA : $data ");
+                          // setState(() {
+                          //   this.verificationId = data[0];
+                          //   this.codeSent = data[1];
+                          // });
+                          verifyPhone(_phoneNumberCtrl.text.trim());
+                        }
                       },
                       child: codeSent ? Text('Login') : Text('Verify'),
                     ),
@@ -132,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) {
-        AuthService().signIn(credential);
+        AuthService.signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
         print("verificationFailed: (FirebaseAuthException $e)");

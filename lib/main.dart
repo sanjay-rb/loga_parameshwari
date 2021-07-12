@@ -6,9 +6,11 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 import './screens/error_screen.dart';
 import './screens/splash_screen.dart';
+import './services/auth_services.dart';
 import './services/fire_message_services.dart';
 
 Future<void> main() async {
@@ -20,6 +22,8 @@ Future<void> main() async {
   if (await Connectivity().checkConnection()) {
     await Firebase.initializeApp();
     await Messaging.init();
+    await DatabaseManager.init();
+    await AuthService.init();
     runApp(MyApp());
   } else {
     runApp(ErrorApp());

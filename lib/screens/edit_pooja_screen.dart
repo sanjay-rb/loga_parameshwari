@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
+import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/fire_message_services.dart';
 import './history_screen/history_screen.dart';
 import '../model/pooja.dart';
-import '../services/fire_message_services.dart';
 
 class EditPoojaScreen extends StatefulWidget {
-  const EditPoojaScreen({Key key, this.toEditPooja, this.toEditId})
-      : super(key: key);
+  const EditPoojaScreen({Key key, this.toEditPooja}) : super(key: key);
   final Pooja toEditPooja;
-  final toEditId;
 
   @override
   _EditPoojaScreenState createState() => _EditPoojaScreenState();
@@ -29,7 +28,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Schedule Pooja"),
+        title: Text("Edit Pooja"),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -65,16 +64,12 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                                 content: LinearProgressIndicator(),
                               ),
                             );
-                            FirebaseFirestore.instance
-                                .collection("Event")
-                                .doc(widget.toEditId)
-                                .update(
-                                  Pooja(
+                            DatabaseManager.updatePooja(Pooja(
+                                    widget.toEditPooja.id,
                                     name.trim(),
                                     by.trim(),
                                     Timestamp.fromDate(on),
-                                  ).toJson(),
-                                )
+                                    AuthService.getUserNumber()))
                                 .then((value) {
                               Messaging.send(
                                 title: "$name Pooja is updated by $by",

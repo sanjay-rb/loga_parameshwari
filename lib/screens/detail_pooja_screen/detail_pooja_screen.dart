@@ -12,13 +12,13 @@ class DetailPooja extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: AddImageButton(pooja: pooja, id: id),
+      floatingActionButton: AddImageButton(pooja: pooja),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              HeaderDetails(pooja: pooja, id: id),
+              HeaderDetails(pooja: pooja),
               Divider(),
               ImageGridViewer(id),
             ],

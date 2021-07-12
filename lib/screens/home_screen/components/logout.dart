@@ -9,7 +9,7 @@ class LogoutBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AuthService().signOut();
+        AuthService.signOut();
       },
       child: Container(
         decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 import '../../add_pooja_screen.dart';
 import '../../../constant/constant.dart';
@@ -18,11 +19,7 @@ class RecentPooja extends StatelessWidget {
         color: Colors.white,
       ),
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Event')
-            .where('on', isGreaterThanOrEqualTo: Timestamp.now())
-            .orderBy('on')
-            .snapshots(),
+        stream: DatabaseManager.getRecentPoojaStream(),
         initialData: null,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

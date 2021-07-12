@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:loga_parameshwari/model/image.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 import '../../../model/pooja.dart';
@@ -10,10 +12,8 @@ class AddImageButton extends StatelessWidget {
   const AddImageButton({
     Key key,
     this.pooja,
-    this.id,
   }) : super(key: key);
   final Pooja pooja;
-  final id;
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +46,21 @@ class AddImageButton extends StatelessWidget {
                 content: LinearProgressIndicator()),
           );
           String url = await rootPath
-              .child('${pooja.name}+$id')
+              .child('${pooja.name}+${pooja.id}')
               .child(imageFile.name)
               .putData((await imageFile.getByteData(quality: 50))
                   .buffer
                   .asUint8List())
               .then((v) => v.ref.getDownloadURL());
-          FirebaseFirestore.instance
-              .collection("Event")
-              .doc(id)
-              .collection('Images')
-              .doc('${imageFile.name}+$id')
-              .set({'url': url});
+          DatabaseManager.addImage(
+            ImageModel(
+              id: DatabaseManager.getUniqueId(),
+              like: [],
+              pooja: pooja.id,
+              url: url,
+              user: AuthService.getUserNumber(),
+            ),
+          );
           Navigator.pop(context);
         }
       },

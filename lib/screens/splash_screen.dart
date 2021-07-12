@@ -1,7 +1,9 @@
-import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 
 import './home_screen/home_screen.dart';
 import './login_screen.dart';
@@ -21,18 +23,54 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-      Duration(seconds: 3),
-      () => Navigator.pushReplacement(
-        context,
-        NavigationAnimationService().fadePageRoute(
-          enterPage: AuthService().handleAuth(
-            onAuthorized: HomeScreen(),
-            onUnAuthorized: LoginScreen(),
-          ),
+    setUp();
+  }
+
+  setUp() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    print("$packageName, $version, $buildNumber");
+    var response = await http.get(Uri.parse(
+        "https://app-status-sanjoke.herokuapp.com/getinfo?appid=$packageName"));
+    var data = jsonDecode(response.body);
+    if (data['version'] != version || buildNumber != data['build_number']) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Update available!"),
+          content: Text("Please install new update out there."),
+          actions: [
+            TextButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  NavigationAnimationService.fadePageRoute(
+                    enterPage: AuthService.handleAuth(
+                      onAuthorized: HomeScreen(),
+                      onUnAuthorized: LoginScreen(),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.close),
+              label: Text("Skip"),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                // TODO :Update....
+              },
+              icon: Icon(Icons.done),
+              label: Text("Update now"),
+            ),
+          ],
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override

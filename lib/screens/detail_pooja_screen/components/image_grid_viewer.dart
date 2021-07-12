@@ -3,7 +3,9 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loga_parameshwari/model/image.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 import './image_viewer.dart';
 
@@ -14,11 +16,7 @@ class ImageGridViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("Event")
-            .doc(id)
-            .collection("Images")
-            .snapshots(),
+        stream: DatabaseManager.getImageStreamFromPoojaId(id),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -35,12 +33,13 @@ class ImageGridViewer extends StatelessWidget {
                 crossAxisCount: 4,
                 itemCount: images.length,
                 itemBuilder: (BuildContext context, int index) {
+                  ImageModel imageModel = ImageModel.fromJson(images[index]);
                   return OpenContainer(
                     closedBuilder: (context, action) => Stack(
                       fit: StackFit.loose,
                       children: [
                         CachedNetworkImage(
-                          imageUrl: images[index]['url'],
+                          imageUrl: imageModel.url,
                           progressIndicatorBuilder: (context, url, progress) =>
                               Container(
                             width: 150,
@@ -55,29 +54,38 @@ class ImageGridViewer extends StatelessWidget {
                         Positioned(
                           bottom: 1,
                           right: 1,
-                          child: FutureBuilder(
-                            future: SharedPreferences.getInstance().then(
-                                (value) => value.get(images[index]['url'])),
-                            builder: (context, snapshot) {
-                              if (snapshot.data == true) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(4),
                                   child: Icon(
-                                    Icons.favorite,
+                                    imageModel.like.contains(
+                                            AuthService.getUserNumber())
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
                                     color: Colors.red,
                                     size: 20,
                                   ),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    "${imageModel.like.length}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                     openBuilder: (context, action) => ImageFullView(
-                      url: images[index]['url'],
+                      id: imageModel.id,
                     ),
                   );
                 },

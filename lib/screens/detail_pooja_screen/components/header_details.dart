@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:share/share.dart';
 
 import '../../edit_pooja_screen.dart';
@@ -13,17 +15,17 @@ class HeaderDetails extends StatelessWidget {
   const HeaderDetails({
     Key key,
     this.pooja,
-    this.id,
   }) : super(key: key);
 
   final Pooja pooja;
-  final id;
-  isPoojaCompleted() =>
-      (pooja.on.toDate().difference(DateTime.now()).isNegative);
+  bool isMyPooja() => (pooja.user == AuthService.getUserNumber());
 
-  editEvent(BuildContext context, Pooja pooja, id) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => EditPoojaScreen(toEditPooja: pooja, toEditId: id)));
+  editEvent(BuildContext context, Pooja pooja) {
+    Navigator.of(context).pushReplacement(
+      NavigationAnimationService.fadePageRoute(
+        enterPage: EditPoojaScreen(toEditPooja: pooja),
+      ),
+    );
   }
 
   notificationEvent(BuildContext context, Pooja pooja) {
@@ -34,63 +36,58 @@ class HeaderDetails extends StatelessWidget {
     );
   }
 
-  deleteEvent(context, id, Pooja pooja) => () async {
-        print("HI");
-        bool boolVal = await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Oops! You're deleting the event?"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: Text(
-                  "Yes, I'm",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-                child: Text(
-                  "Nope",
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-            ],
+  deleteEvent(context, Pooja pooja) async {
+    bool boolVal = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Oops! You're deleting the event?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: Text(
+              "Yes, I'm",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
-        );
-        if (boolVal != null && boolVal) {
-          var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
-          var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
-          Reference rootPath = FirebaseStorage.instance
-              .ref()
-              .child(year)
-              .child(month)
-              .child('${pooja.name}+$id');
-          ListResult storeList = await rootPath.listAll();
-          for (Reference item in storeList.items) {
-            item.delete();
-          }
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: Text(
+              "Nope",
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (boolVal != null && boolVal) {
+      var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
+      var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
+      Reference rootPath = FirebaseStorage.instance
+          .ref()
+          .child(year)
+          .child(month)
+          .child('${pooja.name}+${pooja.id}');
+      print("rootPath.name ${rootPath.name}");
+      ListResult storeList = await rootPath.listAll();
+      print("storeList ${storeList.items}");
+      for (Reference item in storeList.items) {
+        item.delete();
+      }
 
-          DocumentReference rootRef =
-              FirebaseFirestore.instance.collection("Event").doc(id);
-          QuerySnapshot imageList = await rootRef.collection("Images").get();
-          for (QueryDocumentSnapshot item in imageList.docs) {
-            rootRef.collection("Images").doc(item.id).delete();
-          }
+      await DatabaseManager.deletePooja(pooja);
 
-          rootRef.delete();
-          Messaging.send(
-            title: "Pooja ${pooja.name} is Deleted",
-            body:
-                'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
-          );
-          Navigator.pop(context);
-        }
-      };
+      Messaging.send(
+        title: "Pooja ${pooja.name} is Deleted",
+        body:
+            'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
+      );
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +113,11 @@ class HeaderDetails extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              !isPoojaCompleted()
+              isMyPooja()
                   ? Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: TextButton.icon(
-                        onPressed: () => editEvent(context, pooja, id),
+                        onPressed: () => editEvent(context, pooja),
                         icon: Icon(Icons.edit),
                         label: Text("Edit"),
                         style: ButtonStyle(
@@ -130,7 +127,7 @@ class HeaderDetails extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              !isPoojaCompleted()
+              isMyPooja()
                   ? Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: TextButton.icon(
@@ -158,12 +155,12 @@ class HeaderDetails extends StatelessWidget {
                   ),
                 ),
               ),
-              !isPoojaCompleted()
+              isMyPooja()
                   ? Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: TextButton.icon(
                         onPressed: () {
-                          deleteEvent(context, id, pooja);
+                          deleteEvent(context, pooja);
                         },
                         icon: Icon(Icons.delete),
                         label: Text("Delete"),
