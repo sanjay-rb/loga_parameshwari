@@ -14,7 +14,7 @@
  - Timetable for special pooja held on the temple.
  - Download the app now and spiritually connected with the divine​. 
 
-# Git Commit
+# Latest Git Changes
  - Adding image on posting the pooja & adding otp
  - Added Mobile Auth
  - Make own services as modules & SplashScreen & Ad in home screem top
