@@ -13,3 +13,13 @@
  - 3D model of temple architecture view.
  - Timetable for special pooja held on the temple.
  - Download the app now and spiritually connected with the divine​. 
+
+# Git Commit
+ - Adding image on posting the pooja & adding otp
+ - Added Mobile Auth
+ - Make own services as modules & SplashScreen & Ad in home screem top
+ - Added Nextwork image to UI
+ - Restructuring the files and module for better understanding
+ - Service updated
+ - Added DatabaseManager
+ - Updated Readme
