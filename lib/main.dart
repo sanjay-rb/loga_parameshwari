@@ -1,28 +1,29 @@
-import 'package:cross_connectivity/cross_connectivity.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:loga_parameshwari/home_screen/home_screen.dart';
 
-import 'error_page/error_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:cross_connectivity/cross_connectivity.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
+
+import './screens/error_screen.dart';
+import './screens/splash_screen.dart';
+import './services/auth_services.dart';
+import './services/fire_message_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   if (await Connectivity().checkConnection()) {
     await Firebase.initializeApp();
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    await FirebaseMessaging.instance.subscribeToTopic("all");
+    await Messaging.init();
+    await DatabaseManager.init();
+    await AuthService.init();
     runApp(MyApp());
   } else {
     runApp(ErrorApp());
@@ -30,7 +31,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   static FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
@@ -45,10 +45,10 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: HomeScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],
+      home: SplashScreen(),
     );
   }
 }
