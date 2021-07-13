@@ -14,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String verificationId = "";
+  String verId = "";
   TextEditingController _phoneNumberCtrl = TextEditingController();
   TextEditingController _smsOTPCtrl = TextEditingController();
   bool codeSent = false;
@@ -147,10 +147,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               isLoading = false;
                             });
                           }
-                        } else {
+                        }
+
+                        if (!phoneNumberError && !codeError) {
                           if (codeSent) {
                             AuthService.signInWithOTP(
-                                _smsOTPCtrl.text.trim(), verificationId);
+                                _smsOTPCtrl.text.trim(), this.verId);
                           } else {
                             verifyPhone(_phoneNumberCtrl.text.trim());
                           }
@@ -169,9 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> verifyPhone(phoneNo) async {
-    // TODO....
     FirebaseAuth _auth = FirebaseAuth.instance;
-    print("phonenumber : '+91$phoneNo'");
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -181,14 +181,14 @@ class _LoginScreenState extends State<LoginScreen> {
         print("verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
-        this.verificationId = verificationId;
+        this.verId = verificationId;
         setState(() {
           this.codeSent = true;
           this.isLoading = false;
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        this.verificationId = verificationId;
+        this.verId = verificationId;
       },
     );
 
