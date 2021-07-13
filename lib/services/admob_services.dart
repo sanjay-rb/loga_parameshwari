@@ -34,9 +34,9 @@ class AdmobServices {
       "ca-app-pub-3940256099942544/1033173712";
 
   /// Please call the init() on main or splash screen....
-  static init() {
+  static init() async {
     if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
+      await MobileAds.instance.initialize();
     }
   }
 

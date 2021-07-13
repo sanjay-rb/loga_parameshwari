@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './components/ar_view.dart';
 import './components/review_app.dart';
@@ -78,12 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: double.infinity,
                       height: 50,
-                      // child: AdWidget(
-                      //   ad: AdmobServices.createBannerAd(
-                      //     adSize: AdSize.banner,
-                      //   )..load(),
-                      //   key: UniqueKey(),
-                      // ),
+                      child: AdWidget(
+                        ad: AdmobServices.createBannerAd(
+                          adSize: AdSize.banner,
+                        )..load(),
+                        key: UniqueKey(),
+                      ),
                     ),
                     SizedBox(
                       height: 15,

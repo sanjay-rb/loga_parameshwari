@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './home_screen/home_screen.dart';
 import './login_screen.dart';
@@ -20,7 +21,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _progess = 0.0;
-  double _totalPreload = 6;
+  double _totalPreload = 7;
   @override
   void initState() {
     setUp();
@@ -46,6 +47,8 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadProgress(5);
     await InAppUpdateService.checkUpdate(context); // 6....
     _loadProgress(6);
+    await AdmobServices.init(); // 7...
+    _loadProgress(7);
 
     if (_progess.toInt() == 1) {
       Navigator.pushReplacement(
