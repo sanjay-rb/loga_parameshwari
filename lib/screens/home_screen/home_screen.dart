@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_restart/flutter_restart.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './components/ar_view.dart';
 import './components/review_app.dart';
@@ -10,8 +9,6 @@ import './components/special_pooja.dart';
 import './components/head.dart';
 import './components/home_keys.dart';
 import './components/logout.dart';
-import '../../constant/constant.dart';
-import '../../services/admob_services.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -70,84 +67,56 @@ class _HomeScreenState extends State<HomeScreen> {
       body: WillPopScope(
         onWillPop: _onBackPress,
         child: SafeArea(
-          child: ConnectivityBuilder(builder: (context, isConnect, status) {
-            if (isConnect) {
-              return LayoutBuilder(
-                builder: (context, constraints) => Container(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ListView(
-                      controller: _homeListController,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: 50,
-                          // child: AdWidget(
-                          //   ad: AdmobServices.createBannerAd(
-                          //     adSize: AdSize.banner,
-                          //   )..load(),
-                          //   key: UniqueKey(),
-                          // ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        HeadComponent(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        HomeKeysComponent(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight * 0.5,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ARView(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        SpecialPoojaComponent(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        LogoutBtn(),
-                        SizedBox(
-                          height: _bottomAppBarHeight,
-                        ),
-                      ],
+          child: LayoutBuilder(
+            builder: (context, constraints) => Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: ListView(
+                  controller: _homeListController,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: AdWidget(
+                        ad: AdmobServices.createBannerAd(
+                          adSize: AdSize.banner,
+                        )..load(),
+                        key: UniqueKey(),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            } else {
-              return Scaffold(
-                body: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Oops, it looks like your not connected to the internet 😕. \nPlease check your internet connection 👍.",
-                          style: TextDesign.titleText,
-                          textAlign: TextAlign.center,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            FlutterRestart.restartApp();
-                          },
-                          child: Text("Reload"),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 15,
                     ),
-                  ),
+                    HeadComponent(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    HomeKeysComponent(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight * 0.5,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ARView(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SpecialPoojaComponent(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    LogoutBtn(),
+                    SizedBox(
+                      height: _bottomAppBarHeight,
+                    ),
+                  ],
                 ),
-              );
-            }
-          }),
+              ),
+            ),
+          ),
         ),
       ),
     );

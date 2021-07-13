@@ -19,14 +19,15 @@ class AuthService {
   /// Check for the Auth State and navigate to screens....
   static handleAuth({Widget onAuthorized, Widget onUnAuthorized}) {
     return StreamBuilder(
-        stream: _auth.authStateChanges(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasData) {
-            return onAuthorized;
-          } else {
-            return onUnAuthorized;
-          }
-        });
+      stream: _auth.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          return onAuthorized;
+        } else {
+          return onUnAuthorized;
+        }
+      },
+    );
   }
 
   /// SignOut from the current user....
@@ -35,8 +36,8 @@ class AuthService {
   }
 
   /// SignIn with the help of AuthCredential....
-  static signIn(AuthCredential authCreds) {
-    _auth.signInWithCredential(authCreds);
+  static signIn(AuthCredential authCreds) async {
+    await _auth.signInWithCredential(authCreds);
   }
 
   /// SignIn with the help of OTP....
@@ -74,29 +75,4 @@ class AuthService {
     );
     return [verificationId, codeSent];
   }
-
-  /**
-   Future<void> verifyPhone(phoneNo) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    print("phonenumber : '+91$phoneNo'");
-    await _auth.verifyPhoneNumber(
-      phoneNumber: '+91$phoneNo',
-      verificationCompleted: (PhoneAuthCredential credential) {
-        AuthService().signIn(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        print("verificationFailed: (FirebaseAuthException $e)");
-      },
-      codeSent: (String verificationId, int resendToken) async {
-        this.verificationId = verificationId;
-        setState(() {
-          this.codeSent = true;
-        });
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        this.verificationId = verificationId;
-      },
-    );
-  }
-   */
 }

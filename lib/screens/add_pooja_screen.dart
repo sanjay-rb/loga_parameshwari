@@ -21,7 +21,7 @@ class AddPoojaScreen extends StatefulWidget {
 class _AddPoojaScreenState extends State<AddPoojaScreen> {
   final addPoojaFormKey = GlobalKey<FormState>();
   List<Asset> upImages = <Asset>[];
-  DateTime on = DateTime.now();
+  DateTime on;
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController byCtrl = TextEditingController();
 
