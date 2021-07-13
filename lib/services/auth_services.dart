@@ -36,8 +36,8 @@ class AuthService {
   }
 
   /// SignIn with the help of AuthCredential....
-  static signIn(AuthCredential authCreds) {
-    _auth.signInWithCredential(authCreds);
+  static signIn(AuthCredential authCreds) async {
+    await _auth.signInWithCredential(authCreds);
   }
 
   /// SignIn with the help of OTP....

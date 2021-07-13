@@ -174,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
     print("phonenumber : '+91$phoneNo'");
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
-      verificationCompleted: (PhoneAuthCredential credential) {
-        AuthService.signIn(credential);
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await AuthService.signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
         print("verificationFailed: (FirebaseAuthException $e)");
@@ -191,5 +191,43 @@ class _LoginScreenState extends State<LoginScreen> {
         this.verificationId = verificationId;
       },
     );
+
+    /**
+     * // For firebase auth
+final auth = FirebaseAuth.instance;
+//
+final PhoneVerificationCompleted verificationCompleted =
+    (AuthCredential phoneAuthCredential) async {
+  final res = await auth.signInWithCredential(phoneAuthCredential);
+  // Todo After Verification Complete
+  );
+};
+//
+final PhoneVerificationFailed verificationFailed =
+    (AuthException authException) {
+  print('Auth Exception is ${authException.message}');
+};
+//
+final PhoneCodeSent codeSent =
+    (String verificationId, [int forceResendingToken]) async {
+  print('verification id is $verificationId');
+  verId = verificationId;
+};
+//
+final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+    (String verificationId) {
+  verId = verificationId;
+  
+};
+//
+await auth.verifyPhoneNumber(
+    // mobile no. with country code
+    phoneNumber: '+91${_mobile.text}',
+    timeout: const Duration(seconds: 30),
+    verificationCompleted: verificationCompleted,
+    verificationFailed: verificationFailed,
+    codeSent: codeSent,
+    codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+     */
   }
 }
