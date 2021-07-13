@@ -19,6 +19,11 @@ class DetailPooja extends StatelessWidget {
           child: Column(
             children: [
               HeaderDetails(pooja: pooja),
+              Text(
+                "Double tap to like ❤️",
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
               Divider(),
               ImageGridViewer(id),
             ],
