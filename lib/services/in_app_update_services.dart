@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 import 'package:package_info/package_info.dart';
@@ -57,6 +58,7 @@ class InAppUpdateService {
       if (result) {
         if (await canLaunch(ImagesAndUrls.googlePlayLink)) {
           await launch(ImagesAndUrls.googlePlayLink);
+          SystemNavigator.pop();
         }
       }
     }

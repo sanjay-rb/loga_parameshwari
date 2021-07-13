@@ -237,13 +237,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  flutter_restart:
-    dependency: "direct main"
-    description:
-      name: flutter_restart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:

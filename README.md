@@ -30,3 +30,5 @@
  - Removed error logs and static images
  - Help text changed
  - Handled invalid OTP
+ - Log clearance
+ - Removed flutter_restart
