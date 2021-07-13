@@ -18,7 +18,9 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _phoneNumberCtrl = TextEditingController();
   TextEditingController _smsOTPCtrl = TextEditingController();
   bool codeSent = false;
-
+  bool isLoading = false;
+  bool phoneNumberError = false;
+  bool codeError = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("Please enter your number"),
+                    SizedBox(
+                      height: Responsiveness.height(10),
+                    ),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
@@ -76,6 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.all(5),
                             child: Text("+91"),
                           ),
+                          errorText: phoneNumberError
+                              ? "    Please enter correct phone number    "
+                              : null,
+                          errorBorder: InputBorder.none,
                         ),
                         style: TextStyle(
                           fontSize: 20,
@@ -96,6 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: InputDecoration(
                                   hintText: "Enter OTP",
                                   border: InputBorder.none,
+                                  errorText:
+                                      codeError ? "   Invalid OTP   " : null,
                                 ),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -107,21 +117,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           )
                         : Container(),
+                    SizedBox(
+                      height: Responsiveness.height(10),
+                    ),
+                    isLoading ? LinearProgressIndicator() : Container(),
+                    SizedBox(
+                      height: Responsiveness.height(10),
+                    ),
                     ElevatedButton(
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        if (codeSent) {
-                          AuthService.signInWithOTP(
-                              _smsOTPCtrl.text.trim(), verificationId);
+                        setState(() {
+                          isLoading = true;
+                          phoneNumberError = false;
+                          codeError = false;
+                        });
+
+                        if (_phoneNumberCtrl.text.isEmpty ||
+                            _phoneNumberCtrl.text.length < 10) {
+                          setState(() {
+                            phoneNumberError = true;
+                            isLoading = false;
+                          });
+                        } else if (codeSent) {
+                          if (_smsOTPCtrl.text.isEmpty ||
+                              _smsOTPCtrl.text.length != 6) {
+                            setState(() {
+                              codeError = true;
+                              isLoading = false;
+                            });
+                          }
                         } else {
-                          // var data = await AuthService.verifyPhone(
-                          //     _phoneNumberCtrl.text.trim());
-                          // print("DATA : $data ");
-                          // setState(() {
-                          //   this.verificationId = data[0];
-                          //   this.codeSent = data[1];
-                          // });
-                          verifyPhone(_phoneNumberCtrl.text.trim());
+                          if (codeSent) {
+                            AuthService.signInWithOTP(
+                                _smsOTPCtrl.text.trim(), verificationId);
+                          } else {
+                            verifyPhone(_phoneNumberCtrl.text.trim());
+                          }
                         }
                       },
                       child: codeSent ? Text('Login') : Text('Verify'),
@@ -137,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> verifyPhone(phoneNo) async {
+    // TODO....
     FirebaseAuth _auth = FirebaseAuth.instance;
     print("phonenumber : '+91$phoneNo'");
     await _auth.verifyPhoneNumber(
@@ -151,6 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
         this.verificationId = verificationId;
         setState(() {
           this.codeSent = true;
+          this.isLoading = false;
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {

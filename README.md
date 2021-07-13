@@ -23,3 +23,4 @@
  - Service updated
  - Added DatabaseManager
  - Updated Readme
+ - Added in_app_update_services

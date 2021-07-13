@@ -19,14 +19,15 @@ class AuthService {
   /// Check for the Auth State and navigate to screens....
   static handleAuth({Widget onAuthorized, Widget onUnAuthorized}) {
     return StreamBuilder(
-        stream: _auth.authStateChanges(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasData) {
-            return onAuthorized;
-          } else {
-            return onUnAuthorized;
-          }
-        });
+      stream: _auth.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          return onAuthorized;
+        } else {
+          return onUnAuthorized;
+        }
+      },
+    );
   }
 
   /// SignOut from the current user....
