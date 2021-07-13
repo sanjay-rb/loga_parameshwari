@@ -37,14 +37,19 @@ class AuthService {
 
   /// SignIn with the help of AuthCredential....
   static signIn(AuthCredential authCreds) async {
-    await _auth.signInWithCredential(authCreds);
+    try {
+      await _auth.signInWithCredential(authCreds);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /// SignIn with the help of OTP....
-  static signInWithOTP(smsCode, verId) {
+  static signInWithOTP(smsCode, verId) async {
     AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    signIn(authCreds);
+    return await signIn(authCreds);
   }
 
   // Get current user phone number....

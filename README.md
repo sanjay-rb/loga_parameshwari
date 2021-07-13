@@ -29,3 +29,4 @@
  - Bug:- verifyPhone logic
  - Removed error logs and static images
  - Help text changed
+ - Handled invalid OTP
