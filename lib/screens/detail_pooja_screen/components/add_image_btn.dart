@@ -18,6 +18,7 @@ class AddImageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      mini: true,
       onPressed: () async {
         List<Asset> upImages = <Asset>[];
         upImages = await MultiImagePicker.pickImages(

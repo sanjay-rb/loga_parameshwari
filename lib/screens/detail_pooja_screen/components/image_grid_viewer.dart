@@ -34,58 +34,67 @@ class ImageGridViewer extends StatelessWidget {
                 itemCount: images.length,
                 itemBuilder: (BuildContext context, int index) {
                   ImageModel imageModel = ImageModel.fromJson(images[index]);
-                  return OpenContainer(
-                    closedBuilder: (context, action) => Stack(
-                      fit: StackFit.loose,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: imageModel.url,
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Container(
-                            width: 150,
-                            height: 150,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                value: progress.progress,
+                  return GestureDetector(
+                    onDoubleTap: (){
+                      if (imageModel.like.contains(AuthService.getUserNumber())) {
+                        DatabaseManager.unLikeImage(imageModel);
+                      } else {
+                        DatabaseManager.likeImage(imageModel);
+                      }
+                    },
+                    child: OpenContainer(
+                      closedBuilder: (context, action) => Stack(
+                        fit: StackFit.loose,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: imageModel.url,
+                            progressIndicatorBuilder: (context, url, progress) =>
+                                Container(
+                              width: 150,
+                              height: 150,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  value: progress.progress,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 1,
-                          right: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: Icon(
-                                    imageModel.like.contains(
-                                            AuthService.getUserNumber())
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: Text(
-                                    "${imageModel.like.length}",
-                                    style: TextStyle(
-                                      color: Colors.white,
+                          Positioned(
+                            bottom: 1,
+                            left: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Icon(
+                                      imageModel.like.contains(
+                                              AuthService.getUserNumber())
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: Colors.red,
+                                      size: 20,
                                     ),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Text(
+                                      "${imageModel.like.length}",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    openBuilder: (context, action) => ImageFullView(
-                      id: imageModel.id,
+                        ],
+                      ),
+                      openBuilder: (context, action) => ImageFullView(
+                        id: imageModel.id,
+                      ),
                     ),
                   );
                 },

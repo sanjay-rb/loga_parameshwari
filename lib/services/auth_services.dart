@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// This services helps to perform authentication on the app with firebase auth....
 ///
-/// This services requried couple of packages....
+/// This services required couple of packages....
 ///  - firebase_auth: ^2.0.0 (Null Safety)
 ///  - firebase_core: ^1.0.2 (Null Safety)
 class AuthService {
@@ -47,7 +47,7 @@ class AuthService {
     signIn(authCreds);
   }
 
-  // Get current user phonenumber....
+  // Get current user phone number....
   static getUserNumber() {
     return _auth.currentUser.phoneNumber;
   }

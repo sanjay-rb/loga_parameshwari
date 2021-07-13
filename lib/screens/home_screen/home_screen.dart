@@ -73,44 +73,52 @@ class _HomeScreenState extends State<HomeScreen> {
               height: double.maxFinite,
               child: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: ListView(
-                  controller: _homeListController,
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      child: AdWidget(
-                        ad: AdmobServices.createBannerAd(
-                          adSize: AdSize.banner,
-                        )..load(),
-                        key: UniqueKey(),
+                    ListView(
+                      controller: _homeListController,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                        ),
+                        HeadComponent(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        HomeKeysComponent(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight * 0.5,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ARView(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SpecialPoojaComponent(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        LogoutBtn(),
+                        SizedBox(
+                          height: _bottomAppBarHeight,
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        child: AdWidget(
+                          ad: AdmobServices.createBannerAd(
+                            adSize: AdSize.banner,
+                          )..load(),
+                          key: UniqueKey(),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    HeadComponent(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    HomeKeysComponent(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight * 0.5,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ARView(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SpecialPoojaComponent(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    LogoutBtn(),
-                    SizedBox(
-                      height: _bottomAppBarHeight,
                     ),
                   ],
                 ),

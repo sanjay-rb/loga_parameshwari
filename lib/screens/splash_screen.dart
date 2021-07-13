@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './home_screen/home_screen.dart';
 import './login_screen.dart';
-import '../constant/constant.dart';
 import '../services/auth_services.dart';
 import '../services/navigation_animation_services.dart';
 import '../services/responsive_services.dart';
@@ -74,8 +72,8 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CachedNetworkImage(
-                  imageUrl: ImagesAndUrls.godImg,
+                Image.asset(
+                  'images/god.webp',
                   fit: BoxFit.cover,
                 ),
                 Container(

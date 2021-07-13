@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
@@ -31,7 +30,7 @@ class InAppUpdateService {
               SizedBox(
                 width: Responsiveness.width(50),
                 height: Responsiveness.height(50),
-                child: CachedNetworkImage(imageUrl: ImagesAndUrls.logoImg),
+                child: Image.asset("images/icon.png"),
               ),
               Text("Update available!"),
             ],

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 
-import '../constant/constant.dart';
 import '../services/auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            child: CachedNetworkImage(
-              imageUrl: ImagesAndUrls.godImg,
+            child: Image.asset(
+              'images/god.webp',
               fit: BoxFit.cover,
             ),
           ),

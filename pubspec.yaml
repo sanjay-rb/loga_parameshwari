@@ -34,3 +34,6 @@ dev_dependencies: null
 
 flutter:
   uses-material-design: true
+  assets:
+      - images/god.webp
+      - images/icon.png

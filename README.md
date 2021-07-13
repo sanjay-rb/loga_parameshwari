@@ -24,3 +24,7 @@
  - Added DatabaseManager
  - Updated Readme
  - Added in_app_update_services
+ - Async verificationCompleted
+ - async AdmobService
+ - Bug:- verifyPhone logic
+ - Removed error logs and static images
