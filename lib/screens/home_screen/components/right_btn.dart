@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
-class ShareApp extends StatelessWidget {
-  const ShareApp({Key key}) : super(key: key);
+class RightBtn extends StatelessWidget {
+  const RightBtn({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

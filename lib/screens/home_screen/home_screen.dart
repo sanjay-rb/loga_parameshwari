@@ -3,8 +3,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './components/ar_view.dart';
-import './components/review_app.dart';
-import './components/share_app.dart';
+import 'components/left_btn.dart';
+import 'components/right_btn.dart';
 import './components/special_pooja.dart';
 import './components/head.dart';
 import './components/home_keys.dart';
@@ -45,9 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
             height: _bottomAppBarHeight,
             child: Row(
               children: [
-                ReviewApp(),
+                LeftBtn(),
                 Spacer(),
-                ShareApp(),
+                RightBtn(),
               ],
             ),
           )),

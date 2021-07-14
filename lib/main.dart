@@ -19,7 +19,7 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => ConnectivityService(),
           child: MyApp(),
-        )
+        ),
       ],
       child: MyApp(),
     ),
