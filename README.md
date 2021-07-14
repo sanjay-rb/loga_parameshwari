@@ -33,3 +33,4 @@
  - Log clearance
  - Removed flutter_restart
  - Check connection at start
+ - Loading text added....

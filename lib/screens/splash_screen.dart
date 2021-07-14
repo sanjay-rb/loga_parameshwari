@@ -21,35 +21,38 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   double _progess = 0.0;
   double _totalPreload = 8;
+
+  String _progressText = "Welcome to Loga Parameshwari Temple App....";
   @override
   void initState() {
     setUp();
     super.initState();
   }
 
-  _loadProgress(double id) {
+  _loadProgress(double id, String text) {
     setState(() {
       _progess = (id / _totalPreload);
+      _progressText = text;
     });
   }
 
   setUp() async {
     await Firebase.initializeApp(); // 1....
-    _loadProgress(1);
+    _loadProgress(1, "Loading....");
     await Messaging.init(); // 2....
-    _loadProgress(2);
+    _loadProgress(2, "Messageing Connected....");
     await DatabaseManager.init(); // 3....
-    _loadProgress(3);
+    _loadProgress(3, "Data Fetched....");
     await AuthService.init(); // 4....
-    _loadProgress(4);
+    _loadProgress(4, "Authorization Checked....");
     Responsiveness.init(MediaQuery.of(context).size); // 5....
-    _loadProgress(5);
+    _loadProgress(5, "Loading....");
     await InAppUpdateService.init(); // 6....
-    _loadProgress(6);
+    _loadProgress(6, "App Update Started....");
     await InAppUpdateService.checkUpdate(context); // 7....
-    _loadProgress(7);
+    _loadProgress(7, "App Update Checked....");
     await AdmobServices.init(); // 8...
-    _loadProgress(8);
+    _loadProgress(8, "Ads Loaded....");
 
     if (_progess.toInt() == 1) {
       Navigator.pushReplacement(
@@ -91,7 +94,16 @@ class _SplashScreenState extends State<SplashScreen> {
                 (Responsiveness.widthRatio(0.5) * 0.5),
             child: SizedBox(
               width: Responsiveness.widthRatio(0.5),
-              child: LinearProgressIndicator(value: _progess),
+              child: Column(
+                children: [
+                  LinearProgressIndicator(value: _progess),
+                  Text(
+                    _progressText,
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
