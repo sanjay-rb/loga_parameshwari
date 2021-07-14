@@ -2,7 +2,7 @@ name: loga_parameshwari
 description: This application help to see pooja and events held on the powerfull
   Loga Parameshwari Temple Ramassery.
 publish_to: 'none'
-version: 1.13.7+9
+version: 1.13.7+8
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,6 +13,7 @@ dependencies:
   animations: ^2.0.1
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.3.0
+  connectivity: ^3.0.6
   datetime_picker_formfield: ^2.0.0
   firebase_analytics: ^8.1.2
   firebase_auth: ^2.0.0
@@ -25,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   multi_image_picker: ^4.8.1
   package_info: ^2.0.2
+  provider: ^5.0.0
   share: ^2.0.4
   shared_preferences: ^2.0.6
   url_launcher: ^6.0.9

@@ -32,3 +32,4 @@
  - Handled invalid OTP
  - Log clearance
  - Removed flutter_restart
+ - Check connection at start

@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loga_parameshwari/screens/error_screen.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
+import 'package:provider/provider.dart';
 
 import './screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown]);
-  await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ConnectivityService(),
+          child: MyApp(),
+        )
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +42,15 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
       ],
-      home: SplashScreen(),
+      home: Consumer<ConnectivityService>(
+        builder: (context, value, child) {
+          if (value.isOnline) {
+            return SplashScreen();
+          } else {
+            return ErrorScreen();
+          }
+        },
+      ),
     );
   }
 }
