@@ -10,7 +10,7 @@ import '../constant/constant.dart';
 ///
 /// You can set canNotify as true before triggering send() func....
 class Messaging {
-  static bool canNotify = false;
+  static const bool CAN_NOTIFY = true;
 
   /// Please call init() function before main or splash screen....
   static init() async {
@@ -29,7 +29,7 @@ class Messaging {
     @required String title,
     @required String body,
   }) {
-    return canNotify
+    return CAN_NOTIFY
         ? http.post(
             Uri.parse("https://fcm.googleapis.com/fcm/send"),
             body: json.encode({
@@ -51,6 +51,7 @@ class Messaging {
             },
           )
         : Future.value(
-            http.Response("Message not send status is $canNotify", 200));
+            http.Response("Message not send status is $CAN_NOTIFY", 200),
+          );
   }
 }

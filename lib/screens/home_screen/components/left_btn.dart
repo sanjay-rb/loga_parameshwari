@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:loga_parameshwari/screens/profile_screen.dart';
+import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 
-import '../../../constant/constant.dart';
-
-class ReviewApp extends StatelessWidget {
+class LeftBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,13 +12,16 @@ class ReviewApp extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
         ),
         onPressed: () async {
-          if (await canLaunch(ImagesAndUrls.googlePlayLink)) {
-            launch(ImagesAndUrls.googlePlayLink);
-          }
+          Navigator.of(context).push(
+            NavigationAnimationService.leftToRightPageRoute(
+              exitPage: this,
+              enterPage: ProfileScreen(),
+            ),
+          );
         },
-        icon: Icon(Icons.star, color: Colors.white),
+        icon: Icon(Icons.account_box, color: Colors.white),
         label: Text(
-          "Review",
+          "Profile",
           style: TextStyle(color: Colors.white),
         ),
       ),

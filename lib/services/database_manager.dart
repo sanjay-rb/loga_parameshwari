@@ -33,13 +33,18 @@ class DatabaseManager {
       .where('pooja', isEqualTo: poojaId)
       .snapshots();
 
+  static Future<QuerySnapshot> getUserInfo() => _db
+      .collection(USER_COLLECTION_NAME)
+      .where('id', isEqualTo: AuthService.getUserNumber())
+      .get();
+
   static Stream<DocumentSnapshot> getImageById(String id) =>
       _db.collection(IMAGE_COLLECTION_NAME).doc(id).snapshots();
 
   static String getUniqueId() =>
       DateTime.now().millisecondsSinceEpoch.toString();
 
-  static addUser(UserModel userModel) async {
+  static Future<void> addUser(UserModel userModel) async {
     await _db
         .collection(USER_COLLECTION_NAME)
         .doc(userModel.id)

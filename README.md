@@ -35,3 +35,4 @@
  - Check connection at start
  - Loading text added....
  - User Data in Firestore & Create and connect AdMob
+ - User profile page
