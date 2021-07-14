@@ -34,3 +34,4 @@
  - Removed flutter_restart
  - Check connection at start
  - Loading text added....
+ - User Data in Firestore & Create and connect AdMob

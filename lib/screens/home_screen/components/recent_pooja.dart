@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -103,14 +102,9 @@ class RecentPoojaView extends StatelessWidget {
           flex: 60,
           child: Container(
             width: double.maxFinite,
-            child: CachedNetworkImage(
-              imageUrl: ImagesAndUrls.godImg,
-              fit: BoxFit.fill,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Center(
-                child:
-                    CircularProgressIndicator(value: downloadProgress.progress),
-              ),
+            child: Image.asset(
+              'images/god.webp',
+              fit: BoxFit.cover,
             ),
           ),
         ),

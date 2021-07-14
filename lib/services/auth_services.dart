@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 /// This services helps to perform authentication on the app with firebase auth....
 ///
@@ -38,7 +40,17 @@ class AuthService {
   /// SignIn with the help of AuthCredential....
   static signIn(AuthCredential authCreds) async {
     try {
-      await _auth.signInWithCredential(authCreds);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(authCreds);
+      if (userCredential.additionalUserInfo.isNewUser) {
+        await DatabaseManager.addUser(
+          UserModel(
+            id: userCredential.user.phoneNumber,
+            uid: userCredential.user.uid,
+            name: userCredential.user.displayName ?? "New User",
+          ),
+        );
+      }
       return true;
     } catch (e) {
       return false;

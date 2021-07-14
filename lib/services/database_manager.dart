@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 
 class DatabaseManager {
@@ -8,6 +9,7 @@ class DatabaseManager {
 
   static const String POOJA_COLLECTION_NAME = 'Pooja';
   static const String IMAGE_COLLECTION_NAME = 'Image';
+  static const String USER_COLLECTION_NAME = 'User';
 
   static init() {
     if (_db == null) {
@@ -36,6 +38,13 @@ class DatabaseManager {
 
   static String getUniqueId() =>
       DateTime.now().millisecondsSinceEpoch.toString();
+
+  static addUser(UserModel userModel) async {
+    await _db
+        .collection(USER_COLLECTION_NAME)
+        .doc(userModel.id)
+        .set(userModel.toJson());
+  }
 
   static addPooja(Pooja pooja) async {
     await _db
