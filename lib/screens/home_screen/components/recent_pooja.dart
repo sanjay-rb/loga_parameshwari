@@ -99,7 +99,7 @@ class RecentPoojaView extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 60,
+          flex: 70,
           child: Container(
             width: double.maxFinite,
             child: Image.asset(
