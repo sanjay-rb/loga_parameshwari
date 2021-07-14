@@ -15,6 +15,7 @@ class HeadComponent extends StatelessWidget {
     } else {
       yield "Good Night";
     }
+    yield "Welcome";
   }
 
   @override
