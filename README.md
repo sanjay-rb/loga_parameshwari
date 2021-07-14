@@ -24,3 +24,14 @@
  - Added DatabaseManager
  - Updated Readme
  - Added in_app_update_services
+ - Async verificationCompleted
+ - async AdmobService
+ - Bug:- verifyPhone logic
+ - Removed error logs and static images
+ - Help text changed
+ - Handled invalid OTP
+ - Log clearance
+ - Removed flutter_restart
+ - Check connection at start
+ - Loading text added....
+ - User Data in Firestore & Create and connect AdMob

@@ -51,7 +51,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                       addImages(),
                       if (upImages.isNotEmpty)
                         Text(
-                          "Tap on the image to delete",
+                          "Longpress on the image to delete ❌",
                           style: TextStyle(fontSize: 10, color: Colors.grey),
                           textAlign: TextAlign.center,
                         ),
@@ -107,22 +107,23 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       spacing: 10,
       runSpacing: 10,
       children: List.generate(
-          upImages.length,
-          (index) => ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      upImages.remove(upImages[index]);
-                    });
-                  },
-                  child: AssetThumb(
-                    asset: upImages[index],
-                    width: (upImages[index].originalWidth * 0.2).toInt(),
-                    height: (upImages[index].originalHeight * 0.2).toInt(),
-                  ),
-                ),
-              )),
+        upImages.length,
+        (index) => ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: InkWell(
+            onLongPress: () {
+              setState(() {
+                upImages.remove(upImages[index]);
+              });
+            },
+            child: AssetThumb(
+              asset: upImages[index],
+              width: (upImages[index].originalWidth * 0.2).toInt(),
+              height: (upImages[index].originalHeight * 0.2).toInt(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

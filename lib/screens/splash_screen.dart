@@ -1,10 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './home_screen/home_screen.dart';
 import './login_screen.dart';
-import '../constant/constant.dart';
 import '../services/auth_services.dart';
 import '../services/navigation_animation_services.dart';
 import '../services/responsive_services.dart';
@@ -21,34 +20,39 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _progess = 0.0;
-  double _totalPreload = 7;
+  double _totalPreload = 8;
+
+  String _progressText = "Welcome to Loga Parameshwari Temple App....";
   @override
   void initState() {
     setUp();
     super.initState();
   }
 
-  _loadProgress(double id) {
+  _loadProgress(double id, String text) {
     setState(() {
       _progess = (id / _totalPreload);
+      _progressText = text;
     });
   }
 
   setUp() async {
-    await Messaging.init(); // 1....
-    _loadProgress(1);
-    await DatabaseManager.init(); // 2....
-    _loadProgress(2);
-    await AuthService.init(); // 3....
-    _loadProgress(3);
-    Responsiveness.init(MediaQuery.of(context).size); // 4....
-    _loadProgress(4);
-    await InAppUpdateService.init(); // 5....
-    _loadProgress(5);
-    await InAppUpdateService.checkUpdate(context); // 6....
-    _loadProgress(6);
-    await AdmobServices.init(); // 7...
-    _loadProgress(7);
+    await Firebase.initializeApp(); // 1....
+    _loadProgress(1, "Loading....");
+    await Messaging.init(); // 2....
+    _loadProgress(2, "Messageing Connected....");
+    await DatabaseManager.init(); // 3....
+    _loadProgress(3, "Data Fetched....");
+    await AuthService.init(); // 4....
+    _loadProgress(4, "Authorization Checked....");
+    Responsiveness.init(MediaQuery.of(context).size); // 5....
+    _loadProgress(5, "Loading....");
+    await InAppUpdateService.init(); // 6....
+    _loadProgress(6, "App Update Started....");
+    await InAppUpdateService.checkUpdate(context); // 7....
+    _loadProgress(7, "App Update Checked....");
+    await AdmobServices.init(); // 8...
+    _loadProgress(8, "Ads Loaded....");
 
     if (_progess.toInt() == 1) {
       Navigator.pushReplacement(
@@ -74,8 +78,8 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CachedNetworkImage(
-                  imageUrl: ImagesAndUrls.godImg,
+                Image.asset(
+                  'images/god.webp',
                   fit: BoxFit.cover,
                 ),
                 Container(
@@ -90,7 +94,16 @@ class _SplashScreenState extends State<SplashScreen> {
                 (Responsiveness.widthRatio(0.5) * 0.5),
             child: SizedBox(
               width: Responsiveness.widthRatio(0.5),
-              child: LinearProgressIndicator(value: _progess),
+              child: Column(
+                children: [
+                  LinearProgressIndicator(value: _progess),
+                  Text(
+                    _progressText,
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

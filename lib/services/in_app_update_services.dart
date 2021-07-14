@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 import 'package:package_info/package_info.dart';
@@ -31,7 +31,7 @@ class InAppUpdateService {
               SizedBox(
                 width: Responsiveness.width(50),
                 height: Responsiveness.height(50),
-                child: CachedNetworkImage(imageUrl: ImagesAndUrls.logoImg),
+                child: Image.asset("images/icon.png"),
               ),
               Text("Update available!"),
             ],
@@ -58,6 +58,7 @@ class InAppUpdateService {
       if (result) {
         if (await canLaunch(ImagesAndUrls.googlePlayLink)) {
           await launch(ImagesAndUrls.googlePlayLink);
+          SystemNavigator.pop();
         }
       }
     }

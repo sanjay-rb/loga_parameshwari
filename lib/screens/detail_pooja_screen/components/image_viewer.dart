@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loga_parameshwari/model/image.dart';
-import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
 class ImageFullView extends StatefulWidget {
@@ -30,23 +29,6 @@ class _ImageFullViewState extends State<ImageFullView> {
             ImageModel imageModel = ImageModel.fromJson(snapshot.data);
             return Scaffold(
               backgroundColor: Colors.black,
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  if (imageModel.like.contains(AuthService.getUserNumber())) {
-                    DatabaseManager.unLikeImage(imageModel);
-                  } else {
-                    DatabaseManager.likeImage(imageModel);
-                  }
-                },
-                child: imageModel.like.contains(AuthService.getUserNumber())
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.favorite,
-                      ),
-              ),
               body: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

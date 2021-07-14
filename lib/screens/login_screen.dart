@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 
-import '../constant/constant.dart';
 import '../services/auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            child: CachedNetworkImage(
-              imageUrl: ImagesAndUrls.godImg,
+            child: Image.asset(
+              'images/god.webp',
               fit: BoxFit.cover,
             ),
           ),
@@ -151,8 +149,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         if (!phoneNumberError && !codeError) {
                           if (codeSent) {
-                            AuthService.signInWithOTP(
+                            bool isverifyed = await AuthService.signInWithOTP(
                                 _smsOTPCtrl.text.trim(), this.verId);
+                            if (!isverifyed) {
+                              setState(() {
+                                codeError = true;
+                                isLoading = false;
+                              });
+                            }
                           } else {
                             verifyPhone(_phoneNumberCtrl.text.trim());
                           }
@@ -191,43 +195,5 @@ class _LoginScreenState extends State<LoginScreen> {
         this.verId = verificationId;
       },
     );
-
-    /**
-     * // For firebase auth
-final auth = FirebaseAuth.instance;
-//
-final PhoneVerificationCompleted verificationCompleted =
-    (AuthCredential phoneAuthCredential) async {
-  final res = await auth.signInWithCredential(phoneAuthCredential);
-  // Todo After Verification Complete
-  );
-};
-//
-final PhoneVerificationFailed verificationFailed =
-    (AuthException authException) {
-  print('Auth Exception is ${authException.message}');
-};
-//
-final PhoneCodeSent codeSent =
-    (String verificationId, [int forceResendingToken]) async {
-  print('verification id is $verificationId');
-  verId = verificationId;
-};
-//
-final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-    (String verificationId) {
-  verId = verificationId;
-  
-};
-//
-await auth.verifyPhoneNumber(
-    // mobile no. with country code
-    phoneNumber: '+91${_mobile.text}',
-    timeout: const Duration(seconds: 30),
-    verificationCompleted: verificationCompleted,
-    verificationFailed: verificationFailed,
-    codeSent: codeSent,
-    codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-     */
   }
 }

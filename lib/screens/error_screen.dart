@@ -1,60 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restart/flutter_restart.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:loga_parameshwari/services/responsive_services.dart';
 
-import '../constant/constant.dart';
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({Key key}) : super(key: key);
 
-class ErrorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Loga Parameshwari Temple',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      home: ErrorPage(),
-    );
-  }
-}
-
-class ErrorPage extends StatefulWidget {
-  const ErrorPage({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _ErrorPageState createState() => _ErrorPageState();
-}
-
-class _ErrorPageState extends State<ErrorPage> {
-  @override
-  Widget build(BuildContext context) {
+    Responsiveness.init(MediaQuery.of(context).size); // 5....
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Oops, it looks like your not connected to the internet 😕. \nPlease check your internet connection 👍.",
-                style: TextDesign.titleText,
-                textAlign: TextAlign.center,
-              ),
-              TextButton(
-                onPressed: () {
-                  FlutterRestart.restartApp();
-                },
-                child: Text("Reload"),
-              ),
-            ],
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Image.asset(
+              'images/god.webp',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.black38,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Responsiveness.heightRatio(0.5),
+                  ),
+                  Text(
+                    "Loga Parameshwari Thunai",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.amber,
+                    ),
+                  ),
+                  Card(
+                    child: Container(
+                      width: Responsiveness.widthRatio(0.8),
+                      height: Responsiveness.heightRatio(0.3),
+                      child: Center(
+                        child: Text(
+                          "Please check your internet connection",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
