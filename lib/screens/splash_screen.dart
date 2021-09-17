@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './home_screen/home_screen.dart';
 import './login_screen.dart';
@@ -51,7 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadProgress(6, "App Update Started....");
     await InAppUpdateService.checkUpdate(context); // 7....
     _loadProgress(7, "App Update Checked....");
-    await AdmobServices.init(); // 8...
     _loadProgress(8, "Ads Loaded....");
 
     if (_progess.toInt() == 1) {
