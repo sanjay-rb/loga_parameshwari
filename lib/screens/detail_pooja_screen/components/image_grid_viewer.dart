@@ -35,8 +35,9 @@ class ImageGridViewer extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   ImageModel imageModel = ImageModel.fromJson(images[index]);
                   return GestureDetector(
-                    onDoubleTap: (){
-                      if (imageModel.like.contains(AuthService.getUserNumber())) {
+                    onDoubleTap: () {
+                      if (imageModel.like
+                          .contains(AuthService.getUserNumber())) {
                         DatabaseManager.unLikeImage(imageModel);
                       } else {
                         DatabaseManager.likeImage(imageModel);
@@ -48,8 +49,8 @@ class ImageGridViewer extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: imageModel.url,
-                            progressIndicatorBuilder: (context, url, progress) =>
-                                Container(
+                            progressIndicatorBuilder:
+                                (context, url, progress) => Container(
                               width: 150,
                               height: 150,
                               child: Center(
