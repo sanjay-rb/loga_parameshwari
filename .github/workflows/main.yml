@@ -26,3 +26,31 @@ jobs:
         with:
           flutter-version: '2.2.3'
       - run: flutter pub get
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter analyze .
+      
+      # Telegram sender....
+      - name: Telegram sender
+        uses: appleboy/telegram-action@0.0.3
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: build/app/outputs/flutter-apk/app.apk
+          message: |
+            Project:
+              ${{ github.event.repository.name }}
+            WorkFlow: 
+              ${{ github.workflow }}
+            ------------------------------------------
+            Pull Request Title: 
+              ${{ github.event.pull_request.title }}
+            Total Commits: 
+              ${{ github.event.pull_request.commits }}
+            ------------------------------------------
+            By : ${{ github.actor }}
+            Please find the new APK here.
+            ------------------------------------------
+            🔥🔥🔥🔥
+            👇🏾👇🏾👇🏾
+            👇🏾👇🏾
+            👇🏾
