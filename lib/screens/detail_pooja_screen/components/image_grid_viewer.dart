@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-
 import './image_viewer.dart';
 
 class ImageGridViewer extends StatelessWidget {
