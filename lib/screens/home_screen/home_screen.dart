@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:loga_parameshwari/services/admob_services.dart';
 
 import './components/ar_view.dart';
-import 'components/left_btn.dart';
-import 'components/right_btn.dart';
+import './components/left_btn.dart';
+import './components/right_btn.dart';
 import './components/special_pooja.dart';
 import './components/head.dart';
 import './components/home_keys.dart';
 import './components/logout.dart';
+import './components/notice_banner.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -80,9 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       controller: _homeListController,
                       children: [
                         SizedBox(
-                          height: 60,
+                          height: 15,
                         ),
                         HeadComponent(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        NoticeBanner(),
                         SizedBox(
                           height: 15,
                         ),
@@ -106,19 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: _bottomAppBarHeight,
                         ),
                       ],
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        width: double.infinity,
-                        height: 50,
-                        child: AdWidget(
-                          ad: AdmobServices.createBannerAd(
-                            adSize: AdSize.banner,
-                          )..load(),
-                          key: UniqueKey(),
-                        ),
-                      ),
                     ),
                   ],
                 ),

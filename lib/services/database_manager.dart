@@ -10,12 +10,16 @@ class DatabaseManager {
   static const String POOJA_COLLECTION_NAME = 'Pooja';
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';
+  static const String NOTICE_COLLECTION_NAME = 'Notice';
 
   static init() {
     if (_db == null) {
       _db = FirebaseFirestore.instance;
     }
   }
+
+  static Stream<DocumentSnapshot> getNotice() =>
+      _db.collection(NOTICE_COLLECTION_NAME).doc('notice').snapshots();
 
   static Stream<QuerySnapshot> getRecentPoojaStream() => _db
       .collection(POOJA_COLLECTION_NAME)
