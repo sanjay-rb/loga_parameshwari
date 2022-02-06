@@ -99,13 +99,21 @@ class HeaderDetails extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         Text(
-          "by ${pooja.by}",
+          "Sponsor by",
           style: TextDesign.titleText,
           textAlign: TextAlign.center,
         ),
+        ...List.generate(
+          pooja.by.split('\n').length,
+          (i) => Text(
+            "⚈ ${pooja.by.split('\n')[i]}",
+            style: TextDesign.subTitleText,
+            textAlign: TextAlign.center,
+          ),
+        ),
         Text(
           "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}",
-          style: TextDesign.subTitleText,
+          style: TextDesign.titleText,
           textAlign: TextAlign.center,
         ),
         SingleChildScrollView(

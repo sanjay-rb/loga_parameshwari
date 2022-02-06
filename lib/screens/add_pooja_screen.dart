@@ -270,8 +270,10 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                 }
                 return null;
               },
+              maxLines: null,
               textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
               decoration: InputDecoration(hintText: "Origanizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),

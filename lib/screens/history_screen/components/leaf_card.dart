@@ -46,7 +46,7 @@ class LeafCard extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        "by ${pooja.by}",
+                        "by ${pooja.by.replaceAll('\n', ', ')}",
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

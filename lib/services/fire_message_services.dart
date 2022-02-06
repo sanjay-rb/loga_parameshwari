@@ -10,7 +10,7 @@ import '../constant/constant.dart';
 ///
 /// You can set canNotify as true before triggering send() func....
 class Messaging {
-  static const bool CAN_NOTIFY = true;
+  static const bool CAN_NOTIFY = false;
 
   /// Please call init() function before main or splash screen....
   static init() async {
