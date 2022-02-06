@@ -93,7 +93,8 @@ class ImageGridViewer extends StatelessWidget {
                         ],
                       ),
                       openBuilder: (context, action) => ImageFullView(
-                        id: imageModel.id,
+                        id: index,
+                        imageList: images,
                       ),
                     ),
                   );
