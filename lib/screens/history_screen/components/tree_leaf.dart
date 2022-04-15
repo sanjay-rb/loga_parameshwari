@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import './leaf_card.dart';
-import './leaf_date.dart';
-import '../../../model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/history_screen/components/leaf_card.dart';
+import 'package:loga_parameshwari/screens/history_screen/components/leaf_date.dart';
 
 class TreeLeaf extends StatelessWidget {
   const TreeLeaf({
@@ -14,18 +13,18 @@ class TreeLeaf extends StatelessWidget {
 
   final Pooja pooja;
   final int index;
-  final id;
+  final String id;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.maxFinite,
       height: 100,
       child: Stack(
         children: [
           Row(
-            children: index % 2 == 0
+            children: index.isEven
                 ? [
-                    LeafCard(pooja: pooja, id: this.id),
+                    LeafCard(pooja: pooja, id: id),
                     Expanded(
                       flex: 2,
                       child: Container(
@@ -42,14 +41,14 @@ class TreeLeaf extends StatelessWidget {
                         color: Colors.purple,
                       ),
                     ),
-                    LeafCard(pooja: pooja, id: this.id),
+                    LeafCard(pooja: pooja, id: id),
                   ],
           ),
           Center(
             child: Container(
               width: 15,
               height: 15,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.black,
                 shape: BoxShape.circle,
               ),

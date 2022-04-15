@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/history_screen/components/tree_leaf.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-
-import './components/tree_leaf.dart';
-import '../../../model/pooja.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key key}) : super(key: key);
@@ -23,7 +22,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
       appBar: AppBar(
-        title: Text("History"),
+        title: const Text("History"),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -35,21 +34,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: StreamBuilder(
                   stream: DatabaseManager.getAllPoojaStream(),
                   initialData: null,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot,
+                  ) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else {
                       if (snapshot.data.docs.isNotEmpty) {
-                        List<QueryDocumentSnapshot> allPooja =
+                        final List<QueryDocumentSnapshot> allPooja =
                             snapshot.data.docs;
-                        var controller = ScrollController(
+                        final controller = ScrollController(
                           initialScrollOffset: (allPooja.length + 1) * 50.0,
                         );
-                        var data = allPooja.where((element) {
-                          Pooja pooja = Pooja.fromJson(element);
+                        final data = allPooja
+                            .where((QueryDocumentSnapshot<Object> element) {
+                          final Pooja pooja = Pooja.fromJson(element);
                           return pooja.on.toDate().compareTo(DateTime.now()) ==
                               1;
                         });
@@ -57,10 +59,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         if (data.isNotEmpty) {
                           moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
                         }
-                        Future.delayed(Duration(milliseconds: 500), () {
+                        Future.delayed(const Duration(milliseconds: 500), () {
                           controller.animateTo(
                             moveTo,
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.ease,
                           );
                         });
@@ -70,15 +72,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           itemCount: allPooja.length + 1,
                           itemBuilder: (context, index) {
                             if (index == allPooja.length) {
-                              return Container(
+                              return SizedBox(
                                 width: double.maxFinite,
                                 height: 50,
                                 child: Stack(
                                   children: [
                                     Row(
-                                      children: index % 2 == 0
+                                      children: index.isEven
                                           ? [
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                               Expanded(
@@ -87,12 +89,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   color: Colors.purple,
                                                 ),
                                               ),
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                             ]
                                           : [
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                               Expanded(
@@ -101,7 +103,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   color: Colors.purple,
                                                 ),
                                               ),
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                             ],
@@ -111,7 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       child: Container(
                                         width: 25,
                                         height: 25,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: Colors.black,
                                           shape: BoxShape.circle,
                                         ),
@@ -130,7 +132,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           },
                         );
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text("No Pooja has been fetched"),
                         );
                       }

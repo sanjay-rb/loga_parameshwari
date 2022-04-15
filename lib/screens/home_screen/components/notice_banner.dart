@@ -10,13 +10,13 @@ class NoticeBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: DatabaseManager.getNotice(),
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot<DocumentSnapshot<Object>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else {
-          String notice = snapshot.data["title"];
-          String description = snapshot.data["description"];
-          Timestamp till = snapshot.data["till"];
+          final String notice = snapshot.data["title"] as String;
+          final String description = snapshot.data["description"] as String;
+          final Timestamp till = snapshot.data["till"] as Timestamp;
           if (till.compareTo(Timestamp.now()) == 1) {
             return Container(
               decoration: BoxDecoration(
@@ -27,21 +27,21 @@ class NoticeBanner extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(5),
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "$notice",
+                      notice,
                       style: TextDesign.titleText,
                     ),
                   ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "$description",
+                      description,
                       style: TextDesign.subTitleText,
                     ),
                   ),

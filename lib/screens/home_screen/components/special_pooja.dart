@@ -7,7 +7,7 @@ class SpecialPoojaComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
@@ -18,14 +18,14 @@ class SpecialPoojaComponent extends StatelessWidget {
           Container(
             height: 50,
             width: double.maxFinite,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               ),
               color: Colors.amber,
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 "Special Poojaa",
                 style: TextStyle(
@@ -35,28 +35,37 @@ class SpecialPoojaComponent extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            child: DataTable(columns: [
+          DataTable(
+            columns: const [
               DataColumn(label: Text("Month")),
               DataColumn(label: Text("Poojaa")),
-            ], rows: [
-              DataRow(cells: [
-                DataCell(Text("Meenam")),
-                DataCell(Text("Varshika Poojaa")),
-              ]),
-              DataRow(cells: [
-                DataCell(Text("Medam")),
-                DataCell(Text("Vishukanii Poojaa")),
-              ]),
-              DataRow(cells: [
-                DataCell(Text("Karkidakam")),
-                DataCell(Text("Aadivelli pooja")),
-              ]),
-              DataRow(cells: [
-                DataCell(Text("Dhanu")),
-                DataCell(Text("Vilakoduvu poojaa")),
-              ]),
-            ]),
+            ],
+            rows: const [
+              DataRow(
+                cells: [
+                  DataCell(Text("Meenam")),
+                  DataCell(Text("Varshika Poojaa")),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  DataCell(Text("Medam")),
+                  DataCell(Text("Vishukanii Poojaa")),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  DataCell(Text("Karkidakam")),
+                  DataCell(Text("Aadivelli pooja")),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  DataCell(Text("Dhanu")),
+                  DataCell(Text("Vilakoduvu poojaa")),
+                ],
+              ),
+            ],
           ),
         ],
       ),

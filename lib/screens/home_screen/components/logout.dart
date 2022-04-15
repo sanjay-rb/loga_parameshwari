@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/auth_services.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
 
 class LogoutBtn extends StatelessWidget {
   const LogoutBtn({Key key}) : super(key: key);
@@ -15,12 +15,9 @@ class LogoutBtn extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            width: 1,
-          ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text(
             "Logout",
             style: TextStyle(

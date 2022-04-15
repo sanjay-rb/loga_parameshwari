@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../../model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
 
 class LeafDate extends StatelessWidget {
   const LeafDate({
@@ -15,10 +14,9 @@ class LeafDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 40,
-      child: Container(
-        child: Center(
-          child: Text(
-              "${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}"),
+      child: Center(
+        child: Text(
+          DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate()),
         ),
       ),
     );

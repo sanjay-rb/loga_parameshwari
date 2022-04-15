@@ -14,7 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  TextEditingController _userNameCtrl = TextEditingController();
+  final TextEditingController _userNameCtrl = TextEditingController();
   final userUpdateFormKey = GlobalKey<FormState>();
 
   @override
@@ -24,104 +24,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FutureBuilder(
-              future: DatabaseManager.getUserInfo(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
-                } else {
-                  UserModel userModel =
-                      UserModel.fromJson(snapshot.data.docs.first);
-                  _userNameCtrl.text = userModel.name;
-                  return Form(
-                    key: userUpdateFormKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+            future: DatabaseManager.getUserInfo(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else {
+                final UserModel userModel =
+                    UserModel.fromJson(snapshot.data.docs.first);
+                _userNameCtrl.text = userModel.name;
+                return Form(
+                  key: userUpdateFormKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: Responsiveness.height(10),
+                        ),
+                        const Text(
+                          "User Profile",
+                          style: TextDesign.headText,
+                        ),
+                        ...[
                           SizedBox(
                             height: Responsiveness.height(10),
                           ),
-                          Text(
-                            "User Profile",
-                            style: TextDesign.headText,
+                          const Text("Name"),
+                          Divider(
+                            endIndent: Responsiveness.widthRatio(0.7),
+                            color: Colors.black,
                           ),
-                          ...[
-                            SizedBox(
-                              height: Responsiveness.height(10),
-                            ),
-                            Text("Name"),
-                            Divider(
-                              endIndent: Responsiveness.widthRatio(0.7),
-                              color: Colors.black,
-                            ),
-                            Container(
-                              color: Colors.yellow,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Please enter your name here.";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: _userNameCtrl,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                          ...[
-                            SizedBox(
-                              height: Responsiveness.height(10),
-                            ),
-                            Text("Number (Can't edit number)"),
-                            Divider(
-                              endIndent: Responsiveness.widthRatio(0.7),
-                              color: Colors.black,
-                            ),
-                            Container(
-                              color: Colors.yellow,
-                              child: TextFormField(
-                                initialValue: userModel.id,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                enabled: false,
-                              ),
-                            ),
-                          ],
-                          SizedBox(
-                            height: Responsiveness.height(20),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (userUpdateFormKey.currentState.validate()) {
-                                  UserModel newUser = UserModel(
-                                      id: userModel.id,
-                                      uid: userModel.uid,
-                                      name: _userNameCtrl.text.trim());
-                                  await DatabaseManager.addUser(newUser);
-                                  Navigator.pop(context);
+                          Container(
+                            color: Colors.yellow,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Please enter your name here.";
+                                } else {
+                                  return null;
                                 }
                               },
-                              child: Text("OK"),
+                              controller: _userNameCtrl,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
                             ),
-                          )
+                          ),
                         ],
-                      ),
+                        ...[
+                          SizedBox(
+                            height: Responsiveness.height(10),
+                          ),
+                          const Text("Number (Can't edit number)"),
+                          Divider(
+                            endIndent: Responsiveness.widthRatio(0.7),
+                            color: Colors.black,
+                          ),
+                          Container(
+                            color: Colors.yellow,
+                            child: TextFormField(
+                              initialValue: userModel.id,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              enabled: false,
+                            ),
+                          ),
+                        ],
+                        SizedBox(
+                          height: Responsiveness.height(20),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (userUpdateFormKey.currentState.validate()) {
+                                final UserModel newUser = UserModel(
+                                  id: userModel.id,
+                                  uid: userModel.uid,
+                                  name: _userNameCtrl.text.trim(),
+                                );
+                                await DatabaseManager.addUser(newUser)
+                                    .then((value) {
+                                  Navigator.pop(context);
+                                });
+                              }
+                            },
+                            child: const Text("OK"),
+                          ),
+                        )
+                      ],
                     ),
-                  );
-                }
-              }),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

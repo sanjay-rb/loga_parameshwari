@@ -15,12 +15,12 @@ class LeftBtn extends StatelessWidget {
           Navigator.of(context).push(
             NavigationAnimationService.leftToRightPageRoute(
               exitPage: this,
-              enterPage: ProfileScreen(),
+              enterPage: const ProfileScreen(),
             ),
           );
         },
-        icon: Icon(Icons.account_box, color: Colors.white),
-        label: Text(
+        icon: const Icon(Icons.account_box, color: Colors.white),
+        label: const Text(
           "Profile",
           style: TextStyle(color: Colors.white),
         ),

@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/add_pooja_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-
-import '../../add_pooja_screen.dart';
-import '../../../constant/constant.dart';
-import '../../../model/pooja.dart';
 
 class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
@@ -19,18 +18,17 @@ class RecentPooja extends StatelessWidget {
       ),
       child: StreamBuilder<QuerySnapshot>(
         stream: DatabaseManager.getRecentPoojaStream(),
-        initialData: null,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Object>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
             if (snapshot.data.docs.isNotEmpty) {
-              Pooja next = Pooja.fromJson(snapshot.data.docs.first.data());
+              final Pooja next = Pooja.fromJson(snapshot.data.docs.first);
               return RecentPoojaView(next: next);
             } else {
-              return RecentPoojaView(next: null);
+              return const RecentPoojaView(next: null);
             }
           }
         },
@@ -52,7 +50,7 @@ class RecentPoojaView extends StatelessWidget {
         Expanded(
           flex: 20,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.amber,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
@@ -64,9 +62,9 @@ class RecentPoojaView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Text(
-                  this.next != null ? "${next.name}" : "No Event Scheduled",
+                  next != null ? next.name : "No Event Scheduled",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
@@ -78,7 +76,7 @@ class RecentPoojaView extends StatelessWidget {
         Expanded(
           flex: 10,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.amber,
             ),
             height: 50,
@@ -86,11 +84,11 @@ class RecentPoojaView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Text(
-                  this.next != null
+                  next != null
                       ? "on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(next.on.toDate())}"
                       : "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),
@@ -100,7 +98,7 @@ class RecentPoojaView extends StatelessWidget {
         ),
         Expanded(
           flex: 70,
-          child: Container(
+          child: SizedBox(
             width: double.maxFinite,
             child: Image.asset(
               'images/god.webp',
@@ -111,17 +109,18 @@ class RecentPoojaView extends StatelessWidget {
         Expanded(
           flex: 15,
           child: GestureDetector(
-            onTap: this.next != null
+            onTap: next != null
                 ? null
                 : () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddPoojaScreen(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddPoojaScreen(),
+                      ),
+                    );
                   },
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.amber,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
@@ -131,10 +130,10 @@ class RecentPoojaView extends StatelessWidget {
               height: 50,
               child: Center(
                 child: Text(
-                  this.next != null ? "by ${next.by}" : "Schedule Now",
+                  next != null ? "by ${next.by}" : "Schedule Now",
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),

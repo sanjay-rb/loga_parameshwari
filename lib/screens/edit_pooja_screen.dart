@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/history_screen/history_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
-import './history_screen/history_screen.dart';
-import '../model/pooja.dart';
 
 class EditPoojaScreen extends StatefulWidget {
   const EditPoojaScreen({Key key, this.toEditPooja}) : super(key: key);
@@ -28,23 +28,22 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Edit Pooja"),
+        title: const Text("Edit Pooja"),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
+          child: SizedBox(
             height: double.maxFinite,
             child: Form(
               key: addPoojaFormKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   nameForm(node),
                   byForm(node),
                   onForm(),
-                  Spacer(),
+                  const Spacer(),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
@@ -59,38 +58,45 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                               builder: (context) => AlertDialog(
                                 title: Text(
                                   "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Updating",
-                                  style: TextStyle(fontSize: 10),
+                                  style: const TextStyle(fontSize: 10),
                                 ),
-                                content: LinearProgressIndicator(),
+                                content: const LinearProgressIndicator(),
                               ),
                             );
-                            DatabaseManager.updatePooja(Pooja(
-                                    widget.toEditPooja.id,
-                                    name.trim(),
-                                    by.trim(),
-                                    Timestamp.fromDate(on),
-                                    AuthService.getUserNumber()))
-                                .then((value) {
+                            DatabaseManager.updatePooja(
+                              Pooja(
+                                widget.toEditPooja.id,
+                                name.trim(),
+                                by.trim(),
+                                Timestamp.fromDate(on),
+                                AuthService.getUserNumber(),
+                              ),
+                            ).then((value) {
                               Messaging.send(
                                 title: "$name Pooja is updated by $by",
                                 body:
                                     'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
                               ).then((value) {
                                 Navigator.pop(context);
-                                if (value.statusCode == 200)
+                                if (value.statusCode == 200) {
                                   successDialog(context);
-                                else
-                                  errorDialog(context,
-                                      "Something went wrong! Message not sent to the members.");
+                                } else {
+                                  errorDialog(
+                                    context,
+                                    "Something went wrong! Message not sent to the members.",
+                                  );
+                                }
                               });
                             }).onError((error, stackTrace) {
                               Navigator.pop(context);
-                              errorDialog(context,
-                                  "Something went wrong! Pooja not posted to the members.");
+                              errorDialog(
+                                context,
+                                "Something went wrong! Pooja not posted to the members.",
+                              );
                             });
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Update Data",
                           style: TextStyle(fontSize: 25),
                         ),
@@ -106,7 +112,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
     );
   }
 
-  void errorDialog(context, msg) => showDialog(
+  void errorDialog(BuildContext context, String msg) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           insetPadding: EdgeInsets.zero,
@@ -117,7 +123,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
           content: Padding(
@@ -128,11 +134,11 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                 Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.amber,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.error,
                     size: 80,
                     color: Colors.white,
@@ -156,7 +162,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
           content: Padding(
@@ -167,36 +173,39 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                 Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.green,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.done_rounded,
                     size: 80,
                     color: Colors.white,
                   ),
                 ),
-                Text("Done"),
+                const Text("Done"),
               ],
             ),
           ),
         ),
-      ).then((value) => Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => HistoryScreen())));
+      ).then(
+        (value) => Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HistoryScreen()),
+        ),
+      );
 
-  nameForm(node) => Padding(
+  Widget nameForm(FocusScopeNode node) => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Pooja Name"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Pooja Name"),
             ),
             TextFormField(
               initialValue: widget.toEditPooja.name,
               validator: (value) {
-                if (value == null || value.length == 0) {
+                if (value == null || value.isEmpty) {
                   return "Please give pooja name";
                 } else {
                   name = value;
@@ -205,25 +214,25 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               },
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(hintText: "Name"),
+              decoration: const InputDecoration(hintText: "Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],
         ),
       );
 
-  byForm(FocusScopeNode node) => Padding(
+  Widget byForm(FocusScopeNode node) => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Origanized by"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Origanized by"),
             ),
             TextFormField(
               initialValue: widget.toEditPooja.by,
               validator: (value) {
-                if (value == null || value.length == 0) {
+                if (value == null || value.isEmpty) {
                   return "Please give your name";
                 } else {
                   by = value;
@@ -232,24 +241,24 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               },
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(hintText: "Origanizer Name"),
+              decoration: const InputDecoration(hintText: "Origanizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],
         ),
       );
 
-  onForm() => Padding(
+  Widget onForm() => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Scheduled on"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Scheduled on"),
             ),
             DateTimeField(
               initialValue: widget.toEditPooja.on.toDate(),
-              decoration: InputDecoration(hintText: "Date of the Pooja"),
+              decoration: const InputDecoration(hintText: "Date of the Pooja"),
               validator: (value) {
                 if (value == null) {
                   return "Please give date and time";
@@ -265,7 +274,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                   firstDate: DateTime.now(),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime.now().add(
-                    Duration(days: 365 * 3),
+                    const Duration(days: 365 * 3),
                   ),
                 );
                 if (date != null) {

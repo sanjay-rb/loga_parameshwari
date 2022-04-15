@@ -1,14 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import './home_screen/home_screen.dart';
-import './login_screen.dart';
-import '../services/auth_services.dart';
-import '../services/navigation_animation_services.dart';
-import '../services/responsive_services.dart';
-import '../services/database_manager.dart';
-import '../services/fire_message_services.dart';
-import '../services/in_app_update_services.dart';
+import 'package:loga_parameshwari/screens/home_screen/home_screen.dart';
+import 'package:loga_parameshwari/screens/login_screen.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/fire_message_services.dart';
+import 'package:loga_parameshwari/services/in_app_update_services.dart';
+import 'package:loga_parameshwari/services/navigation_animation_services.dart';
+import 'package:loga_parameshwari/services/responsive_services.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -19,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _progess = 0.0;
-  double _totalPreload = 8;
+  final double _totalPreload = 8;
 
   String _progressText = "Welcome to Loga Parameshwari Temple App....";
   @override
@@ -28,14 +29,14 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  _loadProgress(double id, String text) {
+  void _loadProgress(double id, String text) {
     setState(() {
-      _progess = (id / _totalPreload);
+      _progess = id / _totalPreload;
       _progressText = text;
     });
   }
 
-  setUp() async {
+  Future<void> setUp() async {
     await Firebase.initializeApp(); // 1....
     _loadProgress(1, "Loading....");
     await Messaging.init(); // 2....
@@ -58,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
         NavigationAnimationService.fadePageRoute(
           enterPage: AuthService.handleAuth(
             onAuthorized: HomeScreen(),
-            onUnAuthorized: LoginScreen(),
+            onUnAuthorized: const LoginScreen(),
           ),
         ),
       );
@@ -70,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: Responsiveness.screenSize.width,
             height: Responsiveness.screenSize.height,
             child: Stack(
@@ -97,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   LinearProgressIndicator(value: _progess),
                   Text(
                     _progressText,
-                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    style: const TextStyle(fontSize: 10, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ],

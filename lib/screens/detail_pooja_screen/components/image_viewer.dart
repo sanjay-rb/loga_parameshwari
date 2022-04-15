@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/image.dart';
 
 class ImageFullView extends StatefulWidget {
   const ImageFullView({Key key, this.id, this.imageList}) : super(key: key);
   final int id;
-  final List imageList;
+  final List<QueryDocumentSnapshot<Object>> imageList;
   @override
   _ImageFullViewState createState() => _ImageFullViewState();
 }
@@ -18,8 +19,8 @@ class _ImageFullViewState extends State<ImageFullView> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -43,7 +44,7 @@ class _ImageFullViewState extends State<ImageFullView> {
 
 class ImagePageView extends StatefulWidget {
   const ImagePageView({Key key, this.root}) : super(key: key);
-  final root;
+  final ImageFullView root;
   @override
   State<ImagePageView> createState() => _ImagePageViewState();
 }
@@ -64,7 +65,7 @@ class _ImagePageViewState extends State<ImagePageView> {
       children: List.generate(
         widget.root.imageList.length,
         (index) {
-          ImageModel imageModel =
+          final ImageModel imageModel =
               ImageModel.fromJson(widget.root.imageList[index]);
           return InteractiveViewer(
             child: Center(

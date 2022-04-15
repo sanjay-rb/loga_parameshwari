@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
+// ignore: avoid_classes_with_only_static_members
 /// This services helps to perform authentication on the app with firebase auth....
 ///
 /// This services required couple of packages....
@@ -12,14 +14,12 @@ class AuthService {
   static FirebaseAuth _auth;
 
   ///
-  static init() {
-    if (_auth == null) {
-      _auth = FirebaseAuth.instance;
-    }
+  static Future<void> init() async {
+    _auth ??= FirebaseAuth.instance;
   }
 
   /// Check for the Auth State and navigate to screens....
-  static handleAuth({Widget onAuthorized, Widget onUnAuthorized}) {
+  static Widget handleAuth({Widget onAuthorized, Widget onUnAuthorized}) {
     return StreamBuilder(
       stream: _auth.authStateChanges(),
       builder: (BuildContext context, snapshot) {
@@ -33,14 +33,14 @@ class AuthService {
   }
 
   /// SignOut from the current user....
-  static signOut() {
+  static void signOut() {
     _auth.signOut();
   }
 
   /// SignIn with the help of AuthCredential....
-  static signIn(AuthCredential authCreds) async {
+  static Future<bool> signIn(AuthCredential authCreds) async {
     try {
-      UserCredential userCredential =
+      final UserCredential userCredential =
           await _auth.signInWithCredential(authCreds);
       if (userCredential.additionalUserInfo.isNewUser) {
         await DatabaseManager.addUser(
@@ -58,29 +58,34 @@ class AuthService {
   }
 
   /// SignIn with the help of OTP....
-  static signInWithOTP(smsCode, verId) async {
-    AuthCredential authCreds =
+  static Future<bool> signInWithOTP(String smsCode, String verId) async {
+    final AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    return await signIn(authCreds);
+    return signIn(authCreds);
   }
 
   // Get current user phone number....
-  static getUserNumber() {
+  static String getUserNumber() {
     return _auth.currentUser.phoneNumber;
   }
 
-  static Future<List> verifyPhone(phoneNo) async {
+  static Future<List> verifyPhone(String phoneNo) async {
     String verificationId;
     bool codeSent = false;
-    print("phonenumber : '+91$phoneNo'");
-    print("AUTH : $_auth");
+    if (kDebugMode) {
+      print("phonenumber : '+91$phoneNo'");
+      print("AUTH : $_auth");
+    }
+
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) {
         signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        print("verificationFailed: (FirebaseAuthException $e)");
+        if (kDebugMode) {
+          print("verificationFailed: (FirebaseAuthException $e)");
+        }
       },
       codeSent: (String verificationId, int resendToken) async {
         verificationId = verificationId;
