@@ -30,11 +30,19 @@ class HeadComponent extends StatelessWidget {
         StreamBuilder<String>(
           stream: getGreeting(),
           builder: (context, snapshot) {
-            return Text(
-              snapshot.data,
-              style: TextDesign.titleText,
-              textAlign: TextAlign.right,
-            );
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text(
+                "Loading...",
+                style: TextDesign.titleText,
+                textAlign: TextAlign.right,
+              );
+            } else {
+              return Text(
+                snapshot.data,
+                style: TextDesign.titleText,
+                textAlign: TextAlign.right,
+              );
+            }
           },
         ),
       ],

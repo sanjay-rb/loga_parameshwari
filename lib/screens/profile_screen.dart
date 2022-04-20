@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: FutureBuilder(
             future: DatabaseManager.getUserInfo(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -67,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               controller: _userNameCtrl,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(10),
                               ),
                               style: const TextStyle(
                                 fontSize: 20,
@@ -89,6 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               initialValue: userModel.id,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(10),
                               ),
                               style: const TextStyle(
                                 fontSize: 20,

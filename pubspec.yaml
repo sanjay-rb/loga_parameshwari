@@ -31,6 +31,10 @@ dependencies:
   url_launcher: ^6.0.9
 
 dev_dependencies:
+  flutter_launcher_icons:
+    git:
+      url: https://github.com/Davenchy/flutter_launcher_icons.git
+      ref: fixMinSdkParseFlutter2.8
   lint: ^1.0.0
 
 flutter:
@@ -38,3 +42,8 @@ flutter:
   assets:
     - images/god.webp
     - images/icon.png
+
+flutter_icons:
+  image_path: "images/icon.png"
+  android: true
+  ios: true
