@@ -3,7 +3,6 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
-import 'package:loga_parameshwari/screens/history_screen/history_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
@@ -189,9 +188,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
           ),
         ),
       ).then(
-        (value) => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HistoryScreen()),
-        ),
+        (value) => Navigator.of(context).pop(),
       );
 
   Widget nameForm(FocusScopeNode node) => Padding(
@@ -239,8 +236,10 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                   return null;
                 }
               },
+              maxLines: null,
               textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
               decoration: const InputDecoration(hintText: "Origanizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
@@ -271,11 +270,10 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               onShowPicker: (context, currentValue) async {
                 final date = await showDatePicker(
                   context: context,
-                  firstDate: DateTime.now(),
+                  firstDate:
+                      DateTime.now().subtract(const Duration(days: 365 * 3)),
                   initialDate: currentValue ?? DateTime.now(),
-                  lastDate: DateTime.now().add(
-                    const Duration(days: 365 * 3),
-                  ),
+                  lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
                 );
                 if (date != null) {
                   final time = await showTimePicker(

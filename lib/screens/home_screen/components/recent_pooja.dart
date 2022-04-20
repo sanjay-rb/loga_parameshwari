@@ -130,7 +130,7 @@ class RecentPoojaView extends StatelessWidget {
               height: 50,
               child: Center(
                 child: Text(
-                  next != null ? "by ${next.by}" : "Schedule Now",
+                  getSponserByText(),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -144,5 +144,17 @@ class RecentPoojaView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getSponserByText() {
+    if (next != null) {
+      if (next.by.split('\n').length > 1) {
+        return "by ${next.by.split('\n').length} members";
+      } else {
+        return "by ${next.by}";
+      }
+    } else {
+      return "Schedule Now";
+    }
   }
 }
