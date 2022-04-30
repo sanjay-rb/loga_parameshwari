@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/head.dart';
@@ -8,6 +9,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,8 +17,126 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = [];
   final _bottomAppBarHeight = 50.0;
   final ScrollController _homeListController = ScrollController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    targets.addAll([
+      targetFocus(
+        "Upcoming Pooja",
+        GKey.recentPoojaKey,
+        "Check out upcoming pooja here!",
+        isCircle: false,
+      ),
+      targetFocus(
+        "Schedule New Pooja",
+        GKey.addPoojaKey,
+        "Click here to schedule your pooja!",
+      ),
+      targetFocus(
+        "History Pooja",
+        GKey.historyPoojaKey,
+        "Click here to know history of Loga Parameshwari Temple.",
+      ),
+      targetFocus(
+        "Map View",
+        GKey.mapViewKey,
+        "Click here! Start navigation to Loga Parameshwari Temple.",
+      ),
+      targetFocus(
+        "Donation",
+        GKey.donationBtnKey,
+        "Click here to find donation information of temple.",
+        isCircle: false,
+      ),
+      targetFocus(
+        "Profile",
+        GKey.profileBtnKey,
+        "Click here to open your profile",
+        isCircle: false,
+        isTextUp: true,
+      ),
+    ]);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    super.initState();
+  }
+
+  TargetFocus targetFocus(
+    String identify,
+    GlobalKey key,
+    String text, {
+    bool isCircle = true,
+    bool isTextUp = false,
+  }) {
+    return TargetFocus(
+      identify: identify,
+      keyTarget: key,
+      shape: isCircle ? ShapeLightFocus.Circle : ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: isTextUp ? ContentAlign.top : ContentAlign.bottom,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              children: [
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    tutorialCoachMark.next();
+                  },
+                  child: const Text("Next"),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(const Duration(seconds: 1), () {
+      showTutorial();
+    });
+  }
+
+  void showTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      context,
+      targets: targets,
+      onFinish: () {
+        showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
+            content: const Text(
+              "Feel free to turn off the tutorial on you profile page.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      },
+    )..show();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        const DonateBtn(),
+                        DonateBtn(
+                          key: GKey.donationBtnKey,
+                        ),
                         const SizedBox(
                           height: 20,
                         ),

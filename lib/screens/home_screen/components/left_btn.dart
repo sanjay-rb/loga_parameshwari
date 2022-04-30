@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/profile_screen.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 
@@ -8,6 +9,7 @@ class LeftBtn extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
       child: TextButton.icon(
+        key: GKey.profileBtnKey,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
         ),

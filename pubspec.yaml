@@ -28,8 +28,9 @@ dependencies:
   provider: ^5.0.0
   share: ^2.0.4
   shared_preferences: ^2.0.6
+  tutorial_coach_mark: ^1.2.2
   url_launcher: ^6.0.9
-
+  
 dev_dependencies:
   flutter_launcher_icons:
     git:

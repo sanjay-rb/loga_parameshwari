@@ -43,3 +43,13 @@ class ImagesAndUrls {
   static const godImg =
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fgod.webp?alt=media&token=af566403-fd35-47c1-9a64-8a676453d77d";
 }
+
+// ignore: avoid_classes_with_only_static_members
+class GKey {
+  static final recentPoojaKey = GlobalKey(debugLabel: 'recentPoojaKey');
+  static final addPoojaKey = GlobalKey(debugLabel: 'addPoojaKey');
+  static final historyPoojaKey = GlobalKey(debugLabel: 'historyPoojaKey');
+  static final mapViewKey = GlobalKey(debugLabel: 'mapViewKey');
+  static final donationBtnKey = GlobalKey(debugLabel: 'donationBtnKey');
+  static final profileBtnKey = GlobalKey(debugLabel: 'profileBtnKey');
+}

@@ -95,7 +95,11 @@ class HistoryPooja extends StatelessWidget {
 class HomeKeysComponent extends StatelessWidget {
   final double width;
   final double height;
-  const HomeKeysComponent({Key key, this.width, this.height}) : super(key: key);
+  const HomeKeysComponent({
+    Key key,
+    this.width,
+    this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,17 +109,29 @@ class HomeKeysComponent extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Expanded(
+          Expanded(
             flex: 55,
-            child: RecentPooja(),
+            child: RecentPooja(key: GKey.recentPoojaKey),
           ),
           Expanded(
             flex: 45,
             child: Column(
-              children: const [
-                Expanded(child: AddPooja()),
-                Expanded(child: HistoryPooja()),
-                Expanded(child: MapView()),
+              children: [
+                Expanded(
+                  child: AddPooja(
+                    key: GKey.addPoojaKey,
+                  ),
+                ),
+                Expanded(
+                  child: HistoryPooja(
+                    key: GKey.historyPoojaKey,
+                  ),
+                ),
+                Expanded(
+                  child: MapView(
+                    key: GKey.mapViewKey,
+                  ),
+                ),
               ],
             ),
           ),
