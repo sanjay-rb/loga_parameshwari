@@ -9,6 +9,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,13 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
         GKey.donationBtnKey,
         "Click here to find donation information of temple.",
         isCircle: false,
-      ),
-      targetFocus(
-        "Profile",
-        GKey.profileBtnKey,
-        "Click here to open your profile",
-        isCircle: false,
-        isTextUp: true,
       ),
     ]);
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -106,8 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _afterLayout(_) {
-    Future.delayed(const Duration(seconds: 1), () {
-      showTutorial();
+    SharedPreferences.getInstance().then((value) {
+      final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
+      if (canTutorial) {
+        Future.delayed(const Duration(seconds: 1), () {
+          showTutorial();
+        });
+      }
     });
   }
 
@@ -163,10 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
           width: double.infinity,
           height: _bottomAppBarHeight,
           child: Row(
-            children: [
+            children: const [
               LeftBtn(),
-              const Spacer(),
-              const RightBtn(),
+              Spacer(),
+              RightBtn(),
             ],
           ),
         ),

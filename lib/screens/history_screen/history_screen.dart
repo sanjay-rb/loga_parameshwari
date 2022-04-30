@@ -4,6 +4,7 @@ import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/tree_leaf.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -72,8 +73,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   void _afterLayout(_) {
-    Future.delayed(const Duration(seconds: 3), () {
-      showTutorial();
+    SharedPreferences.getInstance().then((value) {
+      final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
+      if (canTutorial) {
+        Future.delayed(const Duration(seconds: 1), () {
+          showTutorial();
+        });
+      }
     });
   }
 

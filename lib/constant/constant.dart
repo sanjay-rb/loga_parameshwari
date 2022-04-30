@@ -54,3 +54,6 @@ class GKey {
   static final profileBtnKey = GlobalKey(debugLabel: 'profileBtnKey');
   static final leafKey = GlobalKey(debugLabel: 'leafKey');
 }
+
+// ignore: constant_identifier_names
+const SHARE_PREF_TUTORIAL = 'tutorial';

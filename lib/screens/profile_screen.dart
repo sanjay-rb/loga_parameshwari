@@ -4,6 +4,7 @@ import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key key, this.userModel}) : super(key: key);
@@ -16,6 +17,23 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _userNameCtrl = TextEditingController();
   final userUpdateFormKey = GlobalKey<FormState>();
+  bool isTutorialShown = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SharedPreferences.getInstance().then((value) {
+      if (value.getBool(SHARE_PREF_TUTORIAL) != null) {
+        setState(() {
+          isTutorialShown = value.getBool(SHARE_PREF_TUTORIAL);
+        });
+      } else {
+        setState(() {
+          isTutorialShown = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +45,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             future: DatabaseManager.getUserInfo(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               } else {
                 final UserModel userModel =
                     UserModel.fromJson(snapshot.data.docs.first);
@@ -55,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Colors.black,
                           ),
                           Container(
-                            color: Colors.yellow,
+                            color: Colors.grey.shade300,
                             child: TextFormField(
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -85,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Colors.black,
                           ),
                           Container(
-                            color: Colors.yellow,
+                            color: Colors.grey.shade300,
                             child: TextFormField(
                               initialValue: userModel.id,
                               decoration: const InputDecoration(
@@ -96,6 +116,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fontSize: 20,
                               ),
                               enabled: false,
+                            ),
+                          ),
+                        ],
+                        ...[
+                          SizedBox(
+                            height: Responsiveness.height(10),
+                          ),
+                          const Text("Can we show app tutorial next time ?"),
+                          Divider(
+                            endIndent: Responsiveness.widthRatio(0.7),
+                            color: Colors.black,
+                          ),
+                          Container(
+                            color: Colors.grey.shade300,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Tutorial",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                const Spacer(),
+                                Switch.adaptive(
+                                  value: isTutorialShown,
+                                  onChanged: (v) {
+                                    SharedPreferences.getInstance()
+                                        .then((value) {
+                                      value.setBool(SHARE_PREF_TUTORIAL, v);
+                                      setState(() {
+                                        isTutorialShown = v;
+                                      });
+                                    });
+                                  },
+                                )
+                              ],
                             ),
                           ),
                         ],
