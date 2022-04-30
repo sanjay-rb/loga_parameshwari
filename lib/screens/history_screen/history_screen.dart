@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/tree_leaf.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key key}) : super(key: key);
@@ -12,9 +14,74 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = [];
   @override
   void initState() {
+    targets.addAll([
+      targetFocus(
+        "Pooja Leaf",
+        GKey.leafKey,
+        "Click here to view photos of this pooja.",
+        isCircle: false,
+      ),
+    ]);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
+  }
+
+  TargetFocus targetFocus(
+    String identify,
+    GlobalKey key,
+    String text, {
+    bool isCircle = true,
+    bool isTextUp = false,
+  }) {
+    return TargetFocus(
+      identify: identify,
+      keyTarget: key,
+      shape: isCircle ? ShapeLightFocus.Circle : ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: isTextUp ? ContentAlign.top : ContentAlign.bottom,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              children: [
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    tutorialCoachMark.next();
+                  },
+                  child: const Text("Next"),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(const Duration(seconds: 3), () {
+      showTutorial();
+    });
+  }
+
+  void showTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      context,
+      targets: targets,
+    )..show();
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/leaf_card.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/leaf_date.dart';
@@ -24,7 +25,11 @@ class TreeLeaf extends StatelessWidget {
           Row(
             children: index.isEven
                 ? [
-                    LeafCard(pooja: pooja, id: id),
+                    LeafCard(
+                      pooja: pooja,
+                      id: id,
+                      key: index == 0 ? GKey.leafKey : GlobalKey(),
+                    ),
                     Expanded(
                       flex: 2,
                       child: Container(
@@ -41,7 +46,11 @@ class TreeLeaf extends StatelessWidget {
                         color: Colors.purple,
                       ),
                     ),
-                    LeafCard(pooja: pooja, id: id),
+                    LeafCard(
+                      pooja: pooja,
+                      id: id,
+                      key: index == 0 ? GKey.leafKey : GlobalKey(),
+                    ),
                   ],
           ),
           Center(
