@@ -66,8 +66,6 @@ class _DonationScreenState extends State<DonationScreen> {
                       'value': snapshot.data["upi_id"] as String
                     },
                   ];
-                  print(_listOfData);
-                  // return Container();
 
                   return ListView(
                     children: [
