@@ -75,8 +75,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void _afterLayout(_) {
     SharedPreferences.getInstance().then((value) {
       final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
-      if (canTutorial) {
-        Future.delayed(const Duration(seconds: 1), () {
+      if (canTutorial == null || canTutorial) {
+        Future.delayed(const Duration(seconds: 3), () {
           showTutorial();
         });
       }
@@ -87,6 +87,44 @@ class _HistoryScreenState extends State<HistoryScreen> {
     tutorialCoachMark = TutorialCoachMark(
       context,
       targets: targets,
+      onSkip: () {
+        showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
+            content: const Text(
+              "You can turn off app tutorial at\nProfile -> Turn off Tutorial",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      },
+      onFinish: () {
+        showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
+            content: const Text(
+              "You can turn off app tutorial at\nProfile -> Turn off Tutorial",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      },
     )..show();
   }
 

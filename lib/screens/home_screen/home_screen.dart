@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _afterLayout(_) {
     SharedPreferences.getInstance().then((value) {
       final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
-      if (canTutorial) {
+      if (canTutorial == null || canTutorial) {
         Future.delayed(const Duration(seconds: 1), () {
           showTutorial();
         });
@@ -114,25 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
     tutorialCoachMark = TutorialCoachMark(
       context,
       targets: targets,
-      onFinish: () {
-        showDialog(
-          context: context,
-          builder: (c) => AlertDialog(
-            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
-            content: const Text(
-              "Feel free to turn off the tutorial on you profile page.",
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("OK"),
-              )
-            ],
-          ),
-        );
-      },
     )..show();
   }
 

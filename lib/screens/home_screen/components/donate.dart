@@ -31,7 +31,7 @@ class DonateBtn extends StatelessWidget {
           height: Responsiveness.heightRatio(0.1),
           child: const Center(
             child: Text(
-              "Donate",
+              "Donation Details",
               style: TextDesign.headText,
             ),
           ),
