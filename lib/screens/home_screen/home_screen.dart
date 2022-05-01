@@ -114,6 +114,44 @@ class _HomeScreenState extends State<HomeScreen> {
     tutorialCoachMark = TutorialCoachMark(
       context,
       targets: targets,
+      onSkip: () {
+        showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
+            content: const Text(
+              "You can turn off app tutorial at\nProfile -> Turn off Tutorial",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      },
+      onFinish: () {
+        showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text("Welcome to\nLoga Parameshwari Temple App"),
+            content: const Text(
+              "You can turn off app tutorial at\nProfile -> Turn off Tutorial",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      },
     )..show();
   }
 
