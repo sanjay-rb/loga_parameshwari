@@ -13,10 +13,14 @@ class DatabaseManager {
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';
   static const String NOTICE_COLLECTION_NAME = 'Notice';
+  static const String DONATION_COLLECTION_NAME = 'DonationDetails';
 
   static Future<void> init() async {
     _db ??= FirebaseFirestore.instance;
   }
+
+  static Stream<DocumentSnapshot> getAccountDetails() =>
+      _db.collection(DONATION_COLLECTION_NAME).doc('account').snapshots();
 
   static Stream<DocumentSnapshot> getNotice() =>
       _db.collection(NOTICE_COLLECTION_NAME).doc('notice').snapshots();
@@ -108,4 +112,5 @@ class DatabaseManager {
         .doc(imageModel.id)
         .update({"like": like});
   }
+
 }
