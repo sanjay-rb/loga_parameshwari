@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onBackPress() async {
     FocusScope.of(context).unfocus();
-    final bool yesorno = await showDialog(
+    final bool yesOrNo = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text(
@@ -254,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-    if (yesorno) {
+    if (yesOrNo) {
       return Future.value(true);
     } else {
       return Future.value(false);

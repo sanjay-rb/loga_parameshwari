@@ -17,8 +17,8 @@
 # Latest Git Changes
  - Adding image on posting the pooja & adding otp
  - Added Mobile Auth
- - Make own services as modules & SplashScreen & Ad in home screem top
- - Added Nextwork image to UI
+ - Make own services as modules & SplashScreen & Ad in home screen top
+ - Added Network image to UI
  - Restructuring the files and module for better understanding
  - Service updated
  - Added DatabaseManager

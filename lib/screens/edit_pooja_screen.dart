@@ -224,7 +224,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
           children: [
             const Align(
               alignment: Alignment.topLeft,
-              child: Text("Origanized by"),
+              child: Text("Organized by"),
             ),
             TextFormField(
               initialValue: widget.toEditPooja.by,
@@ -240,7 +240,7 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
-              decoration: const InputDecoration(hintText: "Origanizer Name"),
+              decoration: const InputDecoration(hintText: "Organizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],

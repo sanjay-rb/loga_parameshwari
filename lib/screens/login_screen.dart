@@ -152,12 +152,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         if (!phoneNumberError && !codeError) {
                           if (codeSent) {
-                            final bool isverifyed =
+                            final bool isVerified =
                                 await AuthService.signInWithOTP(
                               _smsOTPCtrl.text.trim(),
                               verId,
                             );
-                            if (!isverifyed) {
+                            if (!isVerified) {
                               setState(() {
                                 codeError = true;
                                 isLoading = false;

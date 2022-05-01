@@ -51,7 +51,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                       addImages(),
                       if (upImages.isNotEmpty)
                         const Text(
-                          "Longpress on the image to delete ❌",
+                          "Long press on the image to delete ❌",
                           style: TextStyle(fontSize: 10, color: Colors.grey),
                           textAlign: TextAlign.center,
                         ),
@@ -85,7 +85,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                           }
                         },
                         child: const Text(
-                          "Shedule Now",
+                          "Schedule Now",
                           style: TextStyle(fontSize: 25),
                         ),
                       ),
@@ -262,7 +262,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
           children: [
             const Align(
               alignment: Alignment.topLeft,
-              child: Text("Origanized by"),
+              child: Text("Organized by"),
             ),
             TextFormField(
               controller: byCtrl,
@@ -276,7 +276,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
-              decoration: const InputDecoration(hintText: "Origanizer Name"),
+              decoration: const InputDecoration(hintText: "Organizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],

@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  double _progess = 0.0;
+  double _progress = 0.0;
   final double _totalPreload = 8;
 
   String _progressText = "Welcome to Loga Parameshwari Temple App....";
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _loadProgress(double id, String text) {
     setState(() {
-      _progess = id / _totalPreload;
+      _progress = id / _totalPreload;
       _progressText = text;
     });
   }
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Firebase.initializeApp(); // 1....
     _loadProgress(1, "Loading....");
     await Messaging.init(); // 2....
-    _loadProgress(2, "Messageing Connected....");
+    _loadProgress(2, "Messaging Connected....");
     await DatabaseManager.init(); // 3....
     _loadProgress(3, "Data Fetched....");
     await AuthService.init(); // 4....
@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadProgress(7, "App Update Checked....");
     _loadProgress(8, "Ads Loaded....");
 
-    if (_progess.toInt() == 1) {
+    if (_progress.toInt() == 1) {
       Navigator.pushReplacement(
         context,
         NavigationAnimationService.fadePageRoute(
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: Responsiveness.widthRatio(0.5),
               child: Column(
                 children: [
-                  LinearProgressIndicator(value: _progess),
+                  LinearProgressIndicator(value: _progress),
                   Text(
                     _progressText,
                     style: const TextStyle(fontSize: 10, color: Colors.white),

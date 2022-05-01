@@ -27,7 +27,7 @@ class SpecialPoojaComponent extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                "Special Poojaa",
+                "Special Pooja",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -38,19 +38,19 @@ class SpecialPoojaComponent extends StatelessWidget {
           DataTable(
             columns: const [
               DataColumn(label: Text("Month")),
-              DataColumn(label: Text("Poojaa")),
+              DataColumn(label: Text("Pooja")),
             ],
             rows: const [
               DataRow(
                 cells: [
                   DataCell(Text("Meenam")),
-                  DataCell(Text("Varshika Poojaa")),
+                  DataCell(Text("Varshika Pooja")),
                 ],
               ),
               DataRow(
                 cells: [
                   DataCell(Text("Medam")),
-                  DataCell(Text("Vishukanii Poojaa")),
+                  DataCell(Text("Vishukanii Pooja")),
                 ],
               ),
               DataRow(
@@ -62,7 +62,7 @@ class SpecialPoojaComponent extends StatelessWidget {
               DataRow(
                 cells: [
                   DataCell(Text("Dhanu")),
-                  DataCell(Text("Vilakoduvu poojaa")),
+                  DataCell(Text("Vilakoduvu Pooja")),
                 ],
               ),
             ],

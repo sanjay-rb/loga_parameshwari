@@ -130,7 +130,7 @@ class RecentPoojaView extends StatelessWidget {
               height: 50,
               child: Center(
                 child: Text(
-                  getSponserByText(),
+                  getSponsorByText(),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -146,7 +146,7 @@ class RecentPoojaView extends StatelessWidget {
     );
   }
 
-  String getSponserByText() {
+  String getSponsorByText() {
     if (next != null) {
       if (next.by.split('\n').length > 1) {
         return "by ${next.by.split('\n').length} members";

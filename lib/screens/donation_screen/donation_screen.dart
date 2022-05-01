@@ -5,7 +5,7 @@ import 'package:loga_parameshwari/services/responsive_services.dart';
 
 class DonationScreen extends StatefulWidget {
   const DonationScreen({Key key}) : super(key: key);
-  static final _listofData = [
+  static final _listOfData = [
     {'title': 'Account name', 'value': 'Babu RJ'},
     {'title': 'Account number', 'value': '1392500101678101'},
     {'title': 'IFSC number', 'value': 'KARB0000139'},
@@ -58,11 +58,11 @@ class _DonationScreenState extends State<DonationScreen> {
                 SizedBox(
                   height: Responsiveness.height(10),
                 ),
-                ...List.generate(DonationScreen._listofData.length, (index) {
+                ...List.generate(DonationScreen._listOfData.length, (index) {
                   final String currentValue =
-                      DonationScreen._listofData[index]['value'];
+                      DonationScreen._listOfData[index]['value'];
                   final String currentTitle =
-                      DonationScreen._listofData[index]['title'];
+                      DonationScreen._listOfData[index]['title'];
                   return Column(
                     children: [
                       Container(
