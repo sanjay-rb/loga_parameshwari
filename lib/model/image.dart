@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ImageModel {
   String id;
   String pooja;
@@ -7,21 +9,21 @@ class ImageModel {
 
   ImageModel({this.id, this.pooja, this.user, this.url, this.like});
 
-  ImageModel.fromJson(json) {
-    this.id = json['id'];
-    this.pooja = json['pooja'];
-    this.user = json['user'];
-    this.url = json['url'];
-    this.like = json['like'];
+  ImageModel.fromJson(QueryDocumentSnapshot<Object> json) {
+    id = json['id'] as String;
+    pooja = json['pooja'] as String;
+    user = json['user'] as String;
+    url = json['url'] as String;
+    like = json['like'] as List;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': this.id,
-      'pooja': this.pooja,
-      'user': this.user,
-      'url': this.url,
-      'like': this.like,
+      'id': id,
+      'pooja': pooja,
+      'user': user,
+      'url': url,
+      'like': like,
     };
   }
 }

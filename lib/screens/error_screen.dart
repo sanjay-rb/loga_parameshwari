@@ -11,7 +11,7 @@ class ErrorScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: Image.asset(
@@ -26,14 +26,14 @@ class ErrorScreen extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 children: [
                   SizedBox(
                     height: Responsiveness.heightRatio(0.5),
                   ),
-                  Text(
+                  const Text(
                     "Loga Parameshwari Thunai",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -42,10 +42,10 @@ class ErrorScreen extends StatelessWidget {
                     ),
                   ),
                   Card(
-                    child: Container(
+                    child: SizedBox(
                       width: Responsiveness.widthRatio(0.8),
                       height: Responsiveness.heightRatio(0.3),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Please check your internet connection",
                           textAlign: TextAlign.center,

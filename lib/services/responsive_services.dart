@@ -1,17 +1,19 @@
 import 'dart:ui';
 
+// ignore: avoid_classes_with_only_static_members
 /// This service helps to make the UI responsive and clean....
 class Responsiveness {
   /// My final screen size....
-  static final Size _size = Size(360.0, 728.0);
+  static const Size _size = Size(360.0, 728.0);
 
-  static Size screenSize = Size(0, 0);
+  static Size screenSize = Size.zero;
 
   /// Call this init function on the first build method as passing the MediaQuery.of(context).size....
   /// ```
   /// Responsiveness.init(MediaQuery.of(context).size);
   /// ```
-  static init(Size size) {
+  // ignore: use_setters_to_change_properties
+  static void init(Size size) {
     screenSize = size;
   }
 
@@ -19,7 +21,7 @@ class Responsiveness {
   /// ```
   /// Responsiveness.width(150),
   /// ```
-  static double width(value) {
+  static double width(double value) {
     return screenSize.width * (value / _size.width);
   }
 
@@ -27,7 +29,7 @@ class Responsiveness {
   /// ```
   /// Responsiveness.height(150),
   /// ```
-  static double height(value) {
+  static double height(double value) {
     return screenSize.height * (value / _size.height);
   }
 
@@ -35,7 +37,7 @@ class Responsiveness {
   /// ```
   /// Responsiveness.widthRatio(0.5),
   /// ```
-  static double widthRatio(value) {
+  static double widthRatio(double value) {
     return screenSize.width * value;
   }
 
@@ -43,7 +45,7 @@ class Responsiveness {
   /// ```
   /// Responsiveness.heightRatio(0.5),
   /// ```
-  static double heightRatio(value) {
+  static double heightRatio(double value) {
     return screenSize.height * value;
   }
 }

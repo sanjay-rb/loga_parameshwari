@@ -1,10 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:share/share.dart';
-
-import '../../detail_pooja_screen/detail_pooja_screen.dart';
-import '../../../model/pooja.dart';
-import '../../../constant/constant.dart';
 
 class LeafCard extends StatelessWidget {
   const LeafCard({
@@ -14,7 +13,7 @@ class LeafCard extends StatelessWidget {
   }) : super(key: key);
 
   final Pooja pooja;
-  final id;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -27,36 +26,34 @@ class LeafCard extends StatelessWidget {
             Share.share(TextDesign.getMessageText(pooja));
           },
           child: OpenContainer(
-            closedBuilder: (context, action) => Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+            closedBuilder: (context, action) => Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    pooja.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
                     child: Text(
-                      "${pooja.name}",
+                      "by ${pooja.by.replaceAll('\n', ', ')}",
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ),
-                  Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        "by ${pooja.by}",
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             openBuilder: (context, action) => DetailPooja(
               pooja: pooja,
-              id: this.id,
+              id: id,
             ),
           ),
         ),

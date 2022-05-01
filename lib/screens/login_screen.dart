@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
-
-import '../services/auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -13,8 +13,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String verId = "";
-  TextEditingController _phoneNumberCtrl = TextEditingController();
-  TextEditingController _smsOTPCtrl = TextEditingController();
+  final TextEditingController _phoneNumberCtrl = TextEditingController();
+  final TextEditingController _smsOTPCtrl = TextEditingController();
   bool codeSent = false;
   bool isLoading = false;
   bool phoneNumberError = false;
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: Image.asset(
@@ -39,9 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Positioned(
             top: Responsiveness.heightRatio(0.1),
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Text(
+              child: const Text(
                 "Loga Parameshwari Thunai",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Card(
               child: Container(
                 width: Responsiveness.widthRatio(0.9),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -74,8 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           hintText: "Enter Phone number",
                           border: InputBorder.none,
-                          prefix: Padding(
-                            padding: const EdgeInsets.all(5),
+                          prefix: const Padding(
+                            padding: EdgeInsets.all(5),
                             child: Text("+91"),
                           ),
                           errorText: phoneNumberError
@@ -83,42 +83,45 @@ class _LoginScreenState extends State<LoginScreen> {
                               : null,
                           errorBorder: InputBorder.none,
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                         controller: _phoneNumberCtrl,
                         keyboardType: TextInputType.phone,
                       ),
                     ),
-                    this.codeSent
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Enter OTP",
-                                  border: InputBorder.none,
-                                  errorText:
-                                      codeError ? "   Invalid OTP   " : null,
-                                ),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                controller: _smsOTPCtrl,
-                                keyboardType: TextInputType.number,
-                              ),
+                    if (codeSent)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: "Enter OTP",
+                              border: InputBorder.none,
+                              errorText: codeError ? "   Invalid OTP   " : null,
                             ),
-                          )
-                        : Container(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                            controller: _smsOTPCtrl,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      )
+                    else
+                      Container(),
                     SizedBox(
                       height: Responsiveness.height(10),
                     ),
-                    isLoading ? LinearProgressIndicator() : Container(),
+                    if (isLoading)
+                      const LinearProgressIndicator()
+                    else
+                      Container(),
                     SizedBox(
                       height: Responsiveness.height(10),
                     ),
@@ -149,9 +152,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         if (!phoneNumberError && !codeError) {
                           if (codeSent) {
-                            bool isverifyed = await AuthService.signInWithOTP(
-                                _smsOTPCtrl.text.trim(), this.verId);
-                            if (!isverifyed) {
+                            final bool isVerified =
+                                await AuthService.signInWithOTP(
+                              _smsOTPCtrl.text.trim(),
+                              verId,
+                            );
+                            if (!isVerified) {
                               setState(() {
                                 codeError = true;
                                 isLoading = false;
@@ -162,7 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         }
                       },
-                      child: codeSent ? Text('Login') : Text('Verify'),
+                      child:
+                          codeSent ? const Text('Login') : const Text('Verify'),
                     ),
                   ],
                 ),
@@ -174,25 +181,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> verifyPhone(phoneNo) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> verifyPhone(String phoneNo) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await AuthService.signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        print("verificationFailed: (FirebaseAuthException $e)");
+        if (kDebugMode) {
+          print("verificationFailed: (FirebaseAuthException $e)");
+        }
       },
       codeSent: (String verificationId, int resendToken) async {
-        this.verId = verificationId;
+        verId = verificationId;
         setState(() {
-          this.codeSent = true;
-          this.isLoading = false;
+          codeSent = true;
+          isLoading = false;
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        this.verId = verificationId;
+        verId = verificationId;
       },
     );
   }

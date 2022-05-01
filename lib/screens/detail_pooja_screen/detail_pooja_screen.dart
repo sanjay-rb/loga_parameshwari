@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
-import './components/add_image_btn.dart';
-import './components/header_details.dart';
-import './components/image_grid_viewer.dart';
-import '../../../model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/detail_pooja_screen/components/add_image_btn.dart';
+import 'package:loga_parameshwari/screens/detail_pooja_screen/components/header_details.dart';
+import 'package:loga_parameshwari/screens/detail_pooja_screen/components/image_grid_viewer.dart';
 
 class DetailPooja extends StatelessWidget {
   final Pooja pooja;
-  final id;
+  final String id;
   const DetailPooja({this.pooja, this.id});
   @override
   Widget build(BuildContext context) {
@@ -19,12 +18,12 @@ class DetailPooja extends StatelessWidget {
           child: Column(
             children: [
               HeaderDetails(pooja: pooja),
-              Text(
+              const Text(
                 "Double tap to like ❤️",
                 style: TextStyle(fontSize: 10, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
-              Divider(),
+              const Divider(),
               ImageGridViewer(id),
             ],
           ),

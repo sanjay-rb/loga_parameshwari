@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/history_screen/components/tree_leaf.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-
-import './components/tree_leaf.dart';
-import '../../../model/pooja.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key key}) : super(key: key);
@@ -13,9 +15,78 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = [];
   @override
   void initState() {
+    targets.addAll([
+      targetFocus(
+        "Pooja Leaf",
+        GKey.leafKey,
+        "Click here to view photos of this pooja.",
+        isCircle: false,
+      ),
+    ]);
     super.initState();
+  }
+
+  TargetFocus targetFocus(
+    String identify,
+    GlobalKey key,
+    String text, {
+    bool isCircle = true,
+    bool isTextUp = false,
+  }) {
+    return TargetFocus(
+      identify: identify,
+      keyTarget: key,
+      shape: isCircle ? ShapeLightFocus.Circle : ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: isTextUp ? ContentAlign.top : ContentAlign.bottom,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              children: [
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    tutorialCoachMark.next();
+                  },
+                  child: const Text("Next"),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _afterLayout(_) {
+    SharedPreferences.getInstance().then((value) {
+      final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
+      if (canTutorial == null || canTutorial) {
+        Future.delayed(const Duration(microseconds: 500), () {
+          showTutorial();
+        });
+      }
+    });
+  }
+
+  void showTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      context,
+      targets: targets,
+    )..show();
   }
 
   @override
@@ -23,7 +94,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
       appBar: AppBar(
-        title: Text("History"),
+        title: const Text("History"),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -35,21 +106,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: StreamBuilder(
                   stream: DatabaseManager.getAllPoojaStream(),
                   initialData: null,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot,
+                  ) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else {
                       if (snapshot.data.docs.isNotEmpty) {
-                        List<QueryDocumentSnapshot> allPooja =
+                        final List<QueryDocumentSnapshot> allPooja =
                             snapshot.data.docs;
-                        var controller = ScrollController(
+                        final controller = ScrollController(
                           initialScrollOffset: (allPooja.length + 1) * 50.0,
                         );
-                        var data = allPooja.where((element) {
-                          Pooja pooja = Pooja.fromJson(element);
+                        final data = allPooja
+                            .where((QueryDocumentSnapshot<Object> element) {
+                          final Pooja pooja = Pooja.fromJson(element);
                           return pooja.on.toDate().compareTo(DateTime.now()) ==
                               1;
                         });
@@ -57,12 +131,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         if (data.isNotEmpty) {
                           moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
                         }
-                        Future.delayed(Duration(milliseconds: 500), () {
-                          controller.animateTo(
-                            moveTo,
-                            duration: Duration(seconds: 1),
-                            curve: Curves.ease,
-                          );
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          controller
+                              .animateTo(
+                                moveTo,
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.ease,
+                              )
+                              .then((value) => _afterLayout(context));
                         });
 
                         return ListView.builder(
@@ -70,15 +146,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           itemCount: allPooja.length + 1,
                           itemBuilder: (context, index) {
                             if (index == allPooja.length) {
-                              return Container(
+                              return SizedBox(
                                 width: double.maxFinite,
                                 height: 50,
                                 child: Stack(
                                   children: [
                                     Row(
-                                      children: index % 2 == 0
+                                      children: index.isEven
                                           ? [
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                               Expanded(
@@ -87,12 +163,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   color: Colors.purple,
                                                 ),
                                               ),
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                             ]
                                           : [
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                               Expanded(
@@ -101,7 +177,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   color: Colors.purple,
                                                 ),
                                               ),
-                                              Spacer(
+                                              const Spacer(
                                                 flex: 40,
                                               ),
                                             ],
@@ -111,7 +187,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       child: Container(
                                         width: 25,
                                         height: 25,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: Colors.black,
                                           shape: BoxShape.circle,
                                         ),
@@ -130,7 +206,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           },
                         );
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text("No Pooja has been fetched"),
                         );
                       }

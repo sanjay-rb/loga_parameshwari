@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members, constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
@@ -11,12 +13,14 @@ class DatabaseManager {
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';
   static const String NOTICE_COLLECTION_NAME = 'Notice';
+  static const String DONATION_COLLECTION_NAME = 'DonationDetails';
 
-  static init() {
-    if (_db == null) {
-      _db = FirebaseFirestore.instance;
-    }
+  static Future<void> init() async {
+    _db ??= FirebaseFirestore.instance;
   }
+
+  static Stream<DocumentSnapshot> getAccountDetails() =>
+      _db.collection(DONATION_COLLECTION_NAME).doc('account').snapshots();
 
   static Stream<DocumentSnapshot> getNotice() =>
       _db.collection(NOTICE_COLLECTION_NAME).doc('notice').snapshots();
@@ -55,57 +59,58 @@ class DatabaseManager {
         .set(userModel.toJson());
   }
 
-  static addPooja(Pooja pooja) async {
+  static Future<void> addPooja(Pooja pooja) async {
     await _db
         .collection(POOJA_COLLECTION_NAME)
         .doc(pooja.id)
         .set(pooja.toJson());
   }
 
-  static updatePooja(Pooja pooja) async {
+  static Future<void> updatePooja(Pooja pooja) async {
     await _db
         .collection(POOJA_COLLECTION_NAME)
         .doc(pooja.id)
         .update(pooja.toJson());
   }
 
-  static deletePooja(Pooja pooja) async {
+  static Future<void> deletePooja(Pooja pooja) async {
     await _db.collection(POOJA_COLLECTION_NAME).doc(pooja.id).delete();
     await deleteImage(pooja);
   }
 
-  static addImage(ImageModel image) async {
+  static Future<void> addImage(ImageModel image) async {
     await _db
         .collection(IMAGE_COLLECTION_NAME)
         .doc(image.id)
         .set(image.toJson());
   }
 
-  static deleteImage(Pooja pooja) async {
-    QuerySnapshot data = await _db
+  static Future<void> deleteImage(Pooja pooja) async {
+    final QuerySnapshot data = await _db
         .collection(IMAGE_COLLECTION_NAME)
         .where('pooja', isEqualTo: pooja.id)
         .get();
-    for (QueryDocumentSnapshot i in data.docs) {
-      _db.collection(IMAGE_COLLECTION_NAME).doc(i.id).delete();
+    for (final QueryDocumentSnapshot i in data.docs) {
+      await _db.collection(IMAGE_COLLECTION_NAME).doc(i.id).delete();
     }
   }
 
-  static void likeImage(ImageModel imageModel) {
-    List like = imageModel.like;
+  static Future<void> likeImage(ImageModel imageModel) async {
+    final List like = imageModel.like;
     like.add(AuthService.getUserNumber());
-    _db
+    await _db
         .collection(IMAGE_COLLECTION_NAME)
         .doc(imageModel.id)
         .update({"like": like});
   }
 
-  static void unLikeImage(ImageModel imageModel) {
-    List like = imageModel.like;
+  static Future<void> unLikeImage(ImageModel imageModel) async {
+    final List like = imageModel.like;
     like.remove(AuthService.getUserNumber());
-    _db
+    await _db
         .collection(IMAGE_COLLECTION_NAME)
         .doc(imageModel.id)
         .update({"like": like});
   }
+
 }

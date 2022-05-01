@@ -1,45 +1,42 @@
-import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import './map_view.dart';
-import './recent_pooja.dart';
-import '../../add_pooja_screen.dart';
-import '../../history_screen/history_screen.dart';
-import '../../../constant/constant.dart';
+import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/screens/add_pooja_screen.dart';
+import 'package:loga_parameshwari/screens/history_screen/history_screen.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/map_view.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/recent_pooja.dart';
 
 class AddPooja extends StatelessWidget {
   const AddPooja({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: OpenContainer(
-          closedBuilder: (context, action) => Container(
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: CardContainer.borderRadius,
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Icon(Icons.add, size: 50),
-                    ),
-                    Text("Schedule Pooja")
-                  ],
-                ),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: OpenContainer(
+        closedBuilder: (context, action) => Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: CardContainer.borderRadius,
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                children: const [
+                  Expanded(
+                    child: Icon(Icons.add, size: 50),
+                  ),
+                  Text("Schedule Pooja")
+                ],
               ),
             ),
           ),
-          openBuilder: (context, action) => AddPoojaScreen(),
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
+        ),
+        openBuilder: (context, action) => const AddPoojaScreen(),
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
       ),
     );
@@ -51,45 +48,44 @@ class HistoryPooja extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: OpenContainer(
-          closedBuilder: (context, action) => Container(
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: CardContainer.borderRadius,
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CachedNetworkImage(
-                          imageUrl: ImagesAndUrls.historyImg,
-                          fit: BoxFit.contain,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                                value: downloadProgress.progress),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: OpenContainer(
+        closedBuilder: (context, action) => Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: CardContainer.borderRadius,
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CachedNetworkImage(
+                        imageUrl: ImagesAndUrls.historyImg,
+                        fit: BoxFit.contain,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
                           ),
                         ),
                       ),
                     ),
-                    Text("History")
-                  ],
-                ),
+                  ),
+                  const Text("History")
+                ],
               ),
             ),
           ),
-          openBuilder: (context, action) => HistoryScreen(),
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
+        ),
+        openBuilder: (context, action) => const HistoryScreen(),
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
       ),
     );
@@ -99,30 +95,44 @@ class HistoryPooja extends StatelessWidget {
 class HomeKeysComponent extends StatelessWidget {
   final double width;
   final double height;
-  const HomeKeysComponent({Key key, this.width, this.height}) : super(key: key);
+  const HomeKeysComponent({
+    Key key,
+    this.width,
+    this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: this.width,
-      height: this.height,
+    return SizedBox(
+      width: width,
+      height: height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
             flex: 55,
-            child: RecentPooja(),
+            child: RecentPooja(key: GKey.recentPoojaKey),
           ),
           Expanded(
             flex: 45,
-            child: Container(
-              child: Column(
-                children: [
-                  Expanded(child: AddPooja()),
-                  Expanded(child: HistoryPooja()),
-                  Expanded(child: MapView()),
-                ],
-              ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: AddPooja(
+                    key: GKey.addPoojaKey,
+                  ),
+                ),
+                Expanded(
+                  child: HistoryPooja(
+                    key: GKey.historyPoojaKey,
+                  ),
+                ),
+                Expanded(
+                  child: MapView(
+                    key: GKey.mapViewKey,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

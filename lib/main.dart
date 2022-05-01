@@ -1,14 +1,12 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loga_parameshwari/screens/error_screen.dart';
+import 'package:loga_parameshwari/screens/splash_screen.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:provider/provider.dart';
-
-import './screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,9 +46,9 @@ class MyApp extends StatelessWidget {
       home: Consumer<ConnectivityService>(
         builder: (context, value, child) {
           if (value.isOnline) {
-            return SplashScreen();
+            return const SplashScreen();
           } else {
-            return ErrorScreen();
+            return const ErrorScreen();
           }
         },
       ),

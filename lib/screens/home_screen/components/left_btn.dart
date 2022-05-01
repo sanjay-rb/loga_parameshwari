@@ -3,6 +3,7 @@ import 'package:loga_parameshwari/screens/profile_screen.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 
 class LeftBtn extends StatelessWidget {
+  const LeftBtn({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,12 +16,12 @@ class LeftBtn extends StatelessWidget {
           Navigator.of(context).push(
             NavigationAnimationService.leftToRightPageRoute(
               exitPage: this,
-              enterPage: ProfileScreen(),
+              enterPage: const ProfileScreen(),
             ),
           );
         },
-        icon: Icon(Icons.account_box, color: Colors.white),
-        label: Text(
+        icon: const Icon(Icons.account_box, color: Colors.white),
+        label: const Text(
           "Profile",
           style: TextStyle(color: Colors.white),
         ),

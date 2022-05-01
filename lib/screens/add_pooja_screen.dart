@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loga_parameshwari/model/image.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
-import '../model/pooja.dart';
-import '../services/fire_message_services.dart';
 
 class AddPoojaScreen extends StatefulWidget {
   const AddPoojaScreen({Key key}) : super(key: key);
@@ -31,13 +31,13 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Schedule Pooja"),
+        title: const Text("Schedule Pooja"),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
+          child: SizedBox(
             height: double.maxFinite,
             child: Form(
               key: addPoojaFormKey,
@@ -50,14 +50,14 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                       onForm(),
                       addImages(),
                       if (upImages.isNotEmpty)
-                        Text(
-                          "Longpress on the image to delete ❌",
+                        const Text(
+                          "Long press on the image to delete ❌",
                           style: TextStyle(fontSize: 10, color: Colors.grey),
                           textAlign: TextAlign.center,
                         ),
-                      Divider(),
+                      const Divider(),
                       imageView(),
-                      SizedBox(
+                      const SizedBox(
                         height: 50 + 10.0,
                       ),
                     ],
@@ -76,16 +76,16 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                               builder: (context) => AlertDialog(
                                 title: Text(
                                   "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
-                                  style: TextStyle(fontSize: 10),
+                                  style: const TextStyle(fontSize: 10),
                                 ),
-                                content: LinearProgressIndicator(),
+                                content: const LinearProgressIndicator(),
                               ),
                             );
                             addPooja();
                           }
                         },
-                        child: Text(
-                          "Shedule Now",
+                        child: const Text(
+                          "Schedule Now",
                           style: TextStyle(fontSize: 25),
                         ),
                       ),
@@ -135,7 +135,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
           upImages = await MultiImagePicker.pickImages(
             maxImages: 500,
             enableCamera: true,
-            materialOptions: MaterialOptions(
+            materialOptions: const MaterialOptions(
               actionBarTitle: "Select Images",
               allViewTitle: "All Photos",
               useDetailsView: false,
@@ -143,16 +143,18 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
             selectedAssets: upImages,
           );
           setState(() {});
-          print(upImages);
+          if (kDebugMode) {
+            print(upImages);
+          }
         },
-        child: Text(
+        child: const Text(
           "Add Images",
         ),
       ),
     );
   }
 
-  void errorDialog(context, msg) => showDialog(
+  void errorDialog(BuildContext context, String msg) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           insetPadding: EdgeInsets.zero,
@@ -163,7 +165,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
           content: Padding(
@@ -173,11 +175,11 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                 Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.amber,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.error,
                     size: 80,
                     color: Colors.white,
@@ -201,7 +203,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
           content: Padding(
@@ -212,34 +214,34 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                 Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.green,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.done_rounded,
                     size: 80,
                     color: Colors.white,
                   ),
                 ),
-                Text("Done"),
+                const Text("Done"),
               ],
             ),
           ),
         ),
       ).then((value) => Navigator.pop(context));
 
-  nameForm(node) => Padding(
+  Widget nameForm(FocusScopeNode node) => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Pooja Name"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Pooja Name"),
             ),
             TextFormField(
               validator: (value) {
-                if (value == null || value.length == 0) {
+                if (value == null || value.isEmpty) {
                   return "Please give pooja name";
                 }
                 return null;
@@ -247,49 +249,51 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               controller: nameCtrl,
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(hintText: "Name"),
+              decoration: const InputDecoration(hintText: "Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],
         ),
       );
 
-  byForm(FocusScopeNode node) => Padding(
+  Widget byForm(FocusScopeNode node) => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Origanized by"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Organized by"),
             ),
             TextFormField(
               controller: byCtrl,
               validator: (value) {
-                if (value == null || value.length == 0) {
+                if (value == null || value.isEmpty) {
                   return "Please give your name";
                 }
                 return null;
               },
+              maxLines: null,
               textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(hintText: "Origanizer Name"),
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              decoration: const InputDecoration(hintText: "Organizer Name"),
               onEditingComplete: () => node.nextFocus(),
             ),
           ],
         ),
       );
 
-  onForm() => Padding(
+  Widget onForm() => Padding(
         padding: const EdgeInsets.all(5),
         child: Column(
           children: [
-            Align(
-              child: Text("Scheduled on"),
+            const Align(
               alignment: Alignment.topLeft,
+              child: Text("Scheduled on"),
             ),
             DateTimeField(
               initialValue: on,
-              decoration: InputDecoration(hintText: "Date of the Pooja"),
+              decoration: const InputDecoration(hintText: "Date of the Pooja"),
               validator: (value) {
                 if (value == null) {
                   return "Please give date and time";
@@ -306,7 +310,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                   firstDate: DateTime.now(),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime.now().add(
-                    Duration(days: 365 * 3),
+                    const Duration(days: 365 * 3),
                   ),
                 );
                 if (date != null) {
@@ -326,11 +330,11 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       );
 
   Future<void> uploadImages(Pooja pooja) async {
-    var year = "${DateFormat("yyyy").format(pooja.on.toDate())}";
-    var month = "${DateFormat("MMMM").format(pooja.on.toDate())}";
-    Reference rootPath =
+    final year = DateFormat("yyyy").format(pooja.on.toDate());
+    final month = DateFormat("MMMM").format(pooja.on.toDate());
+    final Reference rootPath =
         FirebaseStorage.instance.ref().child(year).child(month);
-    for (Asset imageFile in upImages) {
+    for (final Asset imageFile in upImages) {
       Navigator.pop(context);
       showDialog(
         context: context,
@@ -338,18 +342,19 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
         builder: (context) => AlertDialog(
           title: Text(
             "${imageFile.name} Uploading....",
-            style: TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10),
           ),
-          content: LinearProgressIndicator(),
+          content: const LinearProgressIndicator(),
         ),
       );
-      String url = await rootPath
+      final String url = await rootPath
           .child('${pooja.name}+${pooja.id}')
           .child(imageFile.name)
           .putData(
-              (await imageFile.getByteData(quality: 50)).buffer.asUint8List())
+            (await imageFile.getByteData(quality: 50)).buffer.asUint8List(),
+          )
           .then((v) => v.ref.getDownloadURL());
-      ImageModel imageModel = ImageModel(
+      final ImageModel imageModel = ImageModel(
         id: DatabaseManager.getUniqueId(),
         like: [],
         pooja: pooja.id,
@@ -367,16 +372,19 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
     ).then((value) {
       Navigator.pop(context);
-      if (value.statusCode == 200)
+      if (value.statusCode == 200) {
         successDialog(context);
-      else
+      } else {
         errorDialog(
-            context, "Something went wrong! Message not sent to the members.");
+          context,
+          "Something went wrong! Message not sent to the members.",
+        );
+      }
     });
   }
 
   Future<void> addPooja() async {
-    Pooja pooja = Pooja(
+    final Pooja pooja = Pooja(
       DatabaseManager.getUniqueId(),
       nameCtrl.text.trim(),
       byCtrl.text.trim(),
@@ -391,7 +399,9 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     }).onError((error, stackTrace) {
       Navigator.pop(context);
       errorDialog(
-          context, "Something went wrong! Pooja not posted to the members.");
+        context,
+        "Something went wrong! Pooja not posted to the members.",
+      );
     });
   }
 }

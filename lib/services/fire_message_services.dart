@@ -1,19 +1,21 @@
+// ignore_for_file: constant_identifier_names, depend_on_referenced_packages
+
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:meta/meta.dart';
 
-import '../constant/constant.dart';
-
+// ignore: avoid_classes_with_only_static_members
 /// This service helps to connect and trigger the firebase messaging....
 ///
 /// You can set canNotify as true before triggering send() func....
 class Messaging {
-  static const bool CAN_NOTIFY = true;
+  static const bool CAN_NOTIFY = false;
 
   /// Please call init() function before main or splash screen....
-  static init() async {
+  static Future<void> init() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -35,10 +37,10 @@ class Messaging {
             body: json.encode({
               "to": "/topics/all",
               "notification": {
-                "title": "$title",
-                "body": "$body",
-                "imageUrl": "${ImagesAndUrls.logoImg}",
-                "icon": "${ImagesAndUrls.logoImg}",
+                "title": title,
+                "body": body,
+                "imageUrl": ImagesAndUrls.logoImg,
+                "icon": ImagesAndUrls.logoImg,
                 "sound": "default"
               }
             }),

@@ -9,21 +9,21 @@ class Pooja {
 
   Pooja(this.id, this.name, this.by, this.on, this.user);
 
-  Pooja.fromJson(json) {
-    this.id = json['id'];
-    this.name = json['name'];
-    this.by = json['by'];
-    this.on = json['on'];
-    this.user = json['user'];
+  Pooja.fromJson(QueryDocumentSnapshot<Object> json) {
+    id = json['id'] as String;
+    name = json['name'] as String;
+    by = json['by'] as String;
+    on = json['on'] as Timestamp;
+    user = json['user'] as String;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': this.id,
-      'name': this.name,
-      'by': this.by,
-      'on': this.on,
-      'user': this.user,
+      'id': id,
+      'name': name,
+      'by': by,
+      'on': on,
+      'user': user,
     };
   }
 }
