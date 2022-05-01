@@ -27,7 +27,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
         isCircle: false,
       ),
     ]);
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
   }
 
@@ -76,7 +75,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     SharedPreferences.getInstance().then((value) {
       final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
       if (canTutorial == null || canTutorial) {
-        Future.delayed(const Duration(seconds: 3), () {
+        Future.delayed(const Duration(microseconds: 500), () {
           showTutorial();
         });
       }
@@ -171,11 +170,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
                         }
                         Future.delayed(const Duration(milliseconds: 500), () {
-                          controller.animateTo(
-                            moveTo,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.ease,
-                          );
+                          controller
+                              .animateTo(
+                                moveTo,
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.ease,
+                              )
+                              .then((value) => _afterLayout(context));
                         });
 
                         return ListView.builder(
