@@ -27,6 +27,7 @@ class InAppUpdateService {
         data['build_number'] != packageInfo.buildNumber) {
       final bool result = await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: Row(
             children: [
