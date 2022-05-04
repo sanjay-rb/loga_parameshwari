@@ -94,15 +94,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return WillPopScope(
       onWillPop: () {
         if (tutorialCoachMark.isShowing) {
-          tutorialCoachMark.skip();
-          return Future.value(false);
-        }
-        if (mounted) {
           tutorialCoachMark.finish();
-          return Future.value(true);
-        } else {
           return Future.value(false);
         }
+        return Future.value(true);
       },
       child: Scaffold(
         backgroundColor: Colors.blueGrey[100],
