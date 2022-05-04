@@ -268,6 +268,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onBackPress() async {
     FocusScope.of(context).unfocus();
+    if (tutorialCoachMark.isShowing) {
+      tutorialCoachMark.skip();
+      return Future.value(false);
+    }
     final bool yesOrNo = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
