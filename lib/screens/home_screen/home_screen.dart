@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         GKey.donationBtnKey,
         "Click here to find donation information of temple.",
         isCircle: false,
+        isTextUp: true,
       ),
     ]);
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
