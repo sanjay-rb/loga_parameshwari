@@ -269,9 +269,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onBackPress() async {
     FocusScope.of(context).unfocus();
-    if (tutorialCoachMark.isShowing) {
+    if (tutorialCoachMark != null && tutorialCoachMark.isShowing) {
       tutorialCoachMark.finish();
-      return Future.value(false);
+      return false;
     }
     final bool yesOrNo = await showDialog(
       context: context,
@@ -298,9 +298,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (yesOrNo) {
-      return Future.value(true);
+      return true;
     } else {
-      return Future.value(false);
+      return false;
     }
   }
 }
