@@ -29,10 +29,25 @@ class DonateBtn extends StatelessWidget {
             ),
           ),
           height: Responsiveness.heightRatio(0.1),
-          child: const Center(
-            child: Text(
-              "Donation Details",
-              style: TextDesign.headText,
+          child: Center(
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Donation Details",
+                    style: TextDesign.headText.copyWith(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text:
+                        "\n(Pooja Payment, Temple Reinovation Donation, Virtual Untiyal)",
+                    style: TextDesign.subTitleText.copyWith(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

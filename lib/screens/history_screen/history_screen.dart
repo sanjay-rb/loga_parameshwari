@@ -75,7 +75,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     SharedPreferences.getInstance().then((value) {
       final bool canTutorial = value.getBool(SHARE_PREF_TUTORIAL);
       if (canTutorial == null || canTutorial) {
-        Future.delayed(const Duration(seconds: 1), () {
+        Future.delayed(const Duration(microseconds: 500), () {
           showTutorial(context);
         });
       }
