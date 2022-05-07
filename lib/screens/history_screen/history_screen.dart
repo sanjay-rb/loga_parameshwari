@@ -17,6 +17,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   TutorialCoachMark tutorialCoachMark;
   List<TargetFocus> targets = [];
+  ScrollController controller = ScrollController();
   @override
   void initState() {
     targets.addAll([
@@ -90,14 +91,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        if (tutorialCoachMark.isShowing) {
+      onWillPop: () async {
+        if (tutorialCoachMark != null && tutorialCoachMark.isShowing) {
           tutorialCoachMark.finish();
-          return Future.value(false);
+          return false;
+        } else {
+          return true;
         }
-        return Future.value(true);
       },
       child: Scaffold(
         backgroundColor: Colors.blueGrey[100],
@@ -126,7 +135,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         if (snapshot.data.docs.isNotEmpty) {
                           final List<QueryDocumentSnapshot> allPooja =
                               snapshot.data.docs;
-                          final controller = ScrollController(
+                          controller = ScrollController(
                             initialScrollOffset: (allPooja.length + 1) * 50.0,
                           );
                           final data = allPooja
@@ -141,7 +150,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           if (data.isNotEmpty) {
                             moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
                           }
-                          Future.delayed(const Duration(milliseconds: 500), () {
+                          Future.delayed(const Duration(microseconds: 500), () {
                             controller
                                 .animateTo(
                                   moveTo,
