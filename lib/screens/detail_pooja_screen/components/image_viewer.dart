@@ -17,25 +17,28 @@ class _ImageFullViewState extends State<ImageFullView> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Image Viewer",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Image Viewer",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ImagePageView(root: widget),
-            ),
-          ],
+              Expanded(
+                child: ImagePageView(root: widget),
+              ),
+            ],
+          ),
         ),
       ),
     );

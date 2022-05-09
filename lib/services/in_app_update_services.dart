@@ -22,6 +22,9 @@ class InAppUpdateService {
         "https://app-status-sanjoke.herokuapp.com/getinfo?appid=${packageInfo.packageName}",
       ),
     );
+    if (response.statusCode != 200) {
+      return false;
+    }
     final data = jsonDecode(response.body);
     if (data['version'] != packageInfo.version ||
         data['build_number'] != packageInfo.buildNumber) {
