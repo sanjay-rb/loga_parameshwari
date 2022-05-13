@@ -122,7 +122,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: StreamBuilder(
                     stream: DatabaseManager.getAllPoojaStream(),
-                    initialData: null,
                     builder: (
                       BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot,
