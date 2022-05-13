@@ -44,9 +44,7 @@ class ConnectivityService with ChangeNotifier {
         notifyListeners();
       }
     } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print("PlatformException: $e");
-      }
+      debugPrint("PlatformException: $e");
     }
   }
 
