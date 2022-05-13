@@ -112,5 +112,4 @@ class DatabaseManager {
         .doc(imageModel.id)
         .update({"like": like});
   }
-
 }
