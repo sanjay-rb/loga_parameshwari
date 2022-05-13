@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -72,10 +71,8 @@ class AuthService {
   static Future<List> verifyPhone(String phoneNo) async {
     String verificationId;
     bool codeSent = false;
-    if (kDebugMode) {
-      print("phonenumber : '+91$phoneNo'");
-      print("AUTH : $_auth");
-    }
+    debugPrint("phonenumber : '+91$phoneNo'");
+    debugPrint("AUTH : $_auth");
 
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
@@ -83,9 +80,7 @@ class AuthService {
         signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        if (kDebugMode) {
-          print("verificationFailed: (FirebaseAuthException $e)");
-        }
+        debugPrint("verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
         verificationId = verificationId;

@@ -1,5 +1,4 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
@@ -71,13 +70,9 @@ class HeaderDetails extends StatelessWidget {
           .child(year)
           .child(month)
           .child('${pooja.name}+${pooja.id}');
-      if (kDebugMode) {
-        print("rootPath.name ${rootPath.name}");
-      }
+      debugPrint("rootPath.name ${rootPath.name}");
       final ListResult storeList = await rootPath.listAll();
-      if (kDebugMode) {
-        print("storeList ${storeList.items}");
-      }
+      debugPrint("storeList ${storeList.items}");
       for (final Reference item in storeList.items) {
         item.delete();
       }

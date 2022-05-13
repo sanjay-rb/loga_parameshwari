@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
@@ -189,9 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await AuthService.signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        if (kDebugMode) {
-          print("verificationFailed: (FirebaseAuthException $e)");
-        }
+        debugPrint("verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
         verId = verificationId;
