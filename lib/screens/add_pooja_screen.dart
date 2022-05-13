@@ -367,8 +367,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
 
   void sendMessage() {
     Messaging.send(
-      title:
-          "New Pooja named ${nameCtrl.text.trim()} by ${byCtrl.text.trim()}}",
+      title: "New Pooja named ${nameCtrl.text.trim()} by ${byCtrl.text.trim()}",
       body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
     ).then((value) {
       Navigator.pop(context);
