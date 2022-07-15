@@ -75,4 +75,12 @@
 - Minor revision : Update date from the UI by the post creator (Edit Page)
 - Minor revision : App Tutorial 
 
+## Version : (14) 2.5.4
+- Bug fix: 3d GIF link updated
+- Bug fix: Notification enable
+- Minor revision : Photo swipe features
+- Minor revision : Sponsors name list
+- Minor revision : Payment info page
+- Minor revision : Update date from the UI by the post creator (Edit Page)
+- Minor revision : App Tutorial
 
