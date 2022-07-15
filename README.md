@@ -84,3 +84,6 @@
 - Minor revision : Update date from the UI by the post creator (Edit Page)
 - Minor revision : App Tutorial
 
+## Version : (15) 2.5.6
+- Bug fix: Image uploading issue
+- Bug fix: Tutorial toggle
