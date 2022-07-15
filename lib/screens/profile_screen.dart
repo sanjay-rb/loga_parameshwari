@@ -17,23 +17,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _userNameCtrl = TextEditingController();
   final userUpdateFormKey = GlobalKey<FormState>();
-  bool isTutorialShown = true;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SharedPreferences.getInstance().then((value) {
-      if (value.getBool(SHARE_PREF_TUTORIAL) != null) {
-        setState(() {
-          isTutorialShown = value.getBool(SHARE_PREF_TUTORIAL);
-        });
-      } else {
-        setState(() {
-          isTutorialShown = true;
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,35 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             endIndent: Responsiveness.widthRatio(0.7),
                             color: Colors.black,
                           ),
-                          Container(
-                            color: Colors.grey.shade300,
-                            child: Row(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Tutorial",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Switch.adaptive(
-                                  value: isTutorialShown,
-                                  onChanged: (v) {
-                                    SharedPreferences.getInstance()
-                                        .then((value) {
-                                      value.setBool(SHARE_PREF_TUTORIAL, v);
-                                      setState(() {
-                                        isTutorialShown = v;
-                                      });
-                                    });
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
+                          const TutorialToggler(),
                         ],
                         SizedBox(
                           height: Responsiveness.height(20),
@@ -187,6 +142,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class TutorialToggler extends StatefulWidget {
+  const TutorialToggler({Key key}) : super(key: key);
+
+  @override
+  State<TutorialToggler> createState() => TutorialTogglerState();
+}
+
+class TutorialTogglerState extends State<TutorialToggler> {
+  bool isTutorialShown = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SharedPreferences.getInstance().then((value) {
+      if (value.getBool(SHARE_PREF_TUTORIAL) != null) {
+        setState(() {
+          isTutorialShown = value.getBool(SHARE_PREF_TUTORIAL);
+        });
+      } else {
+        setState(() {
+          isTutorialShown = true;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isTutorialShown = !isTutorialShown;
+        });
+        SharedPreferences.getInstance().then((value) {
+          value.setBool(SHARE_PREF_TUTORIAL, isTutorialShown);
+        });
+      },
+      child: Container(
+        color: Colors.grey.shade300,
+        child: Row(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Tutorial",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            const Spacer(),
+            Switch.adaptive(
+              value: isTutorialShown,
+              onChanged: (v) {
+                setState(() {
+                  isTutorialShown = v;
+                });
+                SharedPreferences.getInstance().then((value) {
+                  value.setBool(SHARE_PREF_TUTORIAL, isTutorialShown);
+                });
+              },
+            )
+          ],
         ),
       ),
     );
