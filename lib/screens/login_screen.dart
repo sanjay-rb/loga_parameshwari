@@ -23,9 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: double.infinity,
+          SizedBox.expand(
             child: Image.asset(
               'images/god.webp',
               fit: BoxFit.cover,
@@ -64,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: Responsiveness.height(10),
                     ),
-                    Container(
+                    DecoratedBox(
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(10),
@@ -92,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (codeSent)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(10),
@@ -181,8 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> verifyPhone(String phoneNo) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    await _auth.verifyPhoneNumber(
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await AuthService.signIn(credential);

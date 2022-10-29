@@ -44,7 +44,7 @@ class _DonationScreenState extends State<DonationScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  final _listOfData = [
+                  final listOfData = [
                     {
                       'title': 'Account name',
                       'value': snapshot.data["ac_name"] as String
@@ -84,12 +84,12 @@ class _DonationScreenState extends State<DonationScreen> {
                       SizedBox(
                         height: Responsiveness.height(10),
                       ),
-                      ...List.generate(_listOfData.length, (index) {
-                        final String currentValue = _listOfData[index]['value'];
-                        final String currentTitle = _listOfData[index]['title'];
+                      ...List.generate(listOfData.length, (index) {
+                        final String currentValue = listOfData[index]['value'];
+                        final String currentTitle = listOfData[index]['title'];
                         return Column(
                           children: [
-                            Container(
+                            ColoredBox(
                               color: Colors.yellow,
                               child: ListTile(
                                 title: Text(currentValue),

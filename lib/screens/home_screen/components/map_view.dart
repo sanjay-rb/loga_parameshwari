@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MapView extends StatelessWidget {
   const MapView({Key key}) : super(key: key);
@@ -12,11 +12,11 @@ class MapView extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: GestureDetector(
         onTap: () async {
-          if (await canLaunch(ImagesAndUrls.mapUrl)) {
-            await launch(ImagesAndUrls.mapUrl);
+          if (await canLaunchUrlString(ImagesAndUrls.mapUrl)) {
+            await launchUrlString(ImagesAndUrls.mapUrl);
           }
         },
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: CardContainer.borderRadius,

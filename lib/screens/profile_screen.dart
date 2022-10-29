@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             endIndent: Responsiveness.widthRatio(0.7),
                             color: Colors.black,
                           ),
-                          Container(
+                          ColoredBox(
                             color: Colors.grey.shade300,
                             child: TextFormField(
                               validator: (value) {
@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             endIndent: Responsiveness.widthRatio(0.7),
                             color: Colors.black,
                           ),
-                          Container(
+                          ColoredBox(
                             color: Colors.grey.shade300,
                             child: TextFormField(
                               initialValue: userModel.id,
@@ -185,7 +185,7 @@ class TutorialTogglerState extends State<TutorialToggler> {
           value.setBool(SHARE_PREF_TUTORIAL, isTutorialShown);
         });
       },
-      child: Container(
+      child: ColoredBox(
         color: Colors.grey.shade300,
         child: Row(
           children: [

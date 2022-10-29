@@ -1,1 +1,2 @@
-- https://youtu.be/UJ6IQGkoEgA
+- Video tutorial : https://youtu.be/UJ6IQGkoEgA
+- Flutter package : https://pub.dev/packages/firebase_dynamic_links/example 

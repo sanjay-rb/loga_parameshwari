@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class InAppUpdateService {
   static PackageInfo packageInfo;
@@ -62,8 +62,8 @@ class InAppUpdateService {
         ),
       );
       if (result) {
-        if (await canLaunch(ImagesAndUrls.googlePlayLink)) {
-          await launch(ImagesAndUrls.googlePlayLink);
+        if (await canLaunchUrlString(ImagesAndUrls.googlePlayLink)) {
+          await launchUrlString(ImagesAndUrls.googlePlayLink);
           SystemNavigator.pop();
         }
       }

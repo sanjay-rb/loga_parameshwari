@@ -11,9 +11,7 @@ class ErrorScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: double.infinity,
+          SizedBox.expand(
             child: Image.asset(
               'images/god.webp',
               fit: BoxFit.cover,

@@ -113,7 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void showTutorial() {
     tutorialCoachMark = TutorialCoachMark(
-      context,
       targets: targets,
       onSkip: () {
         showDialog(
@@ -153,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-    )..show();
+    )..show(context: context);
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
       home: Consumer<ConnectivityService>(
         builder: (context, value, child) {

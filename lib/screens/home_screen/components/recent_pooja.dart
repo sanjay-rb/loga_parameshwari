@@ -10,7 +10,7 @@ class RecentPooja extends StatelessWidget {
   const RecentPooja({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: CardContainer.borderRadius,

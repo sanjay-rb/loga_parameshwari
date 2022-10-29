@@ -81,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   'images/god.webp',
                   fit: BoxFit.cover,
                 ),
-                Container(
+                const ColoredBox(
                   color: Colors.black26,
                 ),
               ],
