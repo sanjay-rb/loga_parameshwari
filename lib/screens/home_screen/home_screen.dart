@@ -9,6 +9,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _homeListController = ScrollController();
   @override
   void initState() {
+    Deeplink().isLaunchByLink(context);
     // TODO: implement initState
     targets.addAll([
       targetFocus(

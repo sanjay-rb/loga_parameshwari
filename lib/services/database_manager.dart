@@ -59,6 +59,13 @@ class DatabaseManager {
         .set(userModel.toJson());
   }
 
+  static Future<Pooja> getPoojaByID(String id) async {
+    final DocumentSnapshot snapshot =
+        await _db.collection(POOJA_COLLECTION_NAME).doc(id).get();
+    final Pooja pooja = Pooja.fromJson(snapshot);
+    return pooja;
+  }
+
   static Future<void> addPooja(Pooja pooja) async {
     await _db
         .collection(POOJA_COLLECTION_NAME)
