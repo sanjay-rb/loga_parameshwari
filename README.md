@@ -87,3 +87,7 @@
 ## Version : (15) 2.5.6
 - Bug fix: Image uploading issue
 - Bug fix: Tutorial toggle
+
+## Version : (16) 2.5.8
+- Minor revision : In App Check in Cloud FireStore
+- Minor revision : Deeplink for pooja page
