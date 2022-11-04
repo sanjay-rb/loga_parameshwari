@@ -15,7 +15,7 @@ class AddPooja extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: OpenContainer(
-        closedBuilder: (context, action) => Container(
+        closedBuilder: (context, action) => DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(),
             borderRadius: CardContainer.borderRadius,
@@ -51,7 +51,7 @@ class HistoryPooja extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: OpenContainer(
-        closedBuilder: (context, action) => Container(
+        closedBuilder: (context, action) => DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(),
             borderRadius: CardContainer.borderRadius,

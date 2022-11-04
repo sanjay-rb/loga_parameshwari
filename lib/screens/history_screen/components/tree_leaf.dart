@@ -30,20 +30,26 @@ class TreeLeaf extends StatelessWidget {
                       id: id,
                       key: index == 0 ? GKey.leafKey : GlobalKey(),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 2,
-                      child: Container(
+                      child: ColoredBox(
                         color: Colors.purple,
+                        child: SizedBox(
+                          height: double.infinity,
+                        ),
                       ),
                     ),
                     LeafDate(pooja: pooja),
                   ]
                 : [
                     LeafDate(pooja: pooja),
-                    Expanded(
+                    const Expanded(
                       flex: 2,
-                      child: Container(
+                      child: ColoredBox(
                         color: Colors.purple,
+                        child: SizedBox(
+                          height: double.infinity,
+                        ),
                       ),
                     ),
                     LeafCard(

@@ -18,7 +18,7 @@ class ARView extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: CardContainer.borderRadius,
-          child: Container(
+          child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(),
               borderRadius: CardContainer.borderRadius,

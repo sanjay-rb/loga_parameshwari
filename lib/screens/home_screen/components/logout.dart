@@ -11,7 +11,7 @@ class LogoutBtn extends StatelessWidget {
       onTap: () {
         AuthService.signOut();
       },
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10),
