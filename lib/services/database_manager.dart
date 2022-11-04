@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_classes_with_only_static_members, constant_identifier_names
+// ignore_for_file: constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loga_parameshwari/model/image.dart';
@@ -7,8 +7,8 @@ import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 
 class DatabaseManager {
+  String tag = "DatabaseManager";
   static FirebaseFirestore _db;
-
   static const String POOJA_COLLECTION_NAME = 'Pooja';
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';
@@ -57,6 +57,13 @@ class DatabaseManager {
         .collection(USER_COLLECTION_NAME)
         .doc(userModel.id)
         .set(userModel.toJson());
+  }
+
+  static Future<Pooja> getPoojaByID(String id) async {
+    final DocumentSnapshot snapshot =
+        await _db.collection(POOJA_COLLECTION_NAME).doc(id).get();
+    final Pooja pooja = Pooja.fromJson(snapshot);
+    return pooja;
   }
 
   static Future<void> addPooja(Pooja pooja) async {

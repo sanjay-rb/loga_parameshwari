@@ -6,6 +6,7 @@ import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/screens/edit_pooja_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:share/share.dart';
@@ -153,8 +154,10 @@ class HeaderDetails extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: TextButton.icon(
-                  onPressed: () {
-                    Share.share(TextDesign.getMessageText(pooja));
+                  onPressed: () async {
+                    final String link =
+                        await Deeplink().createNewDeeplink(pooja);
+                    Share.share(TextDesign.getMessageText(pooja, link));
                   },
                   icon: const Icon(Icons.share),
                   label: const Text("Share"),

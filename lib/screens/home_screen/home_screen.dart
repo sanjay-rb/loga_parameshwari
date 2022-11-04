@@ -9,6 +9,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -107,13 +108,14 @@ class _HomeScreenState extends State<HomeScreen> {
         Future.delayed(const Duration(seconds: 1), () {
           showTutorial();
         });
+      } else {
+        Deeplink().isLaunchByLink(context);
       }
     });
   }
 
   void showTutorial() {
     tutorialCoachMark = TutorialCoachMark(
-      context,
       targets: targets,
       onSkip: () {
         showDialog(
@@ -152,8 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         );
+        Deeplink().isLaunchByLink(context);
       },
-    )..show();
+    )..show(context: context);
   }
 
   @override

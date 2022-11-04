@@ -9,7 +9,7 @@ class Pooja {
 
   Pooja(this.id, this.name, this.by, this.on, this.user);
 
-  Pooja.fromJson(QueryDocumentSnapshot<Object> json) {
+  Pooja.fromJson(DocumentSnapshot<Object> json) {
     id = json['id'] as String;
     name = json['name'] as String;
     by = json['by'] as String;

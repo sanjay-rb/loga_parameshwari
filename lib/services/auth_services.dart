@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
-// ignore: avoid_classes_with_only_static_members
 /// This services helps to perform authentication on the app with firebase auth....
 ///
 /// This services required couple of packages....
 ///  - firebase_auth: ^2.0.0 (Null Safety)
 ///  - firebase_core: ^1.0.2 (Null Safety)
 class AuthService {
+  String tag = "AuthService";
   static FirebaseAuth _auth;
 
   ///

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
+import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:share/share.dart';
 
 class LeafCard extends StatelessWidget {
@@ -22,8 +23,9 @@ class LeafCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
-          onLongPress: () {
-            Share.share(TextDesign.getMessageText(pooja));
+          onLongPress: () async {
+            final String link = await Deeplink().createNewDeeplink(pooja);
+            Share.share(TextDesign.getMessageText(pooja, link));
           },
           child: OpenContainer(
             closedBuilder: (context, action) => Column(

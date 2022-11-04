@@ -18,8 +18,8 @@ class TextDesign {
 
   static const msgKey =
       "AAAAZCPfm4I:APA91bHfQkiVDflbWTHDlf6tZPASoa41uKXQkxiOjRSpCezcNdiiiMLT1tIvNOGBbUvqckjSq8mE2pMHURP8Qeo8Nm5QkYwtrfe0pW7hbhJ9dwcWzLuTTcLVw9b5K1SIqHUEusREdoN4";
-  static String getMessageText(Pooja pooja) =>
-      "Hi, your invited to *${pooja.name.trim()}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by.trim()}*.\n\nWe request your gracious presence on this auspicious occasion. \n\n https://sanjoke.page.link/loga_parameshwari_app Click the link for further information.";
+  static String getMessageText(Pooja pooja, String link) =>
+      "Hi, your invited to *${pooja.name.trim()}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by.trim()}*.\n\nWe request your gracious presence on this auspicious occasion.\n$link\nClick the link for further information.";
 }
 
 class CardContainer {

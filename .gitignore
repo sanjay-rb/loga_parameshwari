@@ -1,5 +1,6 @@
 # My Ignore
 ignore/
+pubspec.lock
 
 # Miscellaneous
 *.class

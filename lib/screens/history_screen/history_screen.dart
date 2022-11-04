@@ -85,9 +85,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   void showTutorial(BuildContext c) {
     tutorialCoachMark = TutorialCoachMark(
-      c,
       targets: targets,
-    )..show();
+    )..show(context: c);
   }
 
   @override
@@ -175,10 +174,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 const Spacer(
                                                   flex: 40,
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 2,
-                                                  child: Container(
+                                                  child: ColoredBox(
                                                     color: Colors.purple,
+                                                    child: SizedBox(
+                                                      height: double.infinity,
+                                                    ),
                                                   ),
                                                 ),
                                                 const Spacer(
@@ -189,10 +191,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 const Spacer(
                                                   flex: 40,
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 2,
-                                                  child: Container(
+                                                  child: ColoredBox(
                                                     color: Colors.purple,
+                                                    child: SizedBox(
+                                                      height: double.infinity,
+                                                    ),
                                                   ),
                                                 ),
                                                 const Spacer(
