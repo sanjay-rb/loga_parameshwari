@@ -23,9 +23,12 @@ dependencies:
     sdk: flutter
   flutter_staggered_grid_view: ^0.4.0
   google_fonts: ^2.1.0
+  in_app_update:
+    git:
+      url: https://github.com/sanjay-rb/flutter_packages.git
+      path: in_app_update
   intl: ^0.17.0
   multi_image_picker: ^4.8.1
-  package_info: ^2.0.2
   provider: ^5.0.0
   share: ^2.0.4
   shared_preferences: ^2.0.6

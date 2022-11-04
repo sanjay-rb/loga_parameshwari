@@ -22,15 +22,19 @@ class MapView extends StatelessWidget {
             borderRadius: CardContainer.borderRadius,
             border: Border.all(),
           ),
-          child: ClipRRect(
-            borderRadius: CardContainer.borderRadius,
-            child: CachedNetworkImage(
-              imageUrl: ImagesAndUrls.mapImg,
-              fit: BoxFit.fill,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Center(
-                child:
-                    CircularProgressIndicator(value: downloadProgress.progress),
+          child: Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: ClipRRect(
+              borderRadius: CardContainer.borderRadius,
+              child: CachedNetworkImage(
+                imageUrl: ImagesAndUrls.mapImg,
+                fit: BoxFit.fill,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                  ),
+                ),
               ),
             ),
           ),

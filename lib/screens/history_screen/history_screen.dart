@@ -178,6 +178,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   flex: 2,
                                                   child: ColoredBox(
                                                     color: Colors.purple,
+                                                    child: SizedBox(
+                                                      height: double.infinity,
+                                                    ),
                                                   ),
                                                 ),
                                                 const Spacer(
@@ -192,6 +195,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   flex: 2,
                                                   child: ColoredBox(
                                                     color: Colors.purple,
+                                                    child: SizedBox(
+                                                      height: double.infinity,
+                                                    ),
                                                   ),
                                                 ),
                                                 const Spacer(

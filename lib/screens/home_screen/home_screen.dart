@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _homeListController = ScrollController();
   @override
   void initState() {
-    Deeplink().isLaunchByLink(context);
     // TODO: implement initState
     targets.addAll([
       targetFocus(
@@ -109,6 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Future.delayed(const Duration(seconds: 1), () {
           showTutorial();
         });
+      } else {
+        Deeplink().isLaunchByLink(context);
       }
     });
   }
@@ -153,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         );
+        Deeplink().isLaunchByLink(context);
       },
     )..show(context: context);
   }

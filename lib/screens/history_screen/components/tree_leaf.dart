@@ -34,6 +34,9 @@ class TreeLeaf extends StatelessWidget {
                       flex: 2,
                       child: ColoredBox(
                         color: Colors.purple,
+                        child: SizedBox(
+                          height: double.infinity,
+                        ),
                       ),
                     ),
                     LeafDate(pooja: pooja),
@@ -44,6 +47,9 @@ class TreeLeaf extends StatelessWidget {
                       flex: 2,
                       child: ColoredBox(
                         color: Colors.purple,
+                        child: SizedBox(
+                          height: double.infinity,
+                        ),
                       ),
                     ),
                     LeafCard(

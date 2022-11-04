@@ -2,12 +2,13 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/home_screen/home_screen.dart';
 import 'package:loga_parameshwari/screens/login_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
-import 'package:loga_parameshwari/services/in_app_update_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 
@@ -47,9 +48,12 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadProgress(4, "Authorization Checked....");
     Responsiveness.init(MediaQuery.of(context).size); // 5....
     _loadProgress(5, "Loading....");
-    await InAppUpdateService.init(); // 6....
+    await InAppUpdate.init(); // 6....
     _loadProgress(6, "App Update Started....");
-    await InAppUpdateService.checkUpdate(context); // 7....
+    await InAppUpdate.checkUpdate(
+      context,
+      ImagesAndUrls.googlePlayLink,
+    ); // 7....
     _loadProgress(7, "App Update Checked....");
     _loadProgress(8, "Ads Loaded....");
 
