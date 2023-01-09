@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -27,70 +28,72 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Schedule Pooja"),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: double.maxFinite,
-            child: Form(
-              key: addPoojaFormKey,
-              child: Stack(
-                children: [
-                  ListView(
-                    children: [
-                      nameForm(node),
-                      byForm(node),
-                      onForm(),
-                      addImages(),
-                      if (upImages.isNotEmpty)
-                        const Text(
-                          "Long press on the image to delete ❌",
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                          textAlign: TextAlign.center,
+    return IsConnected(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text("Schedule Pooja"),
+          automaticallyImplyLeading: false,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: double.maxFinite,
+              child: Form(
+                key: addPoojaFormKey,
+                child: Stack(
+                  children: [
+                    ListView(
+                      children: [
+                        nameForm(node),
+                        byForm(node),
+                        onForm(),
+                        addImages(),
+                        if (upImages.isNotEmpty)
+                          const Text(
+                            "Long press on the image to delete ❌",
+                            style: TextStyle(fontSize: 10, color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
+                        const Divider(),
+                        imageView(),
+                        const SizedBox(
+                          height: 50 + 10.0,
                         ),
-                      const Divider(),
-                      imageView(),
-                      const SizedBox(
-                        height: 50 + 10.0,
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (addPoojaFormKey.currentState.validate()) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
-                                  style: const TextStyle(fontSize: 10),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (addPoojaFormKey.currentState.validate()) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                  content: const LinearProgressIndicator(),
                                 ),
-                                content: const LinearProgressIndicator(),
-                              ),
-                            );
-                            addPooja();
-                          }
-                        },
-                        child: const Text(
-                          "Schedule Now",
-                          style: TextStyle(fontSize: 25),
+                              );
+                              addPooja();
+                            }
+                          },
+                          child: const Text(
+                            "Schedule Now",
+                            style: TextStyle(fontSize: 25),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

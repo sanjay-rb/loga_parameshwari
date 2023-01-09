@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loga_parameshwari/screens/error_screen.dart';
 import 'package:loga_parameshwari/screens/splash_screen.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:provider/provider.dart';
@@ -44,15 +43,7 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
-      home: Consumer<ConnectivityService>(
-        builder: (context, value, child) {
-          if (value.isOnline) {
-            return const SplashScreen();
-          } else {
-            return const ErrorScreen();
-          }
-        },
-      ),
+      home: const IsConnected(child: SplashScreen()),
     );
   }
 }

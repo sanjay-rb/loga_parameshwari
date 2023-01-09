@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 
@@ -24,85 +25,87 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Edit Pooja"),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: double.maxFinite,
-            child: Form(
-              key: addPoojaFormKey,
-              child: Column(
-                children: [
-                  nameForm(node),
-                  byForm(node),
-                  onForm(),
-                  const Spacer(),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (addPoojaFormKey.currentState.validate()) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Updating",
-                                  style: const TextStyle(fontSize: 10),
+    return IsConnected(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text("Edit Pooja"),
+          automaticallyImplyLeading: false,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: double.maxFinite,
+              child: Form(
+                key: addPoojaFormKey,
+                child: Column(
+                  children: [
+                    nameForm(node),
+                    byForm(node),
+                    onForm(),
+                    const Spacer(),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (addPoojaFormKey.currentState.validate()) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    "$name on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Updating",
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                  content: const LinearProgressIndicator(),
                                 ),
-                                content: const LinearProgressIndicator(),
-                              ),
-                            );
-                            DatabaseManager.updatePooja(
-                              Pooja(
-                                widget.toEditPooja.id,
-                                name.trim(),
-                                by.trim(),
-                                Timestamp.fromDate(on),
-                                AuthService.getUserNumber(),
-                              ),
-                            ).then((value) {
-                              Messaging.send(
-                                title: "$name Pooja is updated by $by",
-                                body:
-                                    'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-                              ).then((value) {
-                                Navigator.pop(context);
-                                if (value.statusCode == 200) {
-                                  successDialog(context);
-                                } else {
-                                  errorDialog(
-                                    context,
-                                    "Something went wrong! Message not sent to the members.",
-                                  );
-                                }
-                              });
-                            }).onError((error, stackTrace) {
-                              Navigator.pop(context);
-                              errorDialog(
-                                context,
-                                "Something went wrong! Pooja not posted to the members.",
                               );
-                            });
-                          }
-                        },
-                        child: const Text(
-                          "Update Data",
-                          style: TextStyle(fontSize: 25),
+                              DatabaseManager.updatePooja(
+                                Pooja(
+                                  widget.toEditPooja.id,
+                                  name.trim(),
+                                  by.trim(),
+                                  Timestamp.fromDate(on),
+                                  AuthService.getUserNumber(),
+                                ),
+                              ).then((value) {
+                                Messaging.send(
+                                  title: "$name Pooja is updated by $by",
+                                  body:
+                                      'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
+                                ).then((value) {
+                                  Navigator.pop(context);
+                                  if (value.statusCode == 200) {
+                                    successDialog(context);
+                                  } else {
+                                    errorDialog(
+                                      context,
+                                      "Something went wrong! Message not sent to the members.",
+                                    );
+                                  }
+                                });
+                              }).onError((error, stackTrace) {
+                                Navigator.pop(context);
+                                errorDialog(
+                                  context,
+                                  "Something went wrong! Pooja not posted to the members.",
+                                );
+                              });
+                            }
+                          },
+                          child: const Text(
+                            "Update Data",
+                            style: TextStyle(fontSize: 25),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

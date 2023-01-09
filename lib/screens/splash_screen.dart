@@ -7,6 +7,7 @@ import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/home_screen/home_screen.dart';
 import 'package:loga_parameshwari/screens/login_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
@@ -72,44 +73,46 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            width: Responsiveness.screenSize.width,
-            height: Responsiveness.screenSize.height,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'images/god.webp',
-                  fit: BoxFit.cover,
-                ),
-                const ColoredBox(
-                  color: Colors.black26,
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: Responsiveness.height(150),
-            left: Responsiveness.screenSize.width * 0.5 -
-                (Responsiveness.widthRatio(0.5) * 0.5),
-            child: SizedBox(
-              width: Responsiveness.widthRatio(0.5),
-              child: Column(
+    return IsConnected(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              width: Responsiveness.screenSize.width,
+              height: Responsiveness.screenSize.height,
+              child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  LinearProgressIndicator(value: _progress),
-                  Text(
-                    _progressText,
-                    style: const TextStyle(fontSize: 10, color: Colors.white),
-                    textAlign: TextAlign.center,
+                  Image.asset(
+                    'images/god.webp',
+                    fit: BoxFit.cover,
+                  ),
+                  const ColoredBox(
+                    color: Colors.black26,
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: Responsiveness.height(150),
+              left: Responsiveness.screenSize.width * 0.5 -
+                  (Responsiveness.widthRatio(0.5) * 0.5),
+              child: SizedBox(
+                width: Responsiveness.widthRatio(0.5),
+                child: Column(
+                  children: [
+                    LinearProgressIndicator(value: _progress),
+                    Text(
+                      _progressText,
+                      style: const TextStyle(fontSize: 10, color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

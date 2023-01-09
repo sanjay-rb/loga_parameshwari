@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loga_parameshwari/screens/error_screen.dart';
+import 'package:provider/provider.dart';
 
 class ConnectivityService with ChangeNotifier {
   final Connectivity _connectivity = Connectivity();
@@ -60,5 +62,24 @@ class ConnectivityService with ChangeNotifier {
       isConnected = false;
     }
     return isConnected;
+  }
+}
+
+class IsConnected extends StatelessWidget {
+  final Widget child;
+  const IsConnected({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ConnectivityService>(
+      builder: (context, value, child) {
+        if (value.isOnline) {
+          return child;
+        } else {
+          return const ErrorScreen();
+        }
+      },
+      child: child,
+    );
   }
 }
