@@ -46,6 +46,9 @@ class DatabaseManager {
       .where('id', isEqualTo: AuthService.getUserNumber())
       .get();
 
+  static Future<QuerySnapshot> getUserInfoById(String id) =>
+      _db.collection(USER_COLLECTION_NAME).where('id', isEqualTo: id).get();
+
   static Stream<DocumentSnapshot> getImageById(String id) =>
       _db.collection(IMAGE_COLLECTION_NAME).doc(id).snapshots();
 

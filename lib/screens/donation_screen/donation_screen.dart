@@ -19,9 +19,13 @@ class _DonationScreenState extends State<DonationScreen> {
   @override
   void initState() {
     Clipboard.getData(Clipboard.kTextPlain).then((value) {
-      setState(() {
-        copiedText = value.text;
-      });
+      if (value != null) {
+        if (value.text != null) {
+          setState(() {
+            copiedText = value.text;
+          });
+        }
+      }
     });
     super.initState();
   }
@@ -68,7 +72,7 @@ class _DonationScreenState extends State<DonationScreen> {
                         'value': snapshot.data["upi_id"] as String
                       },
                     ];
-      
+
                     return ListView(
                       children: [
                         SizedBox(
@@ -87,8 +91,10 @@ class _DonationScreenState extends State<DonationScreen> {
                           height: Responsiveness.height(10),
                         ),
                         ...List.generate(listOfData.length, (index) {
-                          final String currentValue = listOfData[index]['value'];
-                          final String currentTitle = listOfData[index]['title'];
+                          final String currentValue =
+                              listOfData[index]['value'];
+                          final String currentTitle =
+                              listOfData[index]['title'];
                           return Column(
                             children: [
                               ColoredBox(
@@ -100,9 +106,10 @@ class _DonationScreenState extends State<DonationScreen> {
                                     label: (currentValue == copiedText)
                                         ? const Text('Copied')
                                         : const Text('Copy'),
-                                    backgroundColor: (currentValue == copiedText)
-                                        ? Colors.green
-                                        : Colors.blue,
+                                    backgroundColor:
+                                        (currentValue == copiedText)
+                                            ? Colors.green
+                                            : Colors.blue,
                                     labelStyle:
                                         const TextStyle(color: Colors.white),
                                   ),

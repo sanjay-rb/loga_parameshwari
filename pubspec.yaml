@@ -8,7 +8,6 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  animations: ^2.0.1
   cached_network_image: ^3.0.0
   cloud_firestore: ^4.0.3
   connectivity: ^3.0.6

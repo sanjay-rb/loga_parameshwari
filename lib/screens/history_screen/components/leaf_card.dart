@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
@@ -27,35 +26,45 @@ class LeafCard extends StatelessWidget {
             final String link = await Deeplink().createNewDeeplink(pooja);
             Share.share(TextDesign.getMessageText(pooja, link));
           },
-          child: OpenContainer(
-            closedBuilder: (context, action) => Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    pooja.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPooja(
+                    pooja: pooja,
+                    id: id,
                   ),
                 ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
+              );
+            },
+            child: ColoredBox(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "by ${pooja.by.replaceAll('\n', ', ')}",
+                      pooja.name,
                       overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            openBuilder: (context, action) => DetailPooja(
-              pooja: pooja,
-              id: id,
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "by ${pooja.by.replaceAll('\n', ', ')}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
