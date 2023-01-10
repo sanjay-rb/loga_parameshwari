@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:loga_parameshwari/screens/error_screen.dart';
+import 'package:loga_parameshwari/screens/internet_error_screen.dart';
 import 'package:provider/provider.dart';
 
 class ConnectivityService with ChangeNotifier {
@@ -76,7 +76,7 @@ class IsConnected extends StatelessWidget {
         if (value.isOnline) {
           return child;
         } else {
-          return const ErrorScreen();
+          return const InternetErrorScreen();
         }
       },
       child: child,

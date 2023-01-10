@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user.dart';
@@ -122,16 +123,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             alignment: Alignment.bottomRight,
                             child: ElevatedButton(
                               onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
                                 if (userUpdateFormKey.currentState.validate()) {
                                   final UserModel newUser = UserModel(
                                     id: userModel.id,
                                     uid: userModel.uid,
                                     name: _userNameCtrl.text.trim(),
                                   );
+                                  await FirebaseAuth.instance.currentUser
+                                      .updateDisplayName(
+                                    _userNameCtrl.text.trim(),
+                                  );
                                   await DatabaseManager.addUser(newUser)
                                       .then((value) {
-                                    Navigator.pop(context);
+                                    Navigator.pop(context); // for loader
+                                    Navigator.pop(context); // for navigator
                                   });
+                                } else {
+                                  Navigator.pop(context);
                                 }
                               },
                               child: const Text("OK"),

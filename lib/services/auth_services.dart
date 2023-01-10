@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/screens/auth_error_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
 /// This services helps to perform authentication on the app with firebase auth....
@@ -41,15 +42,15 @@ class AuthService {
     try {
       final UserCredential userCredential =
           await _auth.signInWithCredential(authCreds);
-      if (userCredential.additionalUserInfo.isNewUser) {
-        await DatabaseManager.addUser(
-          UserModel(
-            id: userCredential.user.phoneNumber,
-            uid: userCredential.user.uid,
-            name: userCredential.user.displayName ?? "New User",
-          ),
-        );
-      }
+
+      await DatabaseManager.addUser(
+        UserModel(
+          id: userCredential.user.phoneNumber,
+          uid: userCredential.user.uid,
+          name: userCredential.user.displayName ?? "New User",
+          isverified: false,
+        ),
+      );
       return true;
     } catch (e) {
       return false;
@@ -91,5 +92,30 @@ class AuthService {
       },
     );
     return [verificationId, codeSent];
+  }
+}
+
+class IsAuthorized extends StatelessWidget {
+  final Widget child;
+  const IsAuthorized({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          DatabaseManager.getUserInfoById(snapshot.data.phoneNumber)
+              .then((value) {
+            final UserModel user = UserModel.fromJson(value.docs.first);
+            user.isonline = true;
+            DatabaseManager.addUser(user);
+          });
+          return child;
+        } else {
+          return const AuthErrorScreen();
+        }
+      },
+    );
   }
 }

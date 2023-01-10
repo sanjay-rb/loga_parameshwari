@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/screens/login_screen.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({Key key}) : super(key: key);
+class AuthErrorScreen extends StatelessWidget {
+  const AuthErrorScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +41,26 @@ class ErrorScreen extends StatelessWidget {
                     ),
                   ),
                   Card(
-                    child: SizedBox(
-                      width: Responsiveness.widthRatio(0.8),
-                      height: Responsiveness.heightRatio(0.3),
-                      child: const Center(
-                        child: Text(
-                          "Please check your internet connection",
-                          textAlign: TextAlign.center,
-                        ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "You are not logged in, please login by clicking below button",
+                            textAlign: TextAlign.center,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text('Login'),
+                          ),
+                        ],
                       ),
                     ),
                   )

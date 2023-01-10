@@ -4,11 +4,25 @@ class UserModel {
   String id;
   String uid;
   String name;
-  UserModel({this.id, this.uid, this.name});
+  bool isverified;
+  bool isonline;
+
+  UserModel({this.id, this.uid, this.name, this.isverified});
   UserModel.fromJson(QueryDocumentSnapshot<Object> json) {
-    id = json['id'] as String;
-    uid = json['uid'] as String;
-    name = json['name'] as String;
+    final Map data = json.data() as Map;
+    id = json.get('id') as String;
+    uid = json.get('uid') as String;
+    name = json.get('name') as String;
+    if (data.keys.contains('isverified')) {
+      isverified = json.get('isverified') as bool;
+    } else {
+      isverified = false;
+    }
+    if (data.keys.contains('isonline')) {
+      isonline = json.get('isonline') as bool;
+    } else {
+      isonline = false;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +30,8 @@ class UserModel {
       'id': id,
       'uid': uid,
       'name': name,
+      'isverified': isverified,
+      'isonline': isonline,
     };
   }
 }
