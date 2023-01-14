@@ -33,7 +33,16 @@ class AuthService {
   }
 
   /// SignOut from the current user....
-  static void signOut() {
+  static Future<void> signOut() async {
+    await DatabaseManager.getUserInfoById(
+      FirebaseAuth.instance.currentUser.phoneNumber,
+    ).then((value) {
+      if (value.docs.length == 1) {
+        final UserModel user = UserModel.fromJson(value.docs.first);
+        user.isonline = false;
+        DatabaseManager.addUser(user);
+      }
+    });
     _auth.signOut();
   }
 
@@ -49,6 +58,7 @@ class AuthService {
           uid: userCredential.user.uid,
           name: userCredential.user.displayName ?? "New User",
           isverified: false,
+          isonline: true,
         ),
       );
       return true;
@@ -107,9 +117,21 @@ class IsAuthorized extends StatelessWidget {
         if (snapshot.hasData) {
           DatabaseManager.getUserInfoById(snapshot.data.phoneNumber)
               .then((value) {
-            final UserModel user = UserModel.fromJson(value.docs.first);
-            user.isonline = true;
-            DatabaseManager.addUser(user);
+            if (value.docs.length == 1) {
+              final UserModel user = UserModel.fromJson(value.docs.first);
+              user.isonline = true;
+              DatabaseManager.addUser(user);
+            } else {
+              DatabaseManager.addUser(
+                UserModel(
+                  id: snapshot.data.phoneNumber,
+                  uid: snapshot.data.uid,
+                  name: snapshot.data.displayName ?? "New User",
+                  isverified: false,
+                  isonline: true,
+                ),
+              );
+            }
           });
           return child;
         } else {

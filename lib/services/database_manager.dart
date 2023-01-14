@@ -35,6 +35,12 @@ class DatabaseManager {
       .collection(POOJA_COLLECTION_NAME)
       .orderBy('on', descending: true)
       .snapshots();
+      
+  static Future<QuerySnapshot> getLimitedPooja(int limit) => _db
+      .collection(POOJA_COLLECTION_NAME)
+      .orderBy('on', descending: true)
+      .limit(limit)
+      .get();
 
   static Stream<QuerySnapshot> getImageStreamFromPoojaId(String poojaId) => _db
       .collection(IMAGE_COLLECTION_NAME)

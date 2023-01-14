@@ -7,7 +7,7 @@ class UserModel {
   bool isverified;
   bool isonline;
 
-  UserModel({this.id, this.uid, this.name, this.isverified});
+  UserModel({this.id, this.uid, this.name, this.isverified, this.isonline});
   UserModel.fromJson(QueryDocumentSnapshot<Object> json) {
     final Map data = json.data() as Map;
     id = json.get('id') as String;

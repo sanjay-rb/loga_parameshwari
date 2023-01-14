@@ -18,7 +18,10 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   TutorialCoachMark tutorialCoachMark;
   List<TargetFocus> targets = [];
-  ScrollController controller = ScrollController();
+  List<Pooja> allPooja = [];
+  ScrollController controller;
+  int limit = 10;
+  bool isLoading = true;
   @override
   void initState() {
     targets.addAll([
@@ -29,7 +32,47 @@ class _HistoryScreenState extends State<HistoryScreen> {
         isCircle: false,
       ),
     ]);
+    loadPooja();
+    controller = ScrollController(
+      initialScrollOffset: (limit + 1) * 50.0,
+    )..addListener(handleScrolling);
+    final data = allPooja.where((Pooja pooja) {
+      return pooja.on.toDate().compareTo(DateTime.now()) == 1;
+    });
+    var moveTo = 0.0;
+    if (data.isNotEmpty) {
+      moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
+    }
+    Future.delayed(const Duration(seconds: 1), () {
+      controller
+          .animateTo(
+            moveTo,
+            duration: const Duration(seconds: 1),
+            curve: Curves.ease,
+          )
+          .then((value) => _afterLayout(context));
+    });
     super.initState();
+  }
+
+  void handleScrolling() {
+    if (controller.offset >= controller.position.maxScrollExtent) {
+      setState(() {
+        loadPooja();
+      });
+    }
+  }
+
+  Future<void> loadPooja() async {
+    limit = limit + 10;
+    final QuerySnapshot data = await DatabaseManager.getLimitedPooja(limit);
+    for (final QueryDocumentSnapshot element in data.docs) {
+      final Pooja pooja = Pooja.fromJson(element);
+      allPooja.add(pooja);
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   TargetFocus targetFocus(
@@ -116,132 +159,95 @@ class _HistoryScreenState extends State<HistoryScreen> {
             automaticallyImplyLeading: false,
           ),
           body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: StreamBuilder(
-                      stream: DatabaseManager.getAllPoojaStream(),
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot,
-                      ) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          if (snapshot.data.docs.isNotEmpty) {
-                            final List<QueryDocumentSnapshot> allPooja =
-                                snapshot.data.docs;
-                            controller = ScrollController(
-                              initialScrollOffset: (allPooja.length + 1) * 50.0,
-                            );
-                            final data = allPooja
-                                .where((QueryDocumentSnapshot<Object> element) {
-                              final Pooja pooja = Pooja.fromJson(element);
-                              return pooja.on
-                                      .toDate()
-                                      .compareTo(DateTime.now()) ==
-                                  1;
-                            });
-                            var moveTo = 0.0;
-                            if (data.isNotEmpty) {
-                              moveTo = (allPooja.indexOf(data.last) * 2) * 50.0;
-                            }
-                            Future.delayed(const Duration(microseconds: 500), () {
-                              controller
-                                  .animateTo(
-                                    moveTo,
-                                    duration: const Duration(seconds: 1),
-                                    curve: Curves.ease,
-                                  )
-                                  .then((value) => _afterLayout(context));
-                            });
-      
-                            return ListView.builder(
-                              controller: controller,
-                              itemCount: allPooja.length + 1,
-                              itemBuilder: (context, index) {
-                                if (index == allPooja.length) {
-                                  return SizedBox(
-                                    width: double.maxFinite,
-                                    height: 50,
-                                    child: Stack(
-                                      children: [
-                                        Row(
-                                          children: index.isEven
-                                              ? [
-                                                  const Spacer(
-                                                    flex: 40,
-                                                  ),
-                                                  const Expanded(
-                                                    flex: 2,
-                                                    child: ColoredBox(
-                                                      color: Colors.purple,
-                                                      child: SizedBox(
-                                                        height: double.infinity,
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: allPooja.isEmpty
+                              ? const Center(
+                                  child: Text("No Pooja has been fetched"),
+                                )
+                              : ListView.builder(
+                                  controller: controller,
+                                  itemCount: allPooja.length + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == allPooja.length) {
+                                      return SizedBox(
+                                        width: double.maxFinite,
+                                        height: 50,
+                                        child: Stack(
+                                          children: [
+                                            Row(
+                                              children: index.isEven
+                                                  ? [
+                                                      const Spacer(
+                                                        flex: 40,
                                                       ),
-                                                    ),
-                                                  ),
-                                                  const Spacer(
-                                                    flex: 40,
-                                                  ),
-                                                ]
-                                              : [
-                                                  const Spacer(
-                                                    flex: 40,
-                                                  ),
-                                                  const Expanded(
-                                                    flex: 2,
-                                                    child: ColoredBox(
-                                                      color: Colors.purple,
-                                                      child: SizedBox(
-                                                        height: double.infinity,
+                                                      const Expanded(
+                                                        flex: 2,
+                                                        child: ColoredBox(
+                                                          color: Colors.purple,
+                                                          child: SizedBox(
+                                                            height:
+                                                                double.infinity,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  const Spacer(
-                                                    flex: 40,
-                                                  ),
-                                                ],
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            width: 25,
-                                            height: 25,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.black,
-                                              shape: BoxShape.circle,
+                                                      const Spacer(
+                                                        flex: 40,
+                                                      ),
+                                                    ]
+                                                  : [
+                                                      const Spacer(
+                                                        flex: 40,
+                                                      ),
+                                                      const Expanded(
+                                                        flex: 2,
+                                                        child: ColoredBox(
+                                                          color: Colors.purple,
+                                                          child: SizedBox(
+                                                            height:
+                                                                double.infinity,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Spacer(
+                                                        flex: 40,
+                                                      ),
+                                                    ],
                                             ),
-                                          ),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Container(
+                                                width: 25,
+                                                height: 25,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  return TreeLeaf(
-                                    pooja: Pooja.fromJson(allPooja[index]),
-                                    index: index,
-                                    id: allPooja[index].id,
-                                  );
-                                }
-                              },
-                            );
-                          } else {
-                            return const Center(
-                              child: Text("No Pooja has been fetched"),
-                            );
-                          }
-                        }
-                      },
-                    ),
+                                      );
+                                    } else {
+                                      return TreeLeaf(
+                                        pooja: allPooja[index],
+                                        index: index,
+                                        id: allPooja[index].id,
+                                      );
+                                    }
+                                  },
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         ),
       ),

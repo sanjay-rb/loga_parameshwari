@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -63,34 +64,76 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                         ),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: double.maxFinite,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (addPoojaFormKey.currentState.validate()) {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
-                                  content: const LinearProgressIndicator(),
-                                ),
-                              );
-                              addPooja();
-                            }
-                          },
-                          child: const Text(
-                            "Schedule Now",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
+                    FutureBuilder<QuerySnapshot>(
+                      future: DatabaseManager.getUserInfoById(
+                        AuthService.getUserNumber(),
                       ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container();
+                        }
+                        UserModel user;
+                        if (snapshot.data.docs.length == 1) {
+                          user = UserModel.fromJson(snapshot.data.docs.first);
+                        }
+
+                        return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (user != null && user.isverified)
+                                Container()
+                              else
+                                Text(
+                                  "Hi ${user.name}, you cannot create pooja right now, please contact Poojari or Developer.",
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      (user != null && user.isverified)
+                                          ? Colors.amber
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                  onPressed: (user != null && user.isverified)
+                                      ? () {
+                                          if (addPoojaFormKey.currentState
+                                              .validate()) {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) => AlertDialog(
+                                                title: Text(
+                                                  "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
+                                                  style: const TextStyle(
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                                content:
+                                                    const LinearProgressIndicator(),
+                                              ),
+                                            );
+                                            addPooja();
+                                          }
+                                        }
+                                      : () {},
+                                  child: const Text(
+                                    "Schedule Now",
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
