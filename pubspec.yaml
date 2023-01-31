@@ -28,6 +28,7 @@ dependencies:
       path: in_app_update
   intl: ^0.17.0
   multi_image_picker: ^4.8.1
+  permission_handler: ^10.2.0
   provider: ^5.0.0
   share: ^2.0.4
   shared_preferences: ^2.0.6

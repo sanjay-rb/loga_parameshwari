@@ -12,6 +12,7 @@ import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -39,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> setUp() async {
+    await requestPermission();
     await Firebase.initializeApp(); // 1....
     _loadProgress(1, "Loading....");
     await Messaging.init(); // 2....
@@ -69,6 +71,22 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     }
+  }
+
+  Future<bool> requestPermission() async {
+    if (await Permission.storage.request().isGranted) {
+      return true;
+    }
+    if (await Permission.camera.request().isGranted) {
+      return true;
+    }
+    if (await Permission.notification.request().isGranted) {
+      return true;
+    }
+    if (await Permission.photos.request().isGranted) {
+      return true;
+    }
+    return false;
   }
 
   @override

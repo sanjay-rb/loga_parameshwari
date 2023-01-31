@@ -1,6 +1,9 @@
 # TODO
-- Contact Card
-- Android Notification 
+✔️❌⚠️
+
+- ✔️ permission_handler 
+- ⚠️ Contact Card
+- ⚠️ Android Notification 
 
 # Reference
 - Video tutorial : https://youtu.be/UJ6IQGkoEgA

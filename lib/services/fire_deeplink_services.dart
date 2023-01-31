@@ -42,7 +42,7 @@ class Deeplink {
       });
     }).onError((error) {
       // Handle errors
-      debugPrint("DEEPLINK ERROR ::: ${error.toString()}");
+      debugPrint("DEEPLINK ERROR ::: $error");
     });
 
     // App is terminated
@@ -62,7 +62,7 @@ class Deeplink {
       }
     }).onError((error, stackTrace) {
       // Handle errors
-      debugPrint("DEEPLINK ERROR ::: ${error.toString()}");
+      debugPrint("DEEPLINK ERROR ::: $error");
     });
   }
 }

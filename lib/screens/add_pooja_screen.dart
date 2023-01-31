@@ -348,24 +348,28 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               },
               format: DateFormat("dd-MM-yyyy hh:mm aaa"),
               onShowPicker: (context, currentValue) async {
-                final date = await showDatePicker(
+                showDatePicker(
                   context: context,
                   firstDate: DateTime.now(),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime.now().add(
                     const Duration(days: 365 * 3),
                   ),
-                );
-                if (date != null) {
-                  final time = await showTimePicker(
-                    context: context,
-                    initialTime:
-                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                  );
-                  return DateTimeField.combine(date, time);
-                } else {
-                  return currentValue;
-                }
+                ).then((date) {
+                  if (date != null) {
+                    showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(
+                        currentValue ?? DateTime.now(),
+                      ),
+                    ).then((time) {
+                      return DateTimeField.combine(date, time);
+                    });
+                  } else {
+                    return currentValue;
+                  }
+                });
+                return currentValue;
               },
             ),
           ],
