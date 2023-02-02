@@ -14,10 +14,14 @@ class DatabaseManager {
   static const String USER_COLLECTION_NAME = 'User';
   static const String NOTICE_COLLECTION_NAME = 'Notice';
   static const String DONATION_COLLECTION_NAME = 'DonationDetails';
+  static const String CONTACT_COLLECTION_NAME = 'Contact';
 
   static Future<void> init() async {
     _db ??= FirebaseFirestore.instance;
   }
+
+  static Future<QuerySnapshot> getContactInfo() =>
+      _db.collection(CONTACT_COLLECTION_NAME).get();
 
   static Stream<DocumentSnapshot> getAccountDetails() =>
       _db.collection(DONATION_COLLECTION_NAME).doc('account').snapshots();

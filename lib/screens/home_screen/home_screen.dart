@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/contact.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/head.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/home_keys.dart';
@@ -240,6 +241,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           HomeKeysComponent(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight * 0.5,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ContactComponent(
+                            height: constraints.maxHeight * 0.25,
+                            width: constraints.maxWidth * 0.8,
                           ),
                           const SizedBox(
                             height: 20,
