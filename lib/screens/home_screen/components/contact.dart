@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/contact.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -18,20 +19,29 @@ class ContactComponent extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         }
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: List.generate(
-              snapshot.data.docs.length,
-              (index) => ContactCard(
-                height: height,
-                width: width,
-                contactModel: ContactModel.fromMap(
-                  snapshot.data.docs[index].data() as Map<String, dynamic>,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Contacts",
+              style: TextDesign.headText,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  snapshot.data.docs.length,
+                  (index) => ContactCard(
+                    height: height,
+                    width: width,
+                    contactModel: ContactModel.fromMap(
+                      snapshot.data.docs[index].data() as Map<String, dynamic>,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         );
       },
     );
@@ -67,6 +77,7 @@ class ContactCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.red,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   Spacer(),
@@ -75,6 +86,7 @@ class ContactCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.red,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ],
@@ -90,6 +102,9 @@ class ContactCard extends StatelessWidget {
                         child: CachedNetworkImage(
                           imageUrl: contactModel.image,
                           fit: BoxFit.cover,
+                          placeholder: (context, url) => const Icon(
+                            Icons.account_box,
+                          ),
                         ),
                       ),
                       Padding(
@@ -102,17 +117,11 @@ class ContactCard extends StatelessWidget {
                                 children: [
                                   const TextSpan(
                                     text: "🪔 ",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
+                                    style: TextDesign.titleText,
                                   ),
                                   TextSpan(
                                     text: contactModel.name,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.fade,
-                                    ),
+                                    style: TextDesign.titleText,
                                   ),
                                 ],
                               ),
@@ -122,17 +131,11 @@ class ContactCard extends StatelessWidget {
                                 children: [
                                   const TextSpan(
                                     text: "🪔 ",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
+                                    style: TextDesign.titleText,
                                   ),
                                   TextSpan(
                                     text: contactModel.role,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.fade,
-                                    ),
+                                    style: TextDesign.subTitleText,
                                   ),
                                 ],
                               ),
@@ -142,24 +145,18 @@ class ContactCard extends StatelessWidget {
                                 children: [
                                   const TextSpan(
                                     text: "🪔 ",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
+                                    style: TextDesign.titleText,
                                   ),
                                   TextSpan(
                                     text: contactModel.number,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.fade,
-                                    ),
+                                    style: TextDesign.subTitleText,
                                   ),
                                 ],
                               ),
                             ),
                             const Spacer(),
                             SizedBox(
-                              height: 25,
+                              height: 30,
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   launchUrlString("tel:${contactModel.number}");
@@ -182,6 +179,7 @@ class ContactCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.red,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   Spacer(),
@@ -190,6 +188,7 @@ class ContactCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.red,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ],

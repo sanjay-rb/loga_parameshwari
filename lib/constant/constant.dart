@@ -7,13 +7,20 @@ class TextDesign {
   const TextDesign();
   static const headText = TextStyle(
     fontSize: 25,
+    color: Colors.black,
+    overflow: TextOverflow.fade,
   );
 
   static const titleText = TextStyle(
     fontSize: 20,
+    color: Colors.black,
+    overflow: TextOverflow.fade,
   );
+
   static const subTitleText = TextStyle(
     fontSize: 15,
+    color: Colors.black,
+    overflow: TextOverflow.fade,
   );
 
   static const msgKey =
