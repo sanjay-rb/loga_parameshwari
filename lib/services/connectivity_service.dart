@@ -46,7 +46,7 @@ class ConnectivityService with ChangeNotifier {
         notifyListeners();
       }
     } on PlatformException catch (e) {
-      debugPrint("PlatformException: $e");
+      debugPrint("ERROR ::: Connectivity $e");
     }
   }
 

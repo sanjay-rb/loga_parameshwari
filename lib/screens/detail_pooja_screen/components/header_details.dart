@@ -71,9 +71,7 @@ class HeaderDetails extends StatelessWidget {
           .child(year)
           .child(month)
           .child('${pooja.name}+${pooja.id}');
-      debugPrint("rootPath.name ${rootPath.name}");
       final ListResult storeList = await rootPath.listAll();
-      debugPrint("storeList ${storeList.items}");
       for (final Reference item in storeList.items) {
         item.delete();
       }

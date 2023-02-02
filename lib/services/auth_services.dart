@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/user.dart';
@@ -18,12 +19,34 @@ class AuthService {
     _auth ??= FirebaseAuth.instance;
   }
 
+  static Future<void> updateUserDB(User authUser) async {
+    final QuerySnapshot user = await DatabaseManager.getUserInfoById(
+      authUser.phoneNumber,
+    );
+    if (user.docs.length == 1) {
+      final UserModel userModel = UserModel.fromJson(user.docs[0]);
+      userModel.isonline = true;
+      await DatabaseManager.addUser(userModel);
+    } else {
+      await DatabaseManager.addUser(
+        UserModel(
+          id: authUser.phoneNumber,
+          uid: authUser.uid,
+          name: authUser.displayName ?? "New User",
+          isverified: false,
+          isonline: true,
+        ),
+      );
+    }
+  }
+
   /// Check for the Auth State and navigate to screens....
   static Widget handleAuth({Widget onAuthorized, Widget onUnAuthorized}) {
     return StreamBuilder(
       stream: _auth.authStateChanges(),
-      builder: (BuildContext context, snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         if (snapshot.hasData) {
+          AuthService.updateUserDB(snapshot.data);
           return onAuthorized;
         } else {
           return onUnAuthorized;
@@ -51,16 +74,7 @@ class AuthService {
     try {
       final UserCredential userCredential =
           await _auth.signInWithCredential(authCreds);
-
-      await DatabaseManager.addUser(
-        UserModel(
-          id: userCredential.user.phoneNumber,
-          uid: userCredential.user.uid,
-          name: userCredential.user.displayName ?? "New User",
-          isverified: false,
-          isonline: true,
-        ),
-      );
+      updateUserDB(userCredential.user);
       return true;
     } catch (e) {
       return false;
@@ -82,16 +96,13 @@ class AuthService {
   static Future<List> verifyPhone(String phoneNo) async {
     String verificationId;
     bool codeSent = false;
-    debugPrint("phonenumber : '+91$phoneNo'");
-    debugPrint("AUTH : $_auth");
-
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNo',
       verificationCompleted: (PhoneAuthCredential credential) {
         signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        debugPrint("verificationFailed: (FirebaseAuthException $e)");
+        debugPrint("ERROR ::: verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
         verificationId = verificationId;
@@ -115,24 +126,7 @@ class IsAuthorized extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          DatabaseManager.getUserInfoById(snapshot.data.phoneNumber)
-              .then((value) {
-            if (value.docs.length == 1) {
-              final UserModel user = UserModel.fromJson(value.docs.first);
-              user.isonline = true;
-              DatabaseManager.addUser(user);
-            } else {
-              DatabaseManager.addUser(
-                UserModel(
-                  id: snapshot.data.phoneNumber,
-                  uid: snapshot.data.uid,
-                  name: snapshot.data.displayName ?? "New User",
-                  isverified: false,
-                  isonline: true,
-                ),
-              );
-            }
-          });
+          AuthService.updateUserDB(snapshot.data);
           return child;
         } else {
           return const AuthErrorScreen();

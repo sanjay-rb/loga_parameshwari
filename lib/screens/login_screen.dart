@@ -101,7 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: InputDecoration(
                                 hintText: "Enter OTP",
                                 border: InputBorder.none,
-                                errorText: codeError ? "   Invalid OTP   " : null,
+                                errorText:
+                                    codeError ? "   Invalid OTP   " : null,
                               ),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
@@ -132,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             phoneNumberError = false;
                             codeError = false;
                           });
-    
+
                           if (_phoneNumberCtrl.text.isEmpty ||
                               _phoneNumberCtrl.text.length < 10) {
                             setState(() {
@@ -148,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             }
                           }
-    
+
                           if (!phoneNumberError && !codeError) {
                             if (codeSent) {
                               final bool isVerified =
@@ -167,8 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           }
                         },
-                        child:
-                            codeSent ? const Text('Login') : const Text('Verify'),
+                        child: codeSent
+                            ? const Text('Login')
+                            : const Text('Verify'),
                       ),
                     ],
                   ),
@@ -189,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await AuthService.signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        debugPrint("verificationFailed: (FirebaseAuthException $e)");
+        debugPrint("ERROR ::: verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
         verId = verificationId;

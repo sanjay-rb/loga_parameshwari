@@ -19,8 +19,7 @@ class AddImageButton extends StatelessWidget {
     return FloatingActionButton(
       mini: true,
       onPressed: () async {
-        List<Asset> upImages = <Asset>[];
-        upImages = await MultiImagePicker.pickImages(
+        MultiImagePicker.pickImages(
           maxImages: 500,
           enableCamera: true,
           materialOptions: const MaterialOptions(
@@ -28,43 +27,45 @@ class AddImageButton extends StatelessWidget {
             allViewTitle: "All Photos",
             useDetailsView: false,
           ),
-        );
-
-        final year = DateFormat("yyyy").format(pooja.on.toDate());
-        final month = DateFormat("MMMM").format(pooja.on.toDate());
-        final Reference rootPath =
-            FirebaseStorage.instance.ref().child(year).child(month);
-        for (final Asset imageFile in upImages) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-              title: Text(
-                "${imageFile.name} Uploading",
-                style: const TextStyle(fontSize: 10),
+        ).then((upImages) async {
+          final year = DateFormat("yyyy").format(pooja.on.toDate());
+          final month = DateFormat("MMMM").format(pooja.on.toDate());
+          final Reference rootPath =
+              FirebaseStorage.instance.ref().child(year).child(month);
+          for (final Asset imageFile in upImages) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  "${imageFile.name} Uploading",
+                  style: const TextStyle(fontSize: 10),
+                ),
+                content: const LinearProgressIndicator(),
               ),
-              content: const LinearProgressIndicator(),
-            ),
-          );
-          final String url = await rootPath
-              .child('${pooja.name}+${pooja.id}')
-              .child(imageFile.name)
-              .putData(
-                (await imageFile.getByteData(quality: 50)).buffer.asUint8List(),
-              )
-              .then((v) => v.ref.getDownloadURL());
-          DatabaseManager.addImage(
-            ImageModel(
-              id: DatabaseManager.getUniqueId(),
-              like: [],
-              pooja: pooja.id,
-              url: url,
-              user: AuthService.getUserNumber(),
-            ),
-          ).then((value) {
-            Navigator.pop(context);
-          });
-        }
+            );
+            final String url = await rootPath
+                .child('${pooja.name}+${pooja.id}')
+                .child(imageFile.name)
+                .putData(
+                  (await imageFile.getByteData(quality: 50))
+                      .buffer
+                      .asUint8List(),
+                )
+                .then((v) => v.ref.getDownloadURL());
+            DatabaseManager.addImage(
+              ImageModel(
+                id: DatabaseManager.getUniqueId(),
+                like: [],
+                pooja: pooja.id,
+                url: url,
+                user: AuthService.getUserNumber(),
+              ),
+            ).then((value) {
+              Navigator.pop(context);
+            });
+          }
+        });
       },
       child: const Icon(Icons.add),
     );

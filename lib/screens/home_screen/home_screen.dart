@@ -10,7 +10,6 @@ import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
-import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
@@ -166,109 +165,106 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return IsConnected(
-      child: IsAuthorized(
-        child: Scaffold(
-          extendBody: true,
-          bottomNavigationBar: BottomAppBar(
-            elevation: 0.3,
-            notchMargin: 5,
-            clipBehavior: Clip.antiAlias,
-            color: const Color(0xff1c1f26),
-            shape: const AutomaticNotchedShape(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
-                ),
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0.3,
+          notchMargin: 5,
+          clipBehavior: Clip.antiAlias,
+          color: const Color(0xff1c1f26),
+          shape: const AutomaticNotchedShape(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
-            child: SizedBox(
-              width: double.infinity,
-              height: _bottomAppBarHeight,
-              child: Row(
-                children: const [
-                  LeftBtn(),
-                  Spacer(),
-                  RightBtn(),
-                ],
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+          child: SizedBox(
+            width: double.infinity,
+            height: _bottomAppBarHeight,
+            child: Row(
+              children: const [
+                LeftBtn(),
+                Spacer(),
+                RightBtn(),
+              ],
             ),
-            onPressed: () {
-              _homeListController.animateTo(
-                0.0,
-                duration: const Duration(seconds: 1),
-                curve: Curves.ease,
-              );
-            },
-            child: const Icon(Icons.home),
           ),
-          body: WillPopScope(
-            onWillPop: _onBackPress,
-            child: SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) => SizedBox(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        ListView(
-                          controller: _homeListController,
-                          children: [
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const HeadComponent(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const NoticeBanner(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            HomeKeysComponent(
-                              width: constraints.maxWidth,
-                              height: constraints.maxHeight * 0.5,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            DonateBtn(
-                              key: GKey.donationBtnKey,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const ARView(),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const SpecialPoojaComponent(),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const LogoutBtn(),
-                            SizedBox(
-                              height: _bottomAppBarHeight,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          onPressed: () {
+            _homeListController.animateTo(
+              0.0,
+              duration: const Duration(seconds: 1),
+              curve: Curves.ease,
+            );
+          },
+          child: const Icon(Icons.home),
+        ),
+        body: WillPopScope(
+          onWillPop: _onBackPress,
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) => SizedBox(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ListView(
+                        controller: _homeListController,
+                        children: [
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const HeadComponent(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const NoticeBanner(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          HomeKeysComponent(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight * 0.5,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          DonateBtn(
+                            key: GKey.donationBtnKey,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const ARView(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const SpecialPoojaComponent(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const LogoutBtn(),
+                          SizedBox(
+                            height: _bottomAppBarHeight,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

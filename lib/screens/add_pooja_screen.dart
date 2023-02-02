@@ -188,7 +188,6 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
             selectedAssets: upImages,
           );
           setState(() {});
-          debugPrint(upImages.toString());
         },
         child: const Text(
           "Add Images",
