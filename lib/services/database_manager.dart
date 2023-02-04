@@ -15,13 +15,19 @@ class DatabaseManager {
   static const String NOTICE_COLLECTION_NAME = 'Notice';
   static const String DONATION_COLLECTION_NAME = 'DonationDetails';
   static const String CONTACT_COLLECTION_NAME = 'Contact';
+  static const String SPECIAL_DATES_COLLECTION_NAME = 'SpecialDates';
 
   static Future<void> init() async {
     _db ??= FirebaseFirestore.instance;
   }
 
-  static Future<QuerySnapshot> getContactInfo() =>
-      _db.collection(CONTACT_COLLECTION_NAME).get();
+  static Stream<QuerySnapshot> getContactInfo() =>
+      _db.collection(CONTACT_COLLECTION_NAME).snapshots();
+
+  static Stream<DocumentSnapshot> getCurrentMonthSpecialDates() => _db
+      .collection(SPECIAL_DATES_COLLECTION_NAME)
+      .doc("${DateTime.now().year}${DateTime.now().month}")
+      .snapshots();
 
   static Stream<DocumentSnapshot> getAccountDetails() =>
       _db.collection(DONATION_COLLECTION_NAME).doc('account').snapshots();

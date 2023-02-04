@@ -10,6 +10,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/left_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/special_dates.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -241,6 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           HomeKeysComponent(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight * 0.5,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SpecialDatesComponent(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight * 0.19,
                           ),
                           const SizedBox(
                             height: 20,

@@ -74,18 +74,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<bool> requestPermission() async {
-    if (await Permission.storage.request().isGranted) {
+    if ((await Permission.storage.request().isGranted) &&
+        (await Permission.camera.request().isGranted) &&
+        (await Permission.notification.request().isGranted) &&
+        (await Permission.photos.request().isGranted)) {
       return true;
     }
-    if (await Permission.camera.request().isGranted) {
-      return true;
-    }
-    if (await Permission.notification.request().isGranted) {
-      return true;
-    }
-    if (await Permission.photos.request().isGranted) {
-      return true;
-    }
+
     return false;
   }
 

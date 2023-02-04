@@ -13,8 +13,8 @@ class ContactComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: DatabaseManager.getContactInfo(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: DatabaseManager.getContactInfo(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
@@ -61,139 +61,152 @@ class ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.amber.shade100,
-      child: SizedBox(
-        height: height,
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                children: const [
-                  Text(
-                    "卐",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    "卐",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        child: CachedNetworkImage(
-                          imageUrl: contactModel.image,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => const Icon(
-                            Icons.account_box,
-                          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        elevation: 10.0,
+        borderRadius: BorderRadius.circular(10.0),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.amber.shade100,
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: SizedBox(
+            height: height,
+            width: width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: const [
+                      Text(
+                        "卐",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: "🪔 ",
-                                    style: TextDesign.titleText,
-                                  ),
-                                  TextSpan(
-                                    text: contactModel.name,
-                                    style: TextDesign.titleText,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: "🪔 ",
-                                    style: TextDesign.titleText,
-                                  ),
-                                  TextSpan(
-                                    text: contactModel.role,
-                                    style: TextDesign.subTitleText,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: "🪔 ",
-                                    style: TextDesign.titleText,
-                                  ),
-                                  TextSpan(
-                                    text: contactModel.number,
-                                    style: TextDesign.subTitleText,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            SizedBox(
-                              height: 30,
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  launchUrlString("tel:${contactModel.number}");
-                                },
-                                icon: const Icon(Icons.call),
-                                label: const Text("Call"),
-                              ),
-                            )
-                          ],
+                      Spacer(),
+                      Text(
+                        "卐",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Row(
-                children: const [
-                  Text(
-                    "卐",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w900,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: CachedNetworkImage(
+                              imageUrl: contactModel.image,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Icon(
+                                Icons.account_box,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: "🪔 ",
+                                        style: TextDesign.titleText,
+                                      ),
+                                      TextSpan(
+                                        text: contactModel.name,
+                                        style: TextDesign.titleText,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: "🪔 ",
+                                        style: TextDesign.titleText,
+                                      ),
+                                      TextSpan(
+                                        text: contactModel.role,
+                                        style: TextDesign.subTitleText,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: "🪔 ",
+                                        style: TextDesign.titleText,
+                                      ),
+                                      TextSpan(
+                                        text: contactModel.number,
+                                        style: TextDesign.subTitleText,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                SizedBox(
+                                  height: 30,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      launchUrlString(
+                                        "tel:${contactModel.number}",
+                                      );
+                                    },
+                                    icon: const Icon(Icons.call),
+                                    label: const Text("Call"),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    "卐",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w900,
-                    ),
+                  Row(
+                    children: const [
+                      Text(
+                        "卐",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        "卐",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
