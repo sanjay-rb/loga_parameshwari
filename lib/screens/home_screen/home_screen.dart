@@ -53,13 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
         GKey.mapViewKey,
         "Click here! Start navigation to Loga Parameshwari Temple.",
       ),
-      targetFocus(
-        "Donation",
-        GKey.donationBtnKey,
-        "Click here to find donation information of temple.",
-        isCircle: false,
-        isTextUp: true,
-      ),
     ]);
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
@@ -260,9 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          DonateBtn(
-                            key: GKey.donationBtnKey,
-                          ),
+                          const DonateBtn(),
                           const SizedBox(
                             height: 20,
                           ),

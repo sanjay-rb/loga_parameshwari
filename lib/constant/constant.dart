@@ -57,7 +57,6 @@ class GKey {
   static final addPoojaKey = GlobalKey(debugLabel: 'addPoojaKey');
   static final historyPoojaKey = GlobalKey(debugLabel: 'historyPoojaKey');
   static final mapViewKey = GlobalKey(debugLabel: 'mapViewKey');
-  static final donationBtnKey = GlobalKey(debugLabel: 'donationBtnKey');
   static final profileBtnKey = GlobalKey(debugLabel: 'profileBtnKey');
   static final leafKey = GlobalKey(debugLabel: 'leafKey');
 }

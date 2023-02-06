@@ -2,42 +2,75 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 class SpecialDatesModel {
-  Timestamp amavasya_pooja;
-  Timestamp ayilyam_pooja;
-  Timestamp pournami_pooja;
+  final collectionName = "SpecialDates";
+  Timestamp date;
+  String pooja;
   SpecialDatesModel({
-    this.amavasya_pooja,
-    this.ayilyam_pooja,
-    this.pournami_pooja,
+    this.date,
+    this.pooja,
   });
 
+  Future<void> add() async {
+    await DatabaseManager().db.collection(collectionName).add(toMap());
+  }
+
+  Stream<List<SpecialDatesModel>> getThisMonthDates() {
+    return DatabaseManager()
+        .db
+        .collection(collectionName)
+        .where(
+          // >= current month first day
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+          ),
+        )
+        .where(
+          // <= Next month first day
+          'date',
+          isLessThanOrEqualTo: DateTime(
+            DateTime.now().year,
+            ((DateTime.now().month) % 12) + 1,
+          ),
+        )
+        .orderBy('date')
+        .snapshots()
+        .map((QuerySnapshot event) {
+      return event.docs.map(
+        (e) {
+          final SpecialDatesModel model =
+              SpecialDatesModel.fromMap(e.data() as Map<String, dynamic>);
+          return model;
+        },
+      ).toList();
+    });
+  }
+
   SpecialDatesModel copyWith({
-    Timestamp amavasya_pooja,
-    Timestamp ayilyam_pooja,
-    Timestamp pournami_pooja,
+    Timestamp date,
+    String pooja,
   }) {
     return SpecialDatesModel(
-      amavasya_pooja: amavasya_pooja ?? this.amavasya_pooja,
-      ayilyam_pooja: ayilyam_pooja ?? this.ayilyam_pooja,
-      pournami_pooja: pournami_pooja ?? this.pournami_pooja,
+      date: date ?? this.date,
+      pooja: pooja ?? this.pooja,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'amavasya_pooja': amavasya_pooja,
-      'ayilyam_pooja': ayilyam_pooja,
-      'pournami_pooja': pournami_pooja,
+      'date': date,
+      'pooja': pooja,
     };
   }
 
   factory SpecialDatesModel.fromMap(Map<String, dynamic> map) {
     return SpecialDatesModel(
-      amavasya_pooja: map['amavasya_pooja'] as Timestamp,
-      ayilyam_pooja: map['ayilyam_pooja'] as Timestamp,
-      pournami_pooja: map['pournami_pooja'] as Timestamp,
+      date: map['date'] as Timestamp,
+      pooja: map['pooja'] as String,
     );
   }
 
@@ -47,21 +80,15 @@ class SpecialDatesModel {
       SpecialDatesModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'SpecialDatesModel(amavasya_pooja: $amavasya_pooja, ayilyam_pooja: $ayilyam_pooja, pournami_pooja: $pournami_pooja)';
+  String toString() => 'SpecialDatesModel(date: $date, pooja: $pooja)';
 
   @override
   bool operator ==(covariant SpecialDatesModel other) {
     if (identical(this, other)) return true;
 
-    return other.amavasya_pooja == amavasya_pooja &&
-        other.ayilyam_pooja == ayilyam_pooja &&
-        other.pournami_pooja == pournami_pooja;
+    return other.date == date && other.pooja == pooja;
   }
 
   @override
-  int get hashCode =>
-      amavasya_pooja.hashCode ^
-      ayilyam_pooja.hashCode ^
-      pournami_pooja.hashCode;
+  int get hashCode => date.hashCode ^ pooja.hashCode;
 }

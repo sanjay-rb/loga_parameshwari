@@ -9,6 +9,7 @@ import 'package:loga_parameshwari/services/auth_services.dart';
 class DatabaseManager {
   String tag = "DatabaseManager";
   static FirebaseFirestore _db;
+  FirebaseFirestore get db => _db;
   static const String POOJA_COLLECTION_NAME = 'Pooja';
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';

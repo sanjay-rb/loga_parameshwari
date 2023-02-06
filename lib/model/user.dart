@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 class UserModel {
+  final collectionName = "User";
   String id;
   String uid;
   String name;
@@ -9,7 +12,19 @@ class UserModel {
 
   UserModel({this.id, this.uid, this.name, this.isverified, this.isonline});
 
+  Stream<List<UserModel>> getOnlineUsers() {
+    return DatabaseManager()
+        .db
+        .collection(collectionName)
+        .where('isonline', isEqualTo: true)
+        .snapshots()
+        .map((QuerySnapshot event) {
+      return event.docs.map((e) => UserModel.fromJson(e)).toList();
+    });
+  }
+
   UserModel.fromJson(QueryDocumentSnapshot<Object> json) {
+    debugPrint("${json.data()}");
     final Map data = json.data() as Map;
     id = json.get('id') as String;
     uid = json.get('uid') as String;

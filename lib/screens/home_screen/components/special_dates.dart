@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/model/special_dates_model.dart';
-import 'package:loga_parameshwari/services/database_manager.dart';
 
 class SpecialDatesComponent extends StatelessWidget {
   final double width;
@@ -14,31 +12,26 @@ class SpecialDatesComponent extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
-      child: StreamBuilder<DocumentSnapshot>(
-        stream: DatabaseManager.getCurrentMonthSpecialDates(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      child: StreamBuilder<List<SpecialDatesModel>>(
+        stream: SpecialDatesModel().getThisMonthDates(),
+        builder: (context, AsyncSnapshot<List<SpecialDatesModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container();
           }
-          final SpecialDatesModel specialDatesModel = SpecialDatesModel.fromMap(
-            snapshot.data.data() as Map<String, dynamic>,
-          );
-          debugPrint("specialDatesModel = $specialDatesModel");
+          final List<SpecialDatesModel> data = snapshot.data;
+          if (data.isEmpty) {
+            return const Center(
+              child: Text("No Special Pooja Dates"),
+            );
+          }
           return Row(
-            children: [
-              SpecialDates(
-                title: "Ayilyam Pooja",
-                dateTime: specialDatesModel.ayilyam_pooja.toDate(),
+            children: List.generate(
+              data.length,
+              (index) => SpecialDates(
+                title: data[index].pooja,
+                dateTime: data[index].date.toDate(),
               ),
-              SpecialDates(
-                title: "Amavasya Pooja",
-                dateTime: specialDatesModel.amavasya_pooja.toDate(),
-              ),
-              SpecialDates(
-                title: "Pournami Pooja",
-                dateTime: specialDatesModel.pournami_pooja.toDate(),
-              ),
-            ],
+            ),
           );
         },
       ),
@@ -90,7 +83,9 @@ class SpecialDates extends StatelessWidget {
                 flex: 3,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.amber,
+                    color: dateTime.compareTo(DateTime.now()).isNegative
+                        ? Colors.grey
+                        : Colors.amber,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(10.0),
                       topRight: Radius.circular(10.0),
@@ -115,7 +110,9 @@ class SpecialDates extends StatelessWidget {
                 flex: 3,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.amber,
+                    color: dateTime.compareTo(DateTime.now()).isNegative
+                        ? Colors.grey
+                        : Colors.amber,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(10.0),
                       bottomRight: Radius.circular(10.0),
