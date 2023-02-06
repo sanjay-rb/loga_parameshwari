@@ -80,7 +80,6 @@ class _SplashScreenState extends State<SplashScreen> {
         (await Permission.photos.request().isGranted)) {
       return true;
     }
-
     return false;
   }
 

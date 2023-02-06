@@ -6,7 +6,6 @@ import 'package:loga_parameshwari/model/pooja.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-import 'package:loga_parameshwari/services/fire_message_services.dart';
 
 class EditPoojaScreen extends StatefulWidget {
   const EditPoojaScreen({Key key, this.toEditPooja}) : super(key: key);
@@ -73,21 +72,8 @@ class _EditPoojaScreenState extends State<EditPoojaScreen> {
                                   AuthService.getUserNumber(),
                                 ),
                               ).then((value) {
-                                Messaging.send(
-                                  title: "$name Pooja is updated by $by",
-                                  body:
-                                      'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-                                ).then((value) {
-                                  Navigator.pop(context);
-                                  if (value.statusCode == 200) {
-                                    successDialog(context);
-                                  } else {
-                                    errorDialog(
-                                      context,
-                                      "Something went wrong! Message not sent to the members.",
-                                    );
-                                  }
-                                });
+                                Navigator.pop(context);
+                                successDialog(context);
                               }).onError((error, stackTrace) {
                                 Navigator.pop(context);
                                 errorDialog(

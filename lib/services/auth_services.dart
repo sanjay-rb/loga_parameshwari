@@ -74,7 +74,7 @@ class AuthService {
     try {
       final UserCredential userCredential =
           await _auth.signInWithCredential(authCreds);
-      updateUserDB(userCredential.user);
+      AuthService.updateUserDB(userCredential.user);
       return true;
     } catch (e) {
       return false;

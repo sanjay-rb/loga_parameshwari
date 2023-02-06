@@ -1,59 +1,108 @@
-// ignore_for_file: constant_identifier_names, depend_on_referenced_packages
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
-import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:meta/meta.dart';
 
-// ignore: avoid_classes_with_only_static_members
-/// This service helps to connect and trigger the firebase messaging....
-///
-/// You can set canNotify as true before triggering send() func....
 class Messaging {
-  static const bool CAN_NOTIFY = false;
+  String tag = "Messaging";
+  static const bool canNotify = false;
+  static const String channelID = "com.sanjoke.loga_parameshwari";
+  static const String channelTitle = "LPT Notification";
 
-  /// Please call init() function before main or splash screen....
+  static AndroidFlutterLocalNotificationsPlugin androidPlugin =
+      FlutterLocalNotificationsPlugin().resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+
+  static final StreamController<String> selectNotificationStream =
+      StreamController<String>.broadcast();
+
   static Future<void> init() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
+    await FirebaseMessaging.instance.subscribeToTopic(channelID);
+
+    final bool areNotificationsEnabled =
+        await androidPlugin.areNotificationsEnabled();
+    if (areNotificationsEnabled != null) {
+      if (!areNotificationsEnabled) {
+        androidPlugin.requestPermission();
+      }
+    }
+    androidPlugin.deleteNotificationChannel(channelID);
+    androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        channelID,
+        channelTitle,
+        importance: Importance.max,
+        sound: RawResourceAndroidNotificationSound('notification_tone'),
+      ),
     );
-    await FirebaseMessaging.instance.subscribeToTopic("all");
+
+    Messaging.androidPlugin.initialize(
+      const AndroidInitializationSettings("@mipmap/ic_launcher"),
+      onDidReceiveNotificationResponse: (notificationResponse) {
+        if (notificationResponse.notificationResponseType ==
+            NotificationResponseType.selectedNotification) {
+          selectNotificationStream.add(notificationResponse.payload);
+        }
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+    );
   }
 
-  /// This send() function create http request to the firebase messageing and trigger the message....
-  /// Pleas provide the title and body of the notifcation...
-  static Future<http.Response> send({
-    @required String title,
-    @required String body,
-  }) {
-    return CAN_NOTIFY
-        ? http.post(
-            Uri.parse("https://fcm.googleapis.com/fcm/send"),
-            body: json.encode({
-              "to": "/topics/all",
-              "notification": {
-                "title": title,
-                "body": body,
-                "imageUrl": ImagesAndUrls.logoImg,
-                "icon": ImagesAndUrls.logoImg,
-                "sound": "default"
-              }
-            }),
-            headers: <String, String>{
-              "authorization":
-                  "key=AAAAZCPfm4I:APA91bHfQkiVDflbWTHDlf6tZPASoa41uKXQkxiOjRSpCezcNdiiiMLT1tIvNOGBbUvqckjSq8mE2pMHURP8Qeo8Nm5QkYwtrfe0pW7hbhJ9dwcWzLuTTcLVw9b5K1SIqHUEusREdoN4",
-              "content-type": "application/json",
-              "cache-control": "no-cache",
-              "postman-token": "45b5e103-f15a-1847-c77d-d70f9ce2f475",
-            },
-          )
-        : Future.value(
-            http.Response("Message not send status is $CAN_NOTIFY", 200),
-          );
+  @pragma('vm:entry-point')
+  static void notificationTapBackground(
+    NotificationResponse notificationResponse,
+  ) {
+    if (notificationResponse.notificationResponseType ==
+        NotificationResponseType.selectedNotification) {
+      Messaging.selectNotificationStream.add(notificationResponse.payload);
+    }
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> backgroundAndTerminatedMessageHandler(
+    RemoteMessage message,
+  ) async {
+    // ! For Message handler
+    Messaging.showLocalNotification(message);
+  }
+
+  static Future<void> showLocalNotification(RemoteMessage message) async {
+    final Map notification = message.data;
+    final http.Response response = await http.get(
+      Uri.parse(
+        "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fbackground.png?alt=media&token=d1316d19-895c-4e0a-a141-1a1fbf4f1ab7",
+      ),
+    );
+    final BigPictureStyleInformation bigPictureStyleInformation =
+        BigPictureStyleInformation(
+      ByteArrayAndroidBitmap.fromBase64String(
+        base64Encode(
+          response.bodyBytes,
+        ),
+      ),
+      largeIcon: ByteArrayAndroidBitmap.fromBase64String(
+        base64Encode(
+          response.bodyBytes,
+        ),
+      ),
+    );
+    androidPlugin.show(
+      DateTime.now().microsecond,
+      notification['title'].toString(),
+      notification['subtitle'].toString(),
+      notificationDetails: AndroidNotificationDetails(
+        channelID,
+        channelTitle,
+        priority: Priority.max,
+        styleInformation: bigPictureStyleInformation,
+        category: AndroidNotificationCategory.message,
+        visibility: NotificationVisibility.private,
+        icon: '@mipmap/ic_launcher',
+        largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+      ),
+      payload: notification['id'].toString(),
+    );
   }
 }

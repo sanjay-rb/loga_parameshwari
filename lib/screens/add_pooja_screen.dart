@@ -9,7 +9,6 @@ import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AddPoojaScreen extends StatefulWidget {
@@ -411,23 +410,6 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     }
   }
 
-  void sendMessage() {
-    Messaging.send(
-      title: "New Pooja named ${nameCtrl.text.trim()} by ${byCtrl.text.trim()}",
-      body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-    ).then((value) {
-      Navigator.pop(context);
-      if (value.statusCode == 200) {
-        successDialog(context);
-      } else {
-        errorDialog(
-          context,
-          "Something went wrong! Message not sent to the members.",
-        );
-      }
-    });
-  }
-
   Future<void> addPooja() async {
     final Pooja pooja = Pooja(
       DatabaseManager.getUniqueId(),
@@ -440,7 +422,6 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       if (upImages.isNotEmpty) {
         await uploadImages(pooja);
       }
-      sendMessage();
     }).onError((error, stackTrace) {
       Navigator.pop(context);
       errorDialog(
