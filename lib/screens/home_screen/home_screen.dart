@@ -1,6 +1,10 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/contact.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/head.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/home_keys.dart';
@@ -8,8 +12,12 @@ import 'package:loga_parameshwari/screens/home_screen/components/left_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
+import 'package:loga_parameshwari/screens/home_screen/components/special_dates.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
+import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -47,13 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
         "Map View",
         GKey.mapViewKey,
         "Click here! Start navigation to Loga Parameshwari Temple.",
-      ),
-      targetFocus(
-        "Donation",
-        GKey.donationBtnKey,
-        "Click here to find donation information of temple.",
-        isCircle: false,
-        isTextUp: true,
       ),
     ]);
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -112,6 +113,24 @@ class _HomeScreenState extends State<HomeScreen> {
         Deeplink().isLaunchByLink(context);
       }
     });
+    FirebaseMessaging.onMessage.listen(
+      Messaging.backgroundAndTerminatedMessageHandler,
+    );
+
+    Messaging.androidPlugin
+        .getNotificationAppLaunchDetails()
+        .then((NotificationAppLaunchDetails value) {
+      if (value.didNotificationLaunchApp) {
+        Messaging.onSelectNotification(
+          context,
+          value.notificationResponse.payload,
+        );
+      }
+    });
+
+    Messaging.selectNotificationStream.stream.listen((String payload) async {
+      Messaging.onSelectNotification(context, payload);
+    });
   }
 
   void showTutorial() {
@@ -161,106 +180,120 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0.3,
-        notchMargin: 5,
-        clipBehavior: Clip.antiAlias,
-        color: const Color(0xff1c1f26),
-        shape: const AutomaticNotchedShape(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+    return IsConnected(
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0.3,
+          notchMargin: 5,
+          clipBehavior: Clip.antiAlias,
+          color: const Color(0xff1c1f26),
+          shape: const AutomaticNotchedShape(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
             ),
           ),
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
+          child: SizedBox(
+            width: double.infinity,
+            height: _bottomAppBarHeight,
+            child: Row(
+              children: const [
+                LeftBtn(),
+                Spacer(),
+                RightBtn(),
+              ],
             ),
           ),
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: _bottomAppBarHeight,
-          child: Row(
-            children: const [
-              LeftBtn(),
-              Spacer(),
-              RightBtn(),
-            ],
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
+          onPressed: () {
+            _homeListController.animateTo(
+              0.0,
+              duration: const Duration(seconds: 1),
+              curve: Curves.ease,
+            );
+          },
+          child: const Icon(Icons.home),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        onPressed: () {
-          _homeListController.animateTo(
-            0.0,
-            duration: const Duration(seconds: 1),
-            curve: Curves.ease,
-          );
-        },
-        child: const Icon(Icons.home),
-      ),
-      body: WillPopScope(
-        onWillPop: _onBackPress,
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) => SizedBox(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    ListView(
-                      controller: _homeListController,
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const HeadComponent(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const NoticeBanner(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        HomeKeysComponent(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight * 0.5,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        DonateBtn(
-                          key: GKey.donationBtnKey,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const ARView(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const SpecialPoojaComponent(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const LogoutBtn(),
-                        SizedBox(
-                          height: _bottomAppBarHeight,
-                        ),
-                      ],
-                    ),
-                  ],
+        body: WillPopScope(
+          onWillPop: _onBackPress,
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) => SizedBox(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ListView(
+                        controller: _homeListController,
+                        children: [
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const HeadComponent(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const NoticeBanner(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          HomeKeysComponent(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight * 0.5,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SpecialDatesComponent(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight * 0.19,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ContactComponent(
+                            height: constraints.maxHeight * 0.25,
+                            width: constraints.maxWidth * 0.8,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const DonateBtn(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const ARView(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const SpecialPoojaComponent(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const LogoutBtn(),
+                          SizedBox(
+                            height: _bottomAppBarHeight,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -301,6 +334,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (yesOrNo) {
+      final UserModel user =
+          UserModel.fromJson((await DatabaseManager.getUserInfo()).docs.first);
+      user.isonline = false;
+      DatabaseManager.addUser(user);
       return true;
     } else {
       return false;

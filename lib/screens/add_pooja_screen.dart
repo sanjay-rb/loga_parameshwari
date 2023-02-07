@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/image.dart';
 import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AddPoojaScreen extends StatefulWidget {
@@ -27,70 +28,114 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Schedule Pooja"),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: double.maxFinite,
-            child: Form(
-              key: addPoojaFormKey,
-              child: Stack(
-                children: [
-                  ListView(
-                    children: [
-                      nameForm(node),
-                      byForm(node),
-                      onForm(),
-                      addImages(),
-                      if (upImages.isNotEmpty)
-                        const Text(
-                          "Long press on the image to delete ❌",
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                          textAlign: TextAlign.center,
+    return IsConnected(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text("Schedule Pooja"),
+          automaticallyImplyLeading: false,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: double.maxFinite,
+              child: Form(
+                key: addPoojaFormKey,
+                child: Stack(
+                  children: [
+                    ListView(
+                      children: [
+                        nameForm(node),
+                        byForm(node),
+                        onForm(),
+                        addImages(),
+                        if (upImages.isNotEmpty)
+                          const Text(
+                            "Long press on the image to delete ❌",
+                            style: TextStyle(fontSize: 10, color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
+                        const Divider(),
+                        imageView(),
+                        const SizedBox(
+                          height: 50 + 10.0,
                         ),
-                      const Divider(),
-                      imageView(),
-                      const SizedBox(
-                        height: 50 + 10.0,
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (addPoojaFormKey.currentState.validate()) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                                content: const LinearProgressIndicator(),
-                              ),
-                            );
-                            addPooja();
-                          }
-                        },
-                        child: const Text(
-                          "Schedule Now",
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                    FutureBuilder<QuerySnapshot>(
+                      future: DatabaseManager.getUserInfoById(
+                        AuthService.getUserNumber(),
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container();
+                        }
+                        UserModel user;
+                        if (snapshot.data.docs.length == 1) {
+                          user = UserModel.fromJson(snapshot.data.docs.first);
+                        }
+
+                        return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (user != null && user.isverified)
+                                Container()
+                              else
+                                Text(
+                                  "Hi ${user.name}, you cannot create pooja right now, please contact Poojari or Developer.",
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      (user != null && user.isverified)
+                                          ? Colors.amber
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                  onPressed: (user != null && user.isverified)
+                                      ? () {
+                                          if (addPoojaFormKey.currentState
+                                              .validate()) {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) => AlertDialog(
+                                                title: Text(
+                                                  "${nameCtrl.text.trim()} on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)} Uploading....",
+                                                  style: const TextStyle(
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                                content:
+                                                    const LinearProgressIndicator(),
+                                              ),
+                                            );
+                                            addPooja();
+                                          }
+                                        }
+                                      : () {},
+                                  child: const Text(
+                                    "Schedule Now",
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -142,7 +187,6 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
             selectedAssets: upImages,
           );
           setState(() {});
-          debugPrint(upImages.toString());
         },
         child: const Text(
           "Add Images",
@@ -311,6 +355,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                   ),
                 );
                 if (date != null) {
+                  // ignore: use_build_context_synchronously
                   final time = await showTimePicker(
                     context: context,
                     initialTime:
@@ -362,23 +407,6 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     }
   }
 
-  void sendMessage() {
-    Messaging.send(
-      title: "New Pooja named ${nameCtrl.text.trim()} by ${byCtrl.text.trim()}",
-      body: 'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(on)}',
-    ).then((value) {
-      Navigator.pop(context);
-      if (value.statusCode == 200) {
-        successDialog(context);
-      } else {
-        errorDialog(
-          context,
-          "Something went wrong! Message not sent to the members.",
-        );
-      }
-    });
-  }
-
   Future<void> addPooja() async {
     final Pooja pooja = Pooja(
       DatabaseManager.getUniqueId(),
@@ -391,7 +419,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       if (upImages.isNotEmpty) {
         await uploadImages(pooja);
       }
-      sendMessage();
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
     }).onError((error, stackTrace) {
       Navigator.pop(context);
       errorDialog(

@@ -9,15 +9,26 @@ import 'package:loga_parameshwari/services/auth_services.dart';
 class DatabaseManager {
   String tag = "DatabaseManager";
   static FirebaseFirestore _db;
+  FirebaseFirestore get db => _db;
   static const String POOJA_COLLECTION_NAME = 'Pooja';
   static const String IMAGE_COLLECTION_NAME = 'Image';
   static const String USER_COLLECTION_NAME = 'User';
   static const String NOTICE_COLLECTION_NAME = 'Notice';
   static const String DONATION_COLLECTION_NAME = 'DonationDetails';
+  static const String CONTACT_COLLECTION_NAME = 'Contact';
+  static const String SPECIAL_DATES_COLLECTION_NAME = 'SpecialDates';
 
   static Future<void> init() async {
     _db ??= FirebaseFirestore.instance;
   }
+
+  static Stream<QuerySnapshot> getContactInfo() =>
+      _db.collection(CONTACT_COLLECTION_NAME).snapshots();
+
+  static Stream<DocumentSnapshot> getCurrentMonthSpecialDates() => _db
+      .collection(SPECIAL_DATES_COLLECTION_NAME)
+      .doc("${DateTime.now().year}${DateTime.now().month}")
+      .snapshots();
 
   static Stream<DocumentSnapshot> getAccountDetails() =>
       _db.collection(DONATION_COLLECTION_NAME).doc('account').snapshots();
@@ -36,6 +47,12 @@ class DatabaseManager {
       .orderBy('on', descending: true)
       .snapshots();
 
+  static Future<QuerySnapshot> getLimitedPooja(int limit) => _db
+      .collection(POOJA_COLLECTION_NAME)
+      .orderBy('on', descending: true)
+      .limit(limit)
+      .get();
+
   static Stream<QuerySnapshot> getImageStreamFromPoojaId(String poojaId) => _db
       .collection(IMAGE_COLLECTION_NAME)
       .where('pooja', isEqualTo: poojaId)
@@ -44,6 +61,12 @@ class DatabaseManager {
   static Future<QuerySnapshot> getUserInfo() => _db
       .collection(USER_COLLECTION_NAME)
       .where('id', isEqualTo: AuthService.getUserNumber())
+      .get();
+
+  static Future<QuerySnapshot> getUserInfoById(String id) => _db
+      .collection(USER_COLLECTION_NAME)
+      .where('id', isEqualTo: id)
+      .limit(1)
       .get();
 
   static Stream<DocumentSnapshot> getImageById(String id) =>

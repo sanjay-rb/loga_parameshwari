@@ -32,7 +32,6 @@ class Deeplink {
         .listen((PendingDynamicLinkData initialLink) async {
       final String id = initialLink.link.queryParameters['id'];
       DatabaseManager.getPoojaByID(id).then((Pooja pooja) {
-        debugPrint("pooja ${pooja.toJson()}");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -42,7 +41,7 @@ class Deeplink {
       });
     }).onError((error) {
       // Handle errors
-      debugPrint("DEEPLINK ERROR ::: ${error.toString()}");
+      debugPrint("ERROR ::: DEEPLINKING $error");
     });
 
     // App is terminated
@@ -62,7 +61,7 @@ class Deeplink {
       }
     }).onError((error, stackTrace) {
       // Handle errors
-      debugPrint("DEEPLINK ERROR ::: ${error.toString()}");
+      debugPrint("ERROR ::: DEEPLINKING $error");
     });
   }
 }

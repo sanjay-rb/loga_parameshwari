@@ -7,7 +7,6 @@ import 'package:loga_parameshwari/screens/edit_pooja_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
-import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:share/share.dart';
 
@@ -29,11 +28,7 @@ class HeaderDetails extends StatelessWidget {
   }
 
   void notificationEvent(BuildContext context, Pooja pooja) {
-    Messaging.send(
-      title: "Reminder to ${pooja.name}",
-      body:
-          'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
-    );
+    // TODO : Notification
   }
 
   Future<void> deleteEvent(BuildContext context, Pooja pooja) async {
@@ -71,19 +66,12 @@ class HeaderDetails extends StatelessWidget {
           .child(year)
           .child(month)
           .child('${pooja.name}+${pooja.id}');
-      debugPrint("rootPath.name ${rootPath.name}");
       final ListResult storeList = await rootPath.listAll();
-      debugPrint("storeList ${storeList.items}");
       for (final Reference item in storeList.items) {
         item.delete();
       }
 
       DatabaseManager.deletePooja(pooja).then((value) {
-        Messaging.send(
-          title: "Pooja ${pooja.name} is Deleted",
-          body:
-              'on ${DateFormat("dd-MM-yyyy (hh:mm aaa)").format(pooja.on.toDate())}',
-        );
         Navigator.pop(context);
       });
     }

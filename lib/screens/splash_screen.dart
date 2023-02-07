@@ -7,10 +7,12 @@ import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/home_screen/home_screen.dart';
 import 'package:loga_parameshwari/screens/login_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -38,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> setUp() async {
+    await requestPermission();
     await Firebase.initializeApp(); // 1....
     _loadProgress(1, "Loading....");
     await Messaging.init(); // 2....
@@ -70,46 +73,58 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  Future<bool> requestPermission() async {
+    if ((await Permission.manageExternalStorage.request().isGranted) &&
+        (await Permission.camera.request().isGranted) &&
+        (await Permission.notification.request().isGranted) &&
+        (await Permission.photos.request().isGranted)) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            width: Responsiveness.screenSize.width,
-            height: Responsiveness.screenSize.height,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'images/god.webp',
-                  fit: BoxFit.cover,
-                ),
-                const ColoredBox(
-                  color: Colors.black26,
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: Responsiveness.height(150),
-            left: Responsiveness.screenSize.width * 0.5 -
-                (Responsiveness.widthRatio(0.5) * 0.5),
-            child: SizedBox(
-              width: Responsiveness.widthRatio(0.5),
-              child: Column(
+    return IsConnected(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              width: Responsiveness.screenSize.width,
+              height: Responsiveness.screenSize.height,
+              child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  LinearProgressIndicator(value: _progress),
-                  Text(
-                    _progressText,
-                    style: const TextStyle(fontSize: 10, color: Colors.white),
-                    textAlign: TextAlign.center,
+                  Image.asset(
+                    'images/god.webp',
+                    fit: BoxFit.cover,
+                  ),
+                  const ColoredBox(
+                    color: Colors.black26,
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: Responsiveness.height(150),
+              left: Responsiveness.screenSize.width * 0.5 -
+                  (Responsiveness.widthRatio(0.5) * 0.5),
+              child: SizedBox(
+                width: Responsiveness.widthRatio(0.5),
+                child: Column(
+                  children: [
+                    LinearProgressIndicator(value: _progress),
+                    Text(
+                      _progressText,
+                      style: const TextStyle(fontSize: 10, color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
