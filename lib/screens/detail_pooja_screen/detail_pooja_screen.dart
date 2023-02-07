@@ -21,7 +21,7 @@ class DetailPooja extends StatelessWidget {
               children: [
                 HeaderDetails(pooja: pooja),
                 const Text(
-                  "Double tap to like ❤️",
+                  "Double tap to like ❤️ | Click on like ❤️ to view",
                   style: TextStyle(fontSize: 10, color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),

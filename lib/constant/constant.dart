@@ -23,8 +23,6 @@ class TextDesign {
     overflow: TextOverflow.fade,
   );
 
-  static const msgKey =
-      "AAAAZCPfm4I:APA91bHfQkiVDflbWTHDlf6tZPASoa41uKXQkxiOjRSpCezcNdiiiMLT1tIvNOGBbUvqckjSq8mE2pMHURP8Qeo8Nm5QkYwtrfe0pW7hbhJ9dwcWzLuTTcLVw9b5K1SIqHUEusREdoN4";
   static String getMessageText(Pooja pooja, String link) =>
       "Hi, your invited to *${pooja.name.trim()}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by.trim()}*.\n\nWe request your gracious presence on this auspicious occasion.\n$link\nClick the link for further information.";
 }
@@ -49,10 +47,12 @@ class ImagesAndUrls {
   static const gif3D = "https://sanjay-rb.github.io/ScreenShots/temple_3d.gif";
   static const godImg =
       "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fgod.webp?alt=media&token=af566403-fd35-47c1-9a64-8a676453d77d";
+  static const notificationBanner =
+      "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fbackground.png?alt=media&token=d1316d19-895c-4e0a-a141-1a1fbf4f1ab7";
 }
 
-// ignore: avoid_classes_with_only_static_members
 class GKey {
+  const GKey();
   static final recentPoojaKey = GlobalKey(debugLabel: 'recentPoojaKey');
   static final addPoojaKey = GlobalKey(debugLabel: 'addPoojaKey');
   static final historyPoojaKey = GlobalKey(debugLabel: 'historyPoojaKey');

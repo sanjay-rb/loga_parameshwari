@@ -346,28 +346,25 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
               },
               format: DateFormat("dd-MM-yyyy hh:mm aaa"),
               onShowPicker: (context, currentValue) async {
-                showDatePicker(
+                final date = await showDatePicker(
                   context: context,
                   firstDate: DateTime.now(),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime.now().add(
                     const Duration(days: 365 * 3),
                   ),
-                ).then((date) {
-                  if (date != null) {
-                    showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                        currentValue ?? DateTime.now(),
-                      ),
-                    ).then((time) {
-                      return DateTimeField.combine(date, time);
-                    });
-                  } else {
-                    return currentValue;
-                  }
-                });
-                return currentValue;
+                );
+                if (date != null) {
+                  // ignore: use_build_context_synchronously
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime:
+                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                  );
+                  return DateTimeField.combine(date, time);
+                } else {
+                  return currentValue;
+                }
               },
             ),
           ],
@@ -422,6 +419,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       if (upImages.isNotEmpty) {
         await uploadImages(pooja);
       }
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
     }).onError((error, stackTrace) {
       Navigator.pop(context);
       errorDialog(

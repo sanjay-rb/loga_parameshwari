@@ -31,20 +31,26 @@ exports.poojaNotification = functions
 
         var notificationTitle = "";
         var notificationSubTitle = "";
+        var notificationOnClickData = "";
+
+        const date = `${data['on'].toDate().toDateString()} ${data['on'].toDate().toLocaleTimeString()}`;
 
         if (isCreation) {
-            notificationHead = "Pooja Created";
-            notificationSubTitle = `Created : ${data['name']} on ${data['on']}`;
+            notificationTitle = "Pooja Created";
+            notificationSubTitle = `${data['name']} is scheduled on ${date}`;
+            notificationOnClickData = `created:${data['id']}`;
         }
 
         if (isUpdation) {
-            notificationHead = "Pooja Updated";
-            notificationSubTitle = `Updated : ${data['name']} on ${data['on']}`;
+            notificationTitle = "Pooja Updated";
+            notificationSubTitle = `${data['name']} is scheduled on ${date} having some updated`;
+            notificationOnClickData = `updated:${data['id']}`;
         }
 
         if (isDeletion) {
-            notificationHead = "Pooja Deleted";
-            notificationSubTitle = `Deleted : ${data['name']} on ${data['on']}`;
+            notificationTitle = "Pooja Deleted";
+            notificationSubTitle = `${data['name']} is scheduled on ${date} got deleted!`;
+            notificationOnClickData = `deleted:${data['id']}`;
         }
 
         const payload = {
@@ -52,6 +58,7 @@ exports.poojaNotification = functions
                 id: data.id,
                 title: notificationTitle,
                 subtitle: notificationSubTitle,
+                onClickData: notificationOnClickData,
             },
         };
 
@@ -60,6 +67,10 @@ exports.poojaNotification = functions
             priority: "high",
         }
 
+        functions.logger.log(`Payload for Pooja Id : ${context.params.docID}`, payload);
+        functions.logger.log(`Options for Pooja Id : ${context.params.docID}`, options);
+
+        // const response = "";
         const response = await admin
             .messaging()
             .sendToTopic("com.sanjoke.loga_parameshwari", payload, options)
@@ -70,6 +81,7 @@ exports.poojaNotification = functions
                 functions.logger.error("Error sending message:", errorMsg);
                 return errorMsg;
             });
+
         return response;
     });
 

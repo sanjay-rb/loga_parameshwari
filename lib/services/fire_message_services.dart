@@ -2,8 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
 
 class Messaging {
   String tag = "Messaging";
@@ -19,6 +24,16 @@ class Messaging {
       StreamController<String>.broadcast();
 
   static Future<void> init() async {
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: false,
+      criticalAlert: true,
+      provisional: false,
+      sound: true,
+    );
+
     await FirebaseMessaging.instance.subscribeToTopic(channelID);
 
     final bool areNotificationsEnabled =
@@ -68,12 +83,28 @@ class Messaging {
     Messaging.showLocalNotification(message);
   }
 
+  static void onSelectNotification(BuildContext context, String payload) {
+    final String id = payload.split(':')[1];
+    final String type = payload.split(':')[0];
+
+    if (type == "deleted") {
+      return;
+    }
+
+    DatabaseManager.getPoojaByID(id).then((Pooja pooja) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailPooja(id: id, pooja: pooja),
+        ),
+      );
+    });
+  }
+
   static Future<void> showLocalNotification(RemoteMessage message) async {
     final Map notification = message.data;
     final http.Response response = await http.get(
-      Uri.parse(
-        "https://firebasestorage.googleapis.com/v0/b/loga-parameshwari.appspot.com/o/static%2Fbackground.png?alt=media&token=d1316d19-895c-4e0a-a141-1a1fbf4f1ab7",
-      ),
+      Uri.parse(ImagesAndUrls.notificationBanner),
     );
     final BigPictureStyleInformation bigPictureStyleInformation =
         BigPictureStyleInformation(
@@ -88,6 +119,7 @@ class Messaging {
         ),
       ),
     );
+
     androidPlugin.show(
       DateTime.now().microsecond,
       notification['title'].toString(),
@@ -98,11 +130,11 @@ class Messaging {
         priority: Priority.max,
         styleInformation: bigPictureStyleInformation,
         category: AndroidNotificationCategory.message,
-        visibility: NotificationVisibility.private,
+        visibility: NotificationVisibility.public,
         icon: '@mipmap/ic_launcher',
         largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
       ),
-      payload: notification['id'].toString(),
+      payload: notification['onClickData'].toString(),
     );
   }
 }

@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
 class UserModel {
-  final collectionName = "User";
+  static const collectionName = "User";
   String id;
   String uid;
   String name;
   bool isverified;
   bool isonline;
 
-  UserModel({this.id, this.uid, this.name, this.isverified, this.isonline});
+  UserModel({
+    this.id,
+    this.uid,
+    this.name,
+    @required this.isverified,
+    @required this.isonline,
+  });
 
-  Stream<List<UserModel>> getOnlineUsers() {
+  static Stream<List<UserModel>> getOnlineUsers() {
     return DatabaseManager()
         .db
         .collection(collectionName)
@@ -24,7 +30,6 @@ class UserModel {
   }
 
   UserModel.fromJson(QueryDocumentSnapshot<Object> json) {
-    debugPrint("${json.data()}");
     final Map data = json.data() as Map;
     id = json.get('id') as String;
     uid = json.get('uid') as String;

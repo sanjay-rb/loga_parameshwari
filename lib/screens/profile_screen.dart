@@ -136,6 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     id: userModel.id,
                                     uid: userModel.uid,
                                     name: _userNameCtrl.text.trim(),
+                                    isverified: userModel.isverified,
+                                    isonline: userModel.isonline,
                                   );
                                   await FirebaseAuth.instance.currentUser
                                       .updateDisplayName(

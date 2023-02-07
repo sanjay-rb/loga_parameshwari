@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
@@ -15,6 +17,7 @@ import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.d
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
+import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -109,6 +112,24 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         Deeplink().isLaunchByLink(context);
       }
+    });
+    FirebaseMessaging.onMessage.listen(
+      Messaging.backgroundAndTerminatedMessageHandler,
+    );
+
+    Messaging.androidPlugin
+        .getNotificationAppLaunchDetails()
+        .then((NotificationAppLaunchDetails value) {
+      if (value.didNotificationLaunchApp) {
+        Messaging.onSelectNotification(
+          context,
+          value.notificationResponse.payload,
+        );
+      }
+    });
+
+    Messaging.selectNotificationStream.stream.listen((String payload) async {
+      Messaging.onSelectNotification(context, payload);
     });
   }
 

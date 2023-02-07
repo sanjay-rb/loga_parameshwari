@@ -19,16 +19,6 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
-  FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: true,
-    badge: true,
-    carPlay: false,
-    criticalAlert: true,
-    provisional: false,
-    sound: true,
-  );
-  FirebaseMessaging.instance.subscribeToTopic(Messaging.channelID);
 
   Messaging.init();
 

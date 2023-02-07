@@ -47,7 +47,7 @@ class HeadComponent extends StatelessWidget {
           },
         ),
         StreamBuilder<List<UserModel>>(
-          stream: UserModel().getOnlineUsers(),
+          stream: UserModel.getOnlineUsers(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Text(
