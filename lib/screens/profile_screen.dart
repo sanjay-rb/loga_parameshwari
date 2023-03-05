@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,127 +22,146 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: FutureBuilder(
-            future: DatabaseManager.getUserInfo(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                final UserModel userModel =
-                    UserModel.fromJson(snapshot.data.docs.first);
-                _userNameCtrl.text = userModel.name;
-                return Form(
-                  key: userUpdateFormKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: Responsiveness.height(10),
-                        ),
-                        const Text(
-                          "User Profile",
-                          style: TextDesign.headText,
-                        ),
-                        ...[
+    return IsConnected(
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FutureBuilder(
+              future: DatabaseManager.getUserInfo(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  final UserModel userModel =
+                      UserModel.fromJson(snapshot.data.docs.first);
+                  _userNameCtrl.text = userModel.name;
+                  return Form(
+                    key: userUpdateFormKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           SizedBox(
                             height: Responsiveness.height(10),
                           ),
-                          const Text("Name"),
-                          Divider(
-                            endIndent: Responsiveness.widthRatio(0.7),
-                            color: Colors.black,
+                          const Text(
+                            "User Profile",
+                            style: TextDesign.headText,
                           ),
-                          ColoredBox(
-                            color: Colors.grey.shade300,
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Please enter your name here.";
+                          ...[
+                            SizedBox(
+                              height: Responsiveness.height(10),
+                            ),
+                            const Text("Name"),
+                            Divider(
+                              endIndent: Responsiveness.widthRatio(0.7),
+                              color: Colors.black,
+                            ),
+                            ColoredBox(
+                              color: Colors.grey.shade300,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter your name here.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: _userNameCtrl,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                          ...[
+                            SizedBox(
+                              height: Responsiveness.height(10),
+                            ),
+                            const Text("Number (Can't edit number)"),
+                            Divider(
+                              endIndent: Responsiveness.widthRatio(0.7),
+                              color: Colors.black,
+                            ),
+                            ColoredBox(
+                              color: Colors.grey.shade300,
+                              child: TextFormField(
+                                initialValue: userModel.id,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                                enabled: false,
+                              ),
+                            ),
+                          ],
+                          ...[
+                            SizedBox(
+                              height: Responsiveness.height(10),
+                            ),
+                            const Text("Can we show app tutorial next time ?"),
+                            Divider(
+                              endIndent: Responsiveness.widthRatio(0.7),
+                              color: Colors.black,
+                            ),
+                            const TutorialToggler(),
+                          ],
+                          SizedBox(
+                            height: Responsiveness.height(20),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                                if (userUpdateFormKey.currentState.validate()) {
+                                  final UserModel newUser = UserModel(
+                                    id: userModel.id,
+                                    uid: userModel.uid,
+                                    name: _userNameCtrl.text.trim(),
+                                    isverified: userModel.isverified,
+                                    isonline: userModel.isonline,
+                                  );
+                                  await FirebaseAuth.instance.currentUser
+                                      .updateDisplayName(
+                                    _userNameCtrl.text.trim(),
+                                  );
+                                  await DatabaseManager.addUser(newUser)
+                                      .then((value) {
+                                    Navigator.pop(context); // for loader
+                                    Navigator.pop(context); // for navigator
+                                  });
                                 } else {
-                                  return null;
+                                  Navigator.pop(context);
                                 }
                               },
-                              controller: _userNameCtrl,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.all(10),
-                              ),
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
+                              child: const Text("OK"),
                             ),
-                          ),
+                          )
                         ],
-                        ...[
-                          SizedBox(
-                            height: Responsiveness.height(10),
-                          ),
-                          const Text("Number (Can't edit number)"),
-                          Divider(
-                            endIndent: Responsiveness.widthRatio(0.7),
-                            color: Colors.black,
-                          ),
-                          ColoredBox(
-                            color: Colors.grey.shade300,
-                            child: TextFormField(
-                              initialValue: userModel.id,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.all(10),
-                              ),
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                              enabled: false,
-                            ),
-                          ),
-                        ],
-                        ...[
-                          SizedBox(
-                            height: Responsiveness.height(10),
-                          ),
-                          const Text("Can we show app tutorial next time ?"),
-                          Divider(
-                            endIndent: Responsiveness.widthRatio(0.7),
-                            color: Colors.black,
-                          ),
-                          const TutorialToggler(),
-                        ],
-                        SizedBox(
-                          height: Responsiveness.height(20),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (userUpdateFormKey.currentState.validate()) {
-                                final UserModel newUser = UserModel(
-                                  id: userModel.id,
-                                  uid: userModel.uid,
-                                  name: _userNameCtrl.text.trim(),
-                                );
-                                await DatabaseManager.addUser(newUser)
-                                    .then((value) {
-                                  Navigator.pop(context);
-                                });
-                              }
-                            },
-                            child: const Text("OK"),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),

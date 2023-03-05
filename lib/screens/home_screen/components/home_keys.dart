@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
@@ -14,29 +13,36 @@ class AddPooja extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
-      child: OpenContainer(
-        closedBuilder: (context, action) => DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: CardContainer.borderRadius,
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                children: const [
-                  Expanded(
-                    child: Icon(Icons.add, size: 50),
-                  ),
-                  Text("Schedule Pooja")
-                ],
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddPoojaScreen(),
+            ),
+          );
+        },
+        child: ColoredBox(
+          color: Colors.white,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: CardContainer.borderRadius,
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  children: const [
+                    Expanded(
+                      child: Icon(Icons.add, size: 50),
+                    ),
+                    Text("Schedule Pooja")
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        openBuilder: (context, action) => const AddPoojaScreen(),
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
       ),
     );
@@ -50,42 +56,49 @@ class HistoryPooja extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
-      child: OpenContainer(
-        closedBuilder: (context, action) => DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: CardContainer.borderRadius,
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CachedNetworkImage(
-                        imageUrl: ImagesAndUrls.historyImg,
-                        fit: BoxFit.contain,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                          child: CircularProgressIndicator(
-                            value: downloadProgress.progress,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HistoryScreen(),
+            ),
+          );
+        },
+        child: ColoredBox(
+          color: Colors.white,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: CardContainer.borderRadius,
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CachedNetworkImage(
+                          imageUrl: ImagesAndUrls.historyImg,
+                          fit: BoxFit.contain,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const Text("History")
-                ],
+                    const Text("History")
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        openBuilder: (context, action) => const HistoryScreen(),
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
       ),
     );

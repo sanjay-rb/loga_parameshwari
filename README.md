@@ -91,3 +91,13 @@
 ## Version : (16) 2.5.8
 - Minor revision : In App Check in Cloud FireStore
 - Minor revision : Deeplink for pooja page
+
+## Version : (17) 2.13.0
+- Minor revision : Visibility of liked people names
+- Minor revision : User online status
+- Minor revision : History page lazy loading
+- Minor revision : User verification for new pooja addition
+- Minor revision : Permission handler
+- Minor revision : Contact cards
+- Minor revision : Special dates (Amavasay, Pournami & Ailyam Pooja Dates)
+- Minor revision : Android notification channel addition
