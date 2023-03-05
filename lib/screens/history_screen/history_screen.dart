@@ -65,13 +65,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> loadPooja() async {
     limit = limit + 10;
+    final List<Pooja> tempPooja = [];
     final QuerySnapshot data = await DatabaseManager.getLimitedPooja(limit);
     for (final QueryDocumentSnapshot element in data.docs) {
       final Pooja pooja = Pooja.fromJson(element);
-      allPooja.add(pooja);
+      tempPooja.add(pooja);
     }
     setState(() {
       isLoading = false;
+      allPooja = tempPooja;
     });
   }
 
