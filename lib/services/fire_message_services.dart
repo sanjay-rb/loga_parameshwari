@@ -12,7 +12,6 @@ import 'package:loga_parameshwari/services/database_manager.dart';
 
 class Messaging {
   String tag = "Messaging";
-  static const bool canNotify = false;
   static const String channelID = "com.sanjoke.loga_parameshwari";
   static const String channelTitle = "LPT Notification";
 
