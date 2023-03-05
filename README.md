@@ -101,3 +101,6 @@
 - Minor revision : Contact cards
 - Minor revision : Special dates (Amavasay, Pournami & Ailyam Pooja Dates)
 - Minor revision : Android notification channel addition
+
+## Version : (18) 2.13.1
+- Bug fix: Removed unwanted permissions
