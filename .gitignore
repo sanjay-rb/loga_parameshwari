@@ -1,6 +1,7 @@
 # My Ignore
 ignore/
 pubspec.lock
+python/loga-parameshwari-firebase-adminsdk.json
 
 # Miscellaneous
 *.class
