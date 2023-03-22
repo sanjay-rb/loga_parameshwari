@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   TutorialCoachMark tutorialCoachMark;
   List<TargetFocus> targets = [];
   final _bottomAppBarHeight = 50.0;
@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
+
     targets.addAll([
       targetFocus(
         "Upcoming Pooja",
@@ -58,7 +59,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ]);
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    final UserModel user =
+        UserModel.fromJson((await DatabaseManager.getUserInfo()).docs.first);
+    if (state == AppLifecycleState.paused) {
+      user.isonline = false;
+      DatabaseManager.addUser(user);
+    } else if (state == AppLifecycleState.resumed) {
+      user.isonline = true;
+      DatabaseManager.addUser(user);
+    }
   }
 
   TargetFocus targetFocus(

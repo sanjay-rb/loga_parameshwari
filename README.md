@@ -104,3 +104,5 @@
 
 ## Version : (18) 2.13.1
 - Bug fix: Removed unwanted permissions
+
+## Version : (19) 2.13.3
