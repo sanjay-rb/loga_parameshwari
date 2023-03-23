@@ -73,13 +73,46 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  Future<bool> requestPermission() async {
-    if ((await Permission.storage.request().isGranted) &&
-        (await Permission.notification.request().isGranted) &&
-        (await Permission.photos.request().isGranted)) {
-      return true;
+  Future<void> requestPermission() async {
+    final List<Permission> permissions = [
+      Permission.storage,
+      Permission.notification
+    ];
+
+    final Map<Permission, PermissionStatus> statuses =
+        await permissions.request();
+
+    for (final Permission permission in permissions) {
+      while (statuses[permission].isDenied ||
+          statuses[permission].isPermanentlyDenied) {
+        if (statuses[permission].isDenied) {
+          statuses[permission] = await permission.request();
+        }
+        if (statuses[permission].isPermanentlyDenied) {
+          final bool isTrue = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Required Permission : $permission"),
+              content: const Text(
+                "We are opening our app settings page, please manually permit required* permissions",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text("Open Settings"),
+                )
+              ],
+            ),
+          );
+          if (isTrue) {
+            await openAppSettings();
+            statuses[permission] = await permission.status;
+          }
+        }
+      }
     }
-    return false;
   }
 
   @override
