@@ -94,21 +94,22 @@ class _SplashScreenState extends State<SplashScreen> {
             builder: (context) => AlertDialog(
               title: Text("Required Permission : $permission"),
               content: const Text(
-                "We are opening our app settings page, please manually permit required* permissions",
+                "As you have not given the required permission to access storage, you are unable to upload images to any pooja.",
               ),
               actions: [
                 TextButton(
                   onPressed: () async {
                     Navigator.pop(context, true);
                   },
-                  child: const Text("Open Settings"),
+                  child: const Text("Continue"),
                 )
               ],
             ),
           );
           if (isTrue) {
-            await openAppSettings();
-            statuses[permission] = await permission.status;
+            // await openAppSettings();
+            // statuses[permission] = await permission.status;
+            statuses[permission] = PermissionStatus.restricted;
           }
         }
       }
