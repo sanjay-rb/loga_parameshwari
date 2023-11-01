@@ -169,13 +169,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
                 child: const Text("OK"),
-              )
+              ),
             ],
           ),
         );
+        return true;
       },
       onFinish: () {
         showDialog(

@@ -2,6 +2,7 @@
 ignore/
 pubspec.lock
 python/loga-parameshwari-firebase-adminsdk.json
+.fvm/flutter_sdk
 
 # Miscellaneous
 *.class
