@@ -2,7 +2,6 @@
 ignore/
 pubspec.lock
 python/loga-parameshwari-firebase-adminsdk.json
-.fvm/flutter_sdk
 
 # Miscellaneous
 *.class
@@ -45,3 +44,6 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# FVM Version Cache
+.fvm/
