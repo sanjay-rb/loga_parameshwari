@@ -1,0 +1,74 @@
+name: Perform CI
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  continuous_integration:
+    name: Continuous Integration
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "11.x"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION }}
+          channel: "stable"
+
+      - name: Get Flutter Dependancy
+        run: flutter pub get
+
+      - name: Check Code Format
+        run: dart format . --set-exit-if-changed
+
+      - name: Analyze Code
+        run: dart analyze .
+      
+      - name: Testing Build Android App
+        run: flutter build apk --release
+
+  notification_success:
+    if: success()
+    needs: [continuous_integration]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Success Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Continuous Integration Completed Successfully!!!
+
+            User: ${{ github.actor }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+
+  notification_failure:
+    if: failure()
+    needs: [continuous_integration]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Failure Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Continuous Integration Failed!!!
+
+            User: ${{ github.actor }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+  
