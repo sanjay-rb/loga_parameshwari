@@ -29,14 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
   String _progressText = "Welcome to Loga Parameshwari Temple App....";
   @override
   void initState() {
-    print("SS");
-
     setUp();
     super.initState();
   }
 
   void _loadProgress(double id, String text) {
-    print(text);
     setState(() {
       _progress = id / _totalPreload;
       _progressText = text;
@@ -80,22 +77,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> requestPermission() async {
     final plugin = DeviceInfoPlugin();
     final android = await plugin.androidInfo;
-    print(android.version.sdkInt);
 
     final List<Permission> permissions = [
       Permission.storage,
       Permission.notification
     ];
-    Map<Permission, PermissionStatus> statuses = {};
-    for(Permission perm in permissions){
-      if(perm == Permission.storage && android.version.sdkInt < 33){
-        PermissionStatus result = await perm.request();
-        print(result);
+    final Map<Permission, PermissionStatus> statuses = {};
+    for (final Permission perm in permissions) {
+      if (perm == Permission.storage && android.version.sdkInt < 33) {
+        final PermissionStatus result = await perm.request();
         statuses[perm] = result;
-      }else{
+      } else {
         statuses[perm] = PermissionStatus.granted;
       }
-
     }
 
     for (final Permission permission in permissions) {
