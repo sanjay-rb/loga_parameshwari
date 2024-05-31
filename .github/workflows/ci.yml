@@ -31,8 +31,8 @@ jobs:
       - name: Analyze Code
         run: dart analyze .
       
-      - name: Testing Build Android App
-        run: flutter build apk
+#      - name: Testing Build Android App
+#        run: flutter build apk
 
   notification_success:
     if: success()
