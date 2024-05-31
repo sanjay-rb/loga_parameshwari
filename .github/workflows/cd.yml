@@ -48,7 +48,7 @@ jobs:
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
 
-  otification_failure:
+  notification_failure:
     if: failure()
     needs: [continuous_deployment]
     runs-on: ubuntu-latest
