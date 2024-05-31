@@ -26,7 +26,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Android App
-        run: flutter build apk --release
+        run: flutter build apk
   
   notification_success:
     if: success()
