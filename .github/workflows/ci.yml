@@ -1,7 +1,7 @@
 name: Perform CI
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   continuous_integration:

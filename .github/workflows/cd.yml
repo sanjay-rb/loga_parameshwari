@@ -1,7 +1,7 @@
 name: Perform CI/CD
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   continuous_deployment:
