@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:share/share.dart';
@@ -12,7 +12,7 @@ class LeafCard extends StatelessWidget {
     @required this.id,
   }) : super(key: key);
 
-  final Pooja pooja;
+  final PoojaModel pooja;
   final String id;
 
   @override

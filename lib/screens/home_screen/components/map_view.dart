@@ -12,8 +12,12 @@ class MapView extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: GestureDetector(
         onTap: () async {
-          if (await canLaunchUrlString(ImagesAndUrls.mapUrl)) {
+          try {
             await launchUrlString(ImagesAndUrls.mapUrl);
+          } catch (e) {
+            if (await canLaunchUrlString(ImagesAndUrls.mapUrl)) {
+              await launchUrlString(ImagesAndUrls.mapUrl);
+            }
           }
         },
         child: DecoratedBox(

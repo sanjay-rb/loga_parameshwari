@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 
 class LeafDate extends StatelessWidget {
   const LeafDate({
@@ -8,7 +8,7 @@ class LeafDate extends StatelessWidget {
     @required this.pooja,
   }) : super(key: key);
 
-  final Pooja pooja;
+  final PoojaModel pooja;
 
   @override
   Widget build(BuildContext context) {

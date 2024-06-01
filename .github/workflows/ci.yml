@@ -30,9 +30,27 @@ jobs:
 
       - name: Analyze Code
         run: dart analyze .
+
+      - name: Decode keystore files
+        run: |
+          echo $KEY_JKS_BASE64 | base64 --decode > key.jks
+          
+          touch key.properties
+          echo "storePassword=$KEY_STORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> key.properties
+          echo "keyAlias=$KEY_ALIAS" >> key.properties
+          echo "storeFile=${{github.workspace}}/key.jks" >> key.properties
+
+          mv key.properties android/key.properties
+        env:
+          KEY_JKS_BASE64: ${{ secrets.KEY_JKS_BASE64 }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS : ${{ secrets.KEY_ALIAS }}
+
       
-#      - name: Testing Build Android App
-#        run: flutter build apk
+      - name: Testing Build Android App
+        run: flutter build apk --release
 
   notification_success:
     if: success()

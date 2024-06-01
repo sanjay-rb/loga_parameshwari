@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/responsive_services.dart';

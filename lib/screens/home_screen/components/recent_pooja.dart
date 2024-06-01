@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/add_pooja_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -25,7 +25,8 @@ class RecentPooja extends StatelessWidget {
             );
           } else {
             if (snapshot.data.docs.isNotEmpty) {
-              final Pooja next = Pooja.fromJson(snapshot.data.docs.first);
+              final PoojaModel next =
+                  PoojaModel.fromJson(snapshot.data.docs.first);
               return RecentPoojaView(next: next);
             } else {
               return const RecentPoojaView(next: null);
@@ -42,7 +43,7 @@ class RecentPoojaView extends StatelessWidget {
     Key key,
     @required this.next,
   }) : super(key: key);
-  final Pooja next;
+  final PoojaModel next;
   @override
   Widget build(BuildContext context) {
     return Column(

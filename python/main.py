@@ -1,3 +1,4 @@
+from venv import logger
 import firebase_admin
 from firebase_admin import credentials, firestore
 import pandas as pd
@@ -16,7 +17,7 @@ data = {
 # Backup
 source = db.collection(COLLECTION_NAME)
 for doc in source.stream():
-    print("Reading :::", doc.id)
+    logger.debug("Reading :::", doc.id)
     doc_data = doc.to_dict()
     try:
         data['date'].append(date.fromtimestamp(doc_data['date'].timestamp()))
@@ -26,12 +27,12 @@ for doc in source.stream():
 
 df = pd.DataFrame(data=data)
 csv_file=r"csv\SpecialDates.csv"
-print("Generating CSV under",csv_file)
+logger.debug("Generating CSV under",csv_file)
 df.to_csv(csv_file, index=False)
 
 # Delete Entry
 for doc in source.stream():
-    print("Deleting :::", doc.id)
+    logger.debug("Deleting :::", doc.id)
     db.collection(COLLECTION_NAME).document(doc.id).delete()
 
 # Write
@@ -50,5 +51,5 @@ for rid in range(df.shape[0]):
         else:
             w[col[cid]] = datetime.strptime(df.iloc[rid, cid], '%d-%m-%Y')
     id = str(datetime.now().strftime('%Y%m%d%H%M%S%f') )
-    print("Writeing :::", id)
+    logger.debug("Writeing :::", id)
     target.document(id).set(w)

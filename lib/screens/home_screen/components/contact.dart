@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/contact.dart';
+import 'package:loga_parameshwari/model/contact_model.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/screens/auth_error_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -102,7 +103,7 @@ class AuthService {
         signIn(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        debugPrint("ERROR ::: verificationFailed: (FirebaseAuthException $e)");
+        logger.e("ERROR ::: verificationFailed: (FirebaseAuthException $e)");
       },
       codeSent: (String verificationId, int resendToken) async {
         verificationId = verificationId;

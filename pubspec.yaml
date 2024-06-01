@@ -30,6 +30,7 @@ dependencies:
       url: https://github.com/sanjay-rb/flutter_packages.git
       path: in_app_update
   intl: ^0.17.0
+  logger: ^2.3.0
   multi_image_picker: ^4.8.1
   permission_handler: ^10.2.0
   provider: ^5.0.0

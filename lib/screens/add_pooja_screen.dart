@@ -3,9 +3,9 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loga_parameshwari/model/image.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/model/image_model.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -371,7 +371,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
         ),
       );
 
-  Future<void> uploadImages(Pooja pooja) async {
+  Future<void> uploadImages(PoojaModel pooja) async {
     final year = DateFormat("yyyy").format(pooja.on.toDate());
     final month = DateFormat("MMMM").format(pooja.on.toDate());
     final Reference rootPath =
@@ -408,7 +408,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
   }
 
   Future<void> addPooja() async {
-    final Pooja pooja = Pooja(
+    final PoojaModel pooja = PoojaModel(
       DatabaseManager.getUniqueId(),
       nameCtrl.text.trim(),
       byCtrl.text.trim(),

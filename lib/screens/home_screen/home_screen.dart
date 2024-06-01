@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/contact.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';

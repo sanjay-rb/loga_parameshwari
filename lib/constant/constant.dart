@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
+import 'package:logger/logger.dart';
 
 class TextDesign {
   const TextDesign();
@@ -23,7 +24,7 @@ class TextDesign {
     overflow: TextOverflow.fade,
   );
 
-  static String getMessageText(Pooja pooja, String link) =>
+  static String getMessageText(PoojaModel pooja, String link) =>
       "Hi, your invited to *${pooja.name.trim()}*\non *${DateFormat("dd MMMM yyyy (hh:mm aaa)").format(pooja.on.toDate())}*\nby *${pooja.by.trim()}*.\n\nWe request your gracious presence on this auspicious occasion.\n$link\nClick the link for further information.";
 }
 
@@ -63,3 +64,6 @@ class GKey {
 
 // ignore: constant_identifier_names
 const SHARE_PREF_TUTORIAL = 'tutorial';
+
+// Global Logger Variable
+Logger logger = Logger();

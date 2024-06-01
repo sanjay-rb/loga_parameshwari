@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/special_dates_model.dart';
 import 'package:loga_parameshwari/screens/home_screen/home_screen.dart';
 import 'package:loga_parameshwari/screens/login_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
@@ -24,7 +25,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _progress = 0.0;
-  final double _totalPreload = 8;
+  final double _totalPreload = 10;
 
   String _progressText = "Welcome to Loga Parameshwari Temple App....";
   @override
@@ -41,25 +42,25 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> setUp() async {
+    _loadProgress(1, "Requesting Permissions....");
     await requestPermission();
-    await Firebase.initializeApp(); // 1....
-    _loadProgress(1, "Loading....");
-    await Messaging.init(); // 2....
-    _loadProgress(2, "Messaging Connected....");
-    await DatabaseManager.init(); // 3....
-    _loadProgress(3, "Data Fetched....");
-    await AuthService.init(); // 4....
-    _loadProgress(4, "Authorization Checked....");
-    Responsiveness.init(MediaQuery.of(context).size); // 5....
-    _loadProgress(5, "Loading....");
-    await InAppUpdate.init(); // 6....
-    _loadProgress(6, "App Update Started....");
-    await InAppUpdate.checkUpdate(
-      context,
-      ImagesAndUrls.googlePlayLink,
-    ); // 7....
-    _loadProgress(7, "App Update Checked....");
-    _loadProgress(8, "Ads Loaded....");
+    _loadProgress(2, "Initializing Database....");
+    await Firebase.initializeApp();
+    _loadProgress(3, "Initializing Messages....");
+    await Messaging.init();
+    _loadProgress(4, "Initializing Local Database....");
+    await DatabaseManager.init();
+    _loadProgress(5, "Initializing Auth....");
+    await AuthService.init();
+    _loadProgress(6, "Initializing Responsiveness....");
+    Responsiveness.init(MediaQuery.of(context).size);
+    _loadProgress(7, "Initializing In App Update....");
+    await InAppUpdate.init();
+    _loadProgress(8, "Checking for new versions....");
+    await InAppUpdate.checkUpdate(context, ImagesAndUrls.googlePlayLink);
+    _loadProgress(9, "Updating Special Poojas....");
+    await SpecialDatesModel().updatePoojas();
+    _loadProgress(10, "App ready to launch....");
 
     if (_progress.toInt() == 1) {
       Navigator.pushReplacement(

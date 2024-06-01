@@ -1,13 +1,14 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
 class Deeplink {
   // https://logaparameshwaritemple.page.link
 
-  Future<String> createNewDeeplink(Pooja pooja) async {
+  Future<String> createNewDeeplink(PoojaModel pooja) async {
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse(
         "https://logaparameshwaritemple.page.link/pooja?id=${pooja.id}",
@@ -31,7 +32,7 @@ class Deeplink {
     FirebaseDynamicLinks.instance.onLink
         .listen((PendingDynamicLinkData initialLink) async {
       final String id = initialLink.link.queryParameters['id'];
-      DatabaseManager.getPoojaByID(id).then((Pooja pooja) {
+      DatabaseManager.getPoojaByID(id).then((PoojaModel pooja) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -41,7 +42,7 @@ class Deeplink {
       });
     }).onError((error) {
       // Handle errors
-      debugPrint("ERROR ::: DEEPLINKING $error");
+      logger.e("ERROR ::: DEEPLINKING $error");
     });
 
     // App is terminated
@@ -50,7 +51,7 @@ class Deeplink {
         .then((PendingDynamicLinkData initialLink) {
       if (initialLink != null) {
         final String id = initialLink.link.queryParameters['id'];
-        DatabaseManager.getPoojaByID(id).then((Pooja pooja) {
+        DatabaseManager.getPoojaByID(id).then((PoojaModel pooja) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -61,7 +62,7 @@ class Deeplink {
       }
     }).onError((error, stackTrace) {
       // Handle errors
-      debugPrint("ERROR ::: DEEPLINKING $error");
+      logger.e("ERROR ::: DEEPLINKING $error");
     });
   }
 }

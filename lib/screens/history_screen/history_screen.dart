@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/tree_leaf.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -18,7 +18,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   TutorialCoachMark tutorialCoachMark;
   List<TargetFocus> targets = [];
-  List<Pooja> allPooja = [];
+  List<PoojaModel> allPooja = [];
   ScrollController controller;
   int limit = 10;
   bool isLoading = true;
@@ -36,7 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     controller = ScrollController(
       initialScrollOffset: (limit + 1) * 50.0,
     )..addListener(handleScrolling);
-    final data = allPooja.where((Pooja pooja) {
+    final data = allPooja.where((PoojaModel pooja) {
       return pooja.on.toDate().compareTo(DateTime.now()) == 1;
     });
     var moveTo = 0.0;
@@ -65,10 +65,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> loadPooja() async {
     limit = limit + 10;
-    final List<Pooja> tempPooja = [];
+    final List<PoojaModel> tempPooja = [];
     final QuerySnapshot data = await DatabaseManager.getLimitedPooja(limit);
     for (final QueryDocumentSnapshot element in data.docs) {
-      final Pooja pooja = Pooja.fromJson(element);
+      final PoojaModel pooja = PoojaModel.fromJson(element);
       tempPooja.add(pooja);
     }
     setState(() {
