@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 
 class HeadComponent extends StatelessWidget {
   const HeadComponent({Key key}) : super(key: key);

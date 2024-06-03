@@ -1,8 +1,8 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loga_parameshwari/model/image.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/image_model.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -12,7 +12,7 @@ class AddImageButton extends StatelessWidget {
     Key key,
     this.pooja,
   }) : super(key: key);
-  final Pooja pooja;
+  final PoojaModel pooja;
 
   @override
   Widget build(BuildContext context) {

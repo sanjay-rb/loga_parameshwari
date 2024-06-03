@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/components/add_image_btn.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/components/header_details.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/components/image_grid_viewer.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 
 class DetailPooja extends StatelessWidget {
-  final Pooja pooja;
+  final PoojaModel pooja;
   final String id;
   const DetailPooja({this.pooja, this.id});
   @override

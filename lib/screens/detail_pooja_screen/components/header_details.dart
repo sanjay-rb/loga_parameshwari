@@ -2,7 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/edit_pooja_screen.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
@@ -16,10 +16,10 @@ class HeaderDetails extends StatelessWidget {
     this.pooja,
   }) : super(key: key);
 
-  final Pooja pooja;
+  final PoojaModel pooja;
   bool isMyPooja() => pooja.user == AuthService.getUserNumber();
 
-  void editEvent(BuildContext context, Pooja pooja) {
+  void editEvent(BuildContext context, PoojaModel pooja) {
     Navigator.of(context).pushReplacement(
       NavigationAnimationService.fadePageRoute(
         enterPage: EditPoojaScreen(toEditPooja: pooja),
@@ -27,11 +27,11 @@ class HeaderDetails extends StatelessWidget {
     );
   }
 
-  void notificationEvent(BuildContext context, Pooja pooja) {
+  void notificationEvent(BuildContext context, PoojaModel pooja) {
     // TODO : Notification
   }
 
-  Future<void> deleteEvent(BuildContext context, Pooja pooja) async {
+  Future<void> deleteEvent(BuildContext context, PoojaModel pooja) async {
     final bool boolVal = await showDialog(
       context: context,
       builder: (context) => AlertDialog(

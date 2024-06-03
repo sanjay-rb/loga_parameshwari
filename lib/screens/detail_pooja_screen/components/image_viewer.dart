@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:loga_parameshwari/model/image.dart';
+import 'package:loga_parameshwari/model/image_model.dart';
 
 class ImageFullView extends StatefulWidget {
   const ImageFullView({Key key, this.id, this.imageList}) : super(key: key);

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Pooja {
+class PoojaModel {
   String id;
   String name;
   String by;
   Timestamp on;
   String user;
 
-  Pooja(this.id, this.name, this.by, this.on, this.user);
+  PoojaModel(this.id, this.name, this.by, this.on, this.user);
 
-  Pooja.fromJson(DocumentSnapshot<Object> json) {
+  PoojaModel.fromJson(DocumentSnapshot<Object> json) {
     id = json['id'] as String;
     name = json['name'] as String;
     by = json['by'] as String;

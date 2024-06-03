@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/screens/internet_error_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,7 @@ class ConnectivityService with ChangeNotifier {
         notifyListeners();
       }
     } on PlatformException catch (e) {
-      debugPrint("ERROR ::: Connectivity $e");
+      logger.e("ERROR ::: Connectivity $e");
     }
   }
 

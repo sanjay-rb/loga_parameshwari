@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/leaf_card.dart';
 import 'package:loga_parameshwari/screens/history_screen/components/leaf_date.dart';
 
@@ -12,7 +12,7 @@ class TreeLeaf extends StatelessWidget {
     @required this.id,
   }) : super(key: key);
 
-  final Pooja pooja;
+  final PoojaModel pooja;
   final int index;
   final String id;
   @override

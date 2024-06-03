@@ -1,9 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:loga_parameshwari/model/image.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
-import 'package:loga_parameshwari/model/user.dart';
+import 'package:loga_parameshwari/model/image_model.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
+import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 
 class DatabaseManager {
@@ -82,28 +82,28 @@ class DatabaseManager {
         .set(userModel.toJson());
   }
 
-  static Future<Pooja> getPoojaByID(String id) async {
+  static Future<PoojaModel> getPoojaByID(String id) async {
     final DocumentSnapshot snapshot =
         await _db.collection(POOJA_COLLECTION_NAME).doc(id).get();
-    final Pooja pooja = Pooja.fromJson(snapshot);
+    final PoojaModel pooja = PoojaModel.fromJson(snapshot);
     return pooja;
   }
 
-  static Future<void> addPooja(Pooja pooja) async {
+  static Future<void> addPooja(PoojaModel pooja) async {
     await _db
         .collection(POOJA_COLLECTION_NAME)
         .doc(pooja.id)
         .set(pooja.toJson());
   }
 
-  static Future<void> updatePooja(Pooja pooja) async {
+  static Future<void> updatePooja(PoojaModel pooja) async {
     await _db
         .collection(POOJA_COLLECTION_NAME)
         .doc(pooja.id)
         .update(pooja.toJson());
   }
 
-  static Future<void> deletePooja(Pooja pooja) async {
+  static Future<void> deletePooja(PoojaModel pooja) async {
     await _db.collection(POOJA_COLLECTION_NAME).doc(pooja.id).delete();
     await deleteImage(pooja);
   }
@@ -115,7 +115,7 @@ class DatabaseManager {
         .set(image.toJson());
   }
 
-  static Future<void> deleteImage(Pooja pooja) async {
+  static Future<void> deleteImage(PoojaModel pooja) async {
     final QuerySnapshot data = await _db
         .collection(IMAGE_COLLECTION_NAME)
         .where('pooja', isEqualTo: pooja.id)

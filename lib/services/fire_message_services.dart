@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:loga_parameshwari/constant/constant.dart';
-import 'package:loga_parameshwari/model/pooja.dart';
+import 'package:loga_parameshwari/model/pooja_model.dart';
 import 'package:loga_parameshwari/screens/detail_pooja_screen/detail_pooja_screen.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -90,7 +90,7 @@ class Messaging {
       return;
     }
 
-    DatabaseManager.getPoojaByID(id).then((Pooja pooja) {
+    DatabaseManager.getPoojaByID(id).then((PoojaModel pooja) {
       Navigator.push(
         context,
         MaterialPageRoute(
