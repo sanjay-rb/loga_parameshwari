@@ -1,7 +1,8 @@
-name: Perform CI/CD
+name: Perform CD
 on:
   push:
-    branches: [master]
+    tags:
+      - '*'
 
 jobs:
   continuous_deployment:
@@ -44,13 +45,13 @@ jobs:
 
       
       - name: Build Android App
-        run: flutter build apk --release
+        run: flutter build appbundle --release
       
       - name: Upload apk to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/app/outputs/flutter-apk/app-release.apk
+          file: build/app/outputs/bundle/release/app-release.aab
           overwrite: true
 
   notification_success:

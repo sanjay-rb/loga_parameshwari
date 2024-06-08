@@ -106,3 +106,12 @@
 - Bug fix: Removed unwanted permissions
 
 ## Version : (19) 2.13.3
+- Google Play Policy Fix
+
+## Version : 20 (2.13.4)
+- Google Play Policy Fix
+
+## Version : 21 (2.13.7)
+- Bug fix: Permission issue fixed on storage
+- Minor revision : Updated securiy update on cloud functions
+- Minor revision : Updated special dates logic, map click
