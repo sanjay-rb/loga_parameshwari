@@ -36,38 +36,38 @@
  - User Data in Firestore & Create and connect AdMob
  - User profile page
 
-## Version : 1 (1.0.0)
+## Version : 1.0.0+1
 - Initial version of the app
 
-## Version : 3 (1.5.3)
+## Version : 1.5.3+3
 - Replace 3D from local to page
  
-## Version : 4 (1.6.3)
+## Version : 1.6.3+4
 - Reduce application size 
 - Clean View and access
 
-## Version : 6 (1.8.5)
+## Version : 1.8.5+6
 - Complete event management application for the temple.
 - New dynamic link to open the app from a link.
 
-## Version : 7 (1.9.6)
+## Version : 1.9.6+7
 - 1 Minor change & 1 bug fix
 
-## Version : 8 (1.13.7)
+## Version : 1.13.7+8
 - Added Update Info Feature.
 - Added Manual Reminder Feature.
 
-## Version : 10 (2.0.0)
+## Version : 2.0.0+10
 - Added authentication with mobile OTP.  
 - Now you can add an image while scheduling the pooja.  
 - In-app update checked.  
 - New splash screen for preloading information.  
 - New profile page for each user.  
 
-## Version : 12 (2.1.1)
+## Version : 2.1.1+12
 - Notice banner feature addition.
 
-## Version : 13 (2.5.2)
+## Version : 2.5.2+13
 - Bug fix: 3d GIF link updated
 - Minor revision : Photo swipe features
 - Minor revision : Sponsors name list
@@ -75,7 +75,7 @@
 - Minor revision : Update date from the UI by the post creator (Edit Page)
 - Minor revision : App Tutorial 
 
-## Version : (14) 2.5.4
+## Version : 2.5.4+14
 - Bug fix: 3d GIF link updated
 - Bug fix: Notification enable
 - Minor revision : Photo swipe features
@@ -84,15 +84,15 @@
 - Minor revision : Update date from the UI by the post creator (Edit Page)
 - Minor revision : App Tutorial
 
-## Version : (15) 2.5.6
+## Version : 2.5.6+15
 - Bug fix: Image uploading issue
 - Bug fix: Tutorial toggle
 
-## Version : (16) 2.5.8
+## Version : 2.5.8+16
 - Minor revision : In App Check in Cloud FireStore
 - Minor revision : Deeplink for pooja page
 
-## Version : (17) 2.13.0
+## Version : 2.13.0+17
 - Minor revision : Visibility of liked people names
 - Minor revision : User online status
 - Minor revision : History page lazy loading
@@ -102,16 +102,16 @@
 - Minor revision : Special dates (Amavasay, Pournami & Ailyam Pooja Dates)
 - Minor revision : Android notification channel addition
 
-## Version : (18) 2.13.1
+## Version : 2.13.1+18
 - Bug fix: Removed unwanted permissions
 
-## Version : (19) 2.13.3
+## Version : 2.13.3+19
 - Google Play Policy Fix
 
-## Version : 20 (2.13.4)
+## Version : 2.13.4+20
 - Google Play Policy Fix
 
-## Version : 21 (2.13.7)
+## Version : 2.13.7+21
 - Bug fix: Permission issue fixed on storage
 - Minor revision : Updated securiy update on cloud functions
 - Minor revision : Updated special dates logic, map click
