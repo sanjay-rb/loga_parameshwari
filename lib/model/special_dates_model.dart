@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:loga_parameshwari/constant/api.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -77,7 +77,7 @@ class SpecialDatesModel {
       }),
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': API().freeastrologyapi,
+        'x-api-key': dotenv.env['FREE_ASTROLOGY_API'],
       },
     );
     final Map body = jsonDecode(result.body) as Map;
