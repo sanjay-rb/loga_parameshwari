@@ -34,6 +34,8 @@ jobs:
       - name: Decode keystore files
         run: |
           echo $KEY_JKS_BASE64 | base64 --decode > key.jks
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > google-services.json
+          echo $API_DART | base64 --decode > api.dart
           
           touch key.properties
           echo "storePassword=$KEY_STORE_PASSWORD" >> key.properties
@@ -42,11 +44,16 @@ jobs:
           echo "storeFile=${{github.workspace}}/key.jks" >> key.properties
 
           mv key.properties android/key.properties
+          mv google-services.json android/app/google-services.json
+          mv api.dart lib/constant/api.dart
+
         env:
           KEY_JKS_BASE64: ${{ secrets.KEY_JKS_BASE64 }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS : ${{ secrets.KEY_ALIAS }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          API_DART: ${{ secrets.API_DART }}
 
       
       - name: Testing Build Android App

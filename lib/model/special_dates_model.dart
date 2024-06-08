@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
+import 'package:loga_parameshwari/constant/api.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 
@@ -76,7 +77,7 @@ class SpecialDatesModel {
       }),
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': '19ExAQ2D8L2xW4HZqU8Eh1vys1GruWsZi5NWtHRf'
+        'x-api-key': API.freeastrologyapi,
       },
     );
     final Map body = jsonDecode(result.body) as Map;
