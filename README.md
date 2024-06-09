@@ -115,3 +115,6 @@
 - Bug fix: Permission issue fixed on storage
 - Minor revision : Updated securiy update on cloud functions
 - Minor revision : Updated special dates logic, map click
+
+## Version : 2.13.8+22
+- Security Update : Added recaptcha_enterprise_flutter: ^18.5.1
