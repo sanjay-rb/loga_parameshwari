@@ -115,3 +115,7 @@
 - Bug fix: Permission issue fixed on storage
 - Minor revision : Updated securiy update on cloud functions
 - Minor revision : Updated special dates logic, map click
+
+## Version : 2.13.8+22
+- Security update : Google play policy fix
+- Minor revision : Updated special pooja style
