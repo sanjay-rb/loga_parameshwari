@@ -35,7 +35,6 @@ dependencies:
   multi_image_picker: ^4.8.1
   permission_handler: ^10.2.0
   provider: ^5.0.0
-  recaptcha_enterprise_flutter: ^18.5.1
   share: ^2.0.4
   shared_preferences: ^2.0.6
   tutorial_coach_mark: ^1.2.2

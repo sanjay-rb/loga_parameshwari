@@ -117,4 +117,5 @@
 - Minor revision : Updated special dates logic, map click
 
 ## Version : 2.13.8+22
-- Security Update : Added recaptcha_enterprise_flutter: ^18.5.1
+- Security update : Google play policy fix
+- Minor revision : Updated special pooja style

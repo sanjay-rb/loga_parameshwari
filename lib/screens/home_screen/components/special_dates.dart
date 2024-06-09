@@ -50,23 +50,19 @@ class SpecialDates extends StatelessWidget {
 
   String getMonth(int index) {
     return [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
+      "January",
+      "February",
+      "March",
+      "April",
       "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ][index - 1];
-  }
-
-  String getWeekDay(int index) {
-    return ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"][index - 1];
   }
 
   @override
@@ -104,7 +100,12 @@ class SpecialDates extends StatelessWidget {
               ),
               Expanded(
                 flex: 4,
-                child: FittedBox(child: Text("${dateTime.day}")),
+                child: FittedBox(
+                  child: Text(
+                    "${dateTime.day}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
               Expanded(
                 flex: 3,
@@ -123,9 +124,7 @@ class SpecialDates extends StatelessWidget {
                     child: FittedBox(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "${getWeekDay(dateTime.weekday)} (${getMonth(dateTime.month)})",
-                        ),
+                        child: Text(getMonth(dateTime.month)),
                       ),
                     ),
                   ),
