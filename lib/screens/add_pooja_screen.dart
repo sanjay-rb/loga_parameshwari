@@ -1,7 +1,11 @@
+import 'dart:io' as io;
+import 'dart:ui' as ui;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loga_parameshwari/model/image_model.dart';
 import 'package:loga_parameshwari/model/pooja_model.dart';
@@ -9,7 +13,6 @@ import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/services/auth_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AddPoojaScreen extends StatefulWidget {
   const AddPoojaScreen({Key key}) : super(key: key);
@@ -20,7 +23,7 @@ class AddPoojaScreen extends StatefulWidget {
 
 class _AddPoojaScreenState extends State<AddPoojaScreen> {
   final addPoojaFormKey = GlobalKey<FormState>();
-  List<Asset> upImages = <Asset>[];
+  List<XFile> upImages = <XFile>[];
   DateTime on;
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController byCtrl = TextEditingController();
@@ -53,7 +56,7 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
                         if (upImages.isNotEmpty)
                           const Text(
                             "Long press on the image to delete ❌",
-                            style: TextStyle(fontSize: 10, color: Colors.grey),
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
                             textAlign: TextAlign.center,
                           ),
                         const Divider(),
@@ -152,21 +155,42 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       runSpacing: 10,
       children: List.generate(
         upImages.length,
-        (index) => ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: InkWell(
-            onLongPress: () {
-              setState(() {
-                upImages.remove(upImages[index]);
-              });
+        (index) {
+          final io.File imageFile = io.File(upImages[index].path);
+
+          return FutureBuilder<ui.Image>(
+            future: decodeImageFromList(imageFile.readAsBytesSync()),
+            builder: (context, snapshot) {
+              final ui.Image image = snapshot.data;
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+
+              return Material(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onLongPress: () {
+                    setState(() {
+                      upImages.remove(upImages[index]);
+                    });
+                  },
+                  child: SizedBox(
+                    width: image.width * 0.2,
+                    height: image.height * 0.2,
+                    child: Image.file(
+                      io.File(upImages[index].path),
+                      key: ValueKey(upImages[index].name),
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                    ),
+                  ),
+                ),
+              );
             },
-            child: AssetThumb(
-              asset: upImages[index],
-              width: (upImages[index].originalWidth * 0.2).toInt(),
-              height: (upImages[index].originalHeight * 0.2).toInt(),
-            ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -176,16 +200,8 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       padding: const EdgeInsets.all(5),
       child: OutlinedButton(
         onPressed: () async {
-          upImages = await MultiImagePicker.pickImages(
-            maxImages: 500,
-            enableCamera: true,
-            materialOptions: const MaterialOptions(
-              actionBarTitle: "Select Images",
-              allViewTitle: "All Photos",
-              useDetailsView: false,
-            ),
-            selectedAssets: upImages,
-          );
+          final ImagePicker picker = ImagePicker();
+          upImages = await picker.pickMultiImage();
           setState(() {});
         },
         child: const Text(
@@ -376,25 +392,23 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
     final month = DateFormat("MMMM").format(pooja.on.toDate());
     final Reference rootPath =
         FirebaseStorage.instance.ref().child(year).child(month);
-    for (final Asset imageFile in upImages) {
-      Navigator.pop(context);
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "${imageFile.name} Uploading....",
-            style: const TextStyle(fontSize: 10),
-          ),
-          content: const LinearProgressIndicator(),
-        ),
-      );
+    for (final XFile imageFile in upImages) {
+      // Navigator.pop(context);
+      // showDialog(
+      //   context: context,
+      //   barrierDismissible: false,
+      //   builder: (context) => AlertDialog(
+      //     title: Text(
+      //       "${imageFile.name} Uploading....",
+      //       style: const TextStyle(fontSize: 10),
+      //     ),
+      //     content: const LinearProgressIndicator(),
+      //   ),
+      // );
       final String url = await rootPath
           .child('${pooja.name}+${pooja.id}')
           .child(imageFile.name)
-          .putData(
-            (await imageFile.getByteData(quality: 50)).buffer.asUint8List(),
-          )
+          .putData((await imageFile.readAsBytes()).buffer.asUint8List())
           .then((v) => v.ref.getDownloadURL());
       final ImageModel imageModel = ImageModel(
         id: DatabaseManager.getUniqueId(),
@@ -415,18 +429,24 @@ class _AddPoojaScreenState extends State<AddPoojaScreen> {
       Timestamp.fromDate(on),
       AuthService.getUserNumber(),
     );
-    DatabaseManager.addPooja(pooja).then((value) async {
-      if (upImages.isNotEmpty) {
-        await uploadImages(pooja);
-      }
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-    }).onError((error, stackTrace) {
-      Navigator.pop(context);
+    await DatabaseManager.addPooja(pooja).onError((error, stackTrace) {
+      Navigator.pop(context); // Pop Upload Dialog & Show Error Dialog
       errorDialog(
         context,
-        "Something went wrong! Pooja not posted to the members.",
+        "Something went wrong while creating new pooja! Pooja not posted to the members.",
       );
     });
+    await uploadImages(pooja).onError((error, stackTrace) {
+      Navigator.pop(context); // Pop Upload Dialog & Show Error Dialog
+      errorDialog(
+        context,
+        "Something went wrong while uploading images! Pooja not posted to the members.",
+      );
+    });
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context); // Pop upload dialog once uploaded
+
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context); // Pop Back to Home Screen
   }
 }

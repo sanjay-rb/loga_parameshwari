@@ -4,6 +4,8 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+
+
 exports.poojaNotification = functions
     .firestore
     .document('/Pooja/{docID}')
@@ -37,19 +39,19 @@ exports.poojaNotification = functions
 
         if (isCreation) {
             notificationTitle = "Pooja Created";
-            notificationSubTitle = `${data['name']} is scheduled on ${date}`;
+            notificationSubTitle = `New ${data['name']} is scheduled on ${date}`;
             notificationOnClickData = `created:${data['id']}`;
         }
 
         if (isUpdation) {
             notificationTitle = "Pooja Updated";
-            notificationSubTitle = `${data['name']} is scheduled on ${date} having some updated`;
+            notificationSubTitle = `Updates on ${data['name']} is scheduled on ${date}`;
             notificationOnClickData = `updated:${data['id']}`;
         }
 
         if (isDeletion) {
             notificationTitle = "Pooja Deleted";
-            notificationSubTitle = `${data['name']} is scheduled on ${date} got deleted!`;
+            notificationSubTitle = `${data['name']} has been deleted`;
             notificationOnClickData = `deleted:${data['id']}`;
         }
 
