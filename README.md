@@ -119,3 +119,8 @@
 ## Version : 2.13.8+22
 - Security update : Google play policy fix
 - Minor revision : Updated special pooja style
+
+## Version: 2.13.11+23
+- Minor update: Fixed image permission issue
+- Minor update: Scheduled Pooja navigator
+- Minor update: Updated cloud function for notification text
