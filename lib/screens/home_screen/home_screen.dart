@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user_model.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
@@ -8,16 +9,19 @@ import 'package:loga_parameshwari/screens/home_screen/components/contact.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/head.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/home_keys.dart';
-import 'package:loga_parameshwari/screens/home_screen/components/left_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/logout.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/notice_banner.dart';
-import 'package:loga_parameshwari/screens/home_screen/components/right_btn.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_dates.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/special_pooja.dart';
+import 'package:loga_parameshwari/screens/profile_screen.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/database_manager.dart';
 import 'package:loga_parameshwari/services/fire_deeplink_services.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
+import 'package:loga_parameshwari/services/navigation_animation_services.dart';
+import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -61,6 +65,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+    // AdmobService().loadAd();
+    Provider.of<AdmobService>(context, listen: false).loadAd();
   }
 
   @override
@@ -206,49 +212,54 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return IsConnected(
       child: Scaffold(
         extendBody: true,
-        bottomNavigationBar: BottomAppBar(
-          elevation: 0.3,
-          notchMargin: 5,
-          clipBehavior: Clip.antiAlias,
-          color: const Color(0xff1c1f26),
-          shape: const AutomaticNotchedShape(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-          ),
-          child: SizedBox(
-            width: double.infinity,
-            height: _bottomAppBarHeight,
-            child: Row(
-              children: const [
-                LeftBtn(),
-                Spacer(),
-                RightBtn(),
+        appBar: AppBar(
+          title: const Text("Loga Parameshwari Thunai"),
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (String value) {
+                if (value == "Profile") {
+                  Navigator.of(context).push(
+                    NavigationAnimationService.fadePageRoute(
+                      enterPage: const ProfileScreen(),
+                    ),
+                  );
+                } else if (value == "Share") {
+                  Share.share(
+                    "Install Loga Parameshwari Temple Ramassery App \n\n - Get real-time updates of pooja. \n - Make your history with the temple by scheduled pooja. \n - Google map navigation to the temple. \n - Full architecture of temple by the 3D view. \n - Special pooja timetable. \n - And a lot more... \n\n https://play.google.com/store/apps/details?id=com.sanjoke.loga_parameshwari",
+                  );
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem(
+                  value: 'Profile',
+                  child: Text('Profile'),
+                ),
+                const PopupMenuItem(
+                  value: 'Share',
+                  child: Text('Share'),
+                ),
               ],
-            ),
-          ),
+            )
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          onPressed: () {
-            _homeListController.animateTo(
-              0.0,
-              duration: const Duration(seconds: 1),
-              curve: Curves.ease,
+        bottomNavigationBar: Consumer<AdmobService>(
+          builder: (context, value, child) {
+            if (value.isLoaded && value.bannerAd != null) {
+              return SafeArea(
+                child: SizedBox(
+                  width: value.bannerAd.size.width.toDouble(),
+                  height: value.bannerAd.size.height.toDouble(),
+                  child: AdWidget(ad: value.bannerAd),
+                ),
+              );
+            } else {}
+            return const SafeArea(
+              child: SizedBox(
+                width: 320,
+                height: 50,
+              ), // 320x50
             );
           },
-          child: const Icon(Icons.home),
         ),
         body: WillPopScope(
           onWillPop: _onBackPress,

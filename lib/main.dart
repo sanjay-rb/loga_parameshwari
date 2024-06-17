@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loga_parameshwari/firebase_options.dart';
 import 'package:loga_parameshwari/screens/splash_screen.dart';
+import 'package:loga_parameshwari/services/admob_services.dart';
 import 'package:loga_parameshwari/services/connectivity_service.dart';
 import 'package:loga_parameshwari/services/fire_message_services.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,8 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
+  MobileAds.instance.initialize();
+
   Messaging.init();
 
   FirebaseMessaging.onBackgroundMessage(
@@ -34,6 +38,10 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ConnectivityService(),
+          child: MyApp(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AdmobService(),
           child: MyApp(),
         ),
       ],
