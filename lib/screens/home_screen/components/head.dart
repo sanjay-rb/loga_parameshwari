@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user_model.dart';
+import 'package:loga_parameshwari/screens/profile_screen.dart';
+import 'package:loga_parameshwari/services/database_manager.dart';
+import 'package:loga_parameshwari/services/navigation_animation_services.dart';
 
 class HeadComponent extends StatelessWidget {
   const HeadComponent({Key key}) : super(key: key);
@@ -21,12 +25,36 @@ class HeadComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Loga Parameshwari Thunai",
-          style: TextDesign.headText,
-          textAlign: TextAlign.right,
+        FutureBuilder(
+          future: DatabaseManager.getUserInfo(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text(
+                "Loading...",
+                style: TextDesign.headText,
+                textAlign: TextAlign.left,
+              );
+            } else {
+              final UserModel userModel =
+                  UserModel.fromJson(snapshot.data.docs.first);
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    NavigationAnimationService.fadePageRoute(
+                      enterPage: const ProfileScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  userModel.name,
+                  style: TextDesign.headText,
+                  textAlign: TextAlign.left,
+                ),
+              );
+            }
+          },
         ),
         StreamBuilder<String>(
           stream: getGreeting(),
@@ -35,13 +63,13 @@ class HeadComponent extends StatelessWidget {
               return const Text(
                 "Loading...",
                 style: TextDesign.titleText,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.left,
               );
             } else {
               return Text(
-                snapshot.data,
+                "${snapshot.data}🙏",
                 style: TextDesign.titleText,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.left,
               );
             }
           },

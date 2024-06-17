@@ -61,5 +61,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="com.sanjoke.loga_parameshwari" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8205675256306171~1599647817"/>
     </application>
 </manifest>
