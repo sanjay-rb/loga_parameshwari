@@ -120,7 +120,8 @@
 - Security update : Google play policy fix
 - Minor revision : Updated special pooja style
 
-## Version: 2.13.11+23
-- Minor update: Fixed image permission issue
-- Minor update: Scheduled Pooja navigator
-- Minor update: Updated cloud function for notification text
+## Version: 2.13.12+23
+- Minor update: Resolved image permission issue
+- Minor update: Enhanced Scheduled Pooja navigator
+- Minor update: Improved cloud function for notification text
+- Minor update: Integrated AdMob for mobile advertisements
