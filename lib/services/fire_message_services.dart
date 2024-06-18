@@ -29,7 +29,7 @@ class Messaging {
       badge: true,
       carPlay: false,
       criticalAlert: true,
-      provisional: false,
+      provisional: true,
       sound: true,
     );
 

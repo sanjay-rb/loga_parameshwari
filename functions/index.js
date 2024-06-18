@@ -1,9 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
 
-const db = admin.firestore();
-
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+});
 
 
 exports.poojaNotification = functions
