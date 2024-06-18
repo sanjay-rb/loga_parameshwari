@@ -252,11 +252,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   child: AdWidget(ad: value.bannerAd),
                 ),
               );
-            } else {}
+            }
             return const SafeArea(
               child: SizedBox(
                 width: 320,
                 height: 50,
+                child: Center(child: Text("Advertisements")),
               ), // 320x50
             );
           },

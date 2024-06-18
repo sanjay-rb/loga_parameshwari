@@ -29,6 +29,6 @@ class AdmobService with ChangeNotifier {
         },
       ),
     )..load();
-    notifyListeners();
+    // notifyListeners();
   }
 }
