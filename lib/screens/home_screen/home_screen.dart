@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loga_parameshwari/constant/constant.dart';
 import 'package:loga_parameshwari/model/user_model.dart';
+import 'package:loga_parameshwari/screens/about_screen/about_screen.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/ar_view.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/contact.dart';
 import 'package:loga_parameshwari/screens/home_screen/components/donate.dart';
@@ -227,6 +228,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   Share.share(
                     "Install Loga Parameshwari Temple Ramassery App \n\n - Get real-time updates of pooja. \n - Make your history with the temple by scheduled pooja. \n - Google map navigation to the temple. \n - Full architecture of temple by the 3D view. \n - Special pooja timetable. \n - And a lot more... \n\n https://play.google.com/store/apps/details?id=com.sanjoke.loga_parameshwari",
                   );
+                } else if (value == "About") {
+                  Navigator.of(context).push(
+                    NavigationAnimationService.fadePageRoute(
+                      enterPage: const AboutScreen(),
+                    ),
+                  );
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -237,6 +244,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 const PopupMenuItem(
                   value: 'Share',
                   child: Text('Share'),
+                ),
+                const PopupMenuItem(
+                  value: 'About',
+                  child: Text('About'),
                 ),
               ],
             )
