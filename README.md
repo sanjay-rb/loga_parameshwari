@@ -128,5 +128,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Minor update: Improved cloud function for notification text
 - Minor update: Integrated AdMob for mobile advertisements
 
-### Version: 2.13.13+24
+### Version: 2.13.15+24
 - Minor update: Added About Page
+- Minor update: Added multi banner ads
+- Google Play Policy Fix: Update your app to target Android 14 (API level 34) or higher.

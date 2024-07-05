@@ -6,12 +6,13 @@ class AdmobService with ChangeNotifier {
   BannerAd bannerAd;
   bool isLoaded = false;
 
-  final adUnitId = dotenv.env['ANDROID_BANNER_AD_ID'];
+  List<String> adUnitIds = dotenv.env['ANDROID_BANNER_AD_ID'].split(',');
 
   /// Loads a banner ad.
   void loadAd() {
+    adUnitIds.shuffle();
     bannerAd = BannerAd(
-      adUnitId: adUnitId,
+      adUnitId: adUnitIds.first,
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
