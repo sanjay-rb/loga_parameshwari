@@ -6,7 +6,7 @@ We currently support the following versions of our Android app. We recommend all
 
 | Version    | Supported          |
 | ---------- | ------------------ |
-| 2.13.12+23 | :white_check_mark: |
+| 2.13.15+24 | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
