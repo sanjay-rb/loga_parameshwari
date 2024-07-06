@@ -4,9 +4,11 @@
  - A comprehensive pooja management app offering real-time updates, scheduling, sharing options, Google Maps navigation, a 3D temple view, and a special pooja timetable.
 
 ## Badges
-![GitHub Latest Release)](https://img.shields.io/github/v/release/sanjay-rb/loga_parameshwari?logo=github) 
-![Perform CI Status](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/ci.yml/badge.svg)
-![Perform CD Status](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/cd.yml/badge.svg)
+[![Static Badge](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat&logo=github)](NOTICE)
+[![GitHub Latest Release](https://img.shields.io/github/v/release/sanjay-rb/loga_parameshwari?logo=github)](https://github.com/sanjay-rb/loga_parameshwari/releases)
+
+[![Perform CI Status](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/ci.yml/badge.svg)](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/ci.yml)
+[![Perform CD Status](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/cd.yml/badge.svg)](https://github.com/sanjay-rb/loga_parameshwari/actions/workflows/cd.yml)
 
 ## Table of Contents
 - [Installation](#installation)
@@ -34,7 +36,7 @@ Designed, developed, and published by [Sanjay RB](https://sanjay-rb.github.io)
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the Apache License 2.0 License. See the [LICENSE](LICENSE) file for more details.
 
 ## Releases
 
